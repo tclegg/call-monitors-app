@@ -1,0 +1,51 @@
+<template class="section-template" data-target="">
+<section id="leadmonitors" class="wrapper well">
+  <div class="inner">
+		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
+    <h2>Monitors By Lead</h2>
+    <p class="">Choose the lead and the month to display the completed monitors.</p>
+		<div class="form well">
+			<form id="form-monitors" class="form-horizontal">
+				<div class="form-group">
+					<label for="input-date-search" class="col-sm-2 control-label">Monitor Date</label>
+					<div class="col-sm-10">
+						<input type="date"class="form-control" name="date-search" id="input-date-search" value="" required data-toggle="tooltip" title="Choose the date to search (this will pull the whole month).">
+					</div>
+					<span id="date-search-help" class="help-block"></span>
+				</div>
+				<div class="form-group">
+					<label for="select-leads" class="col-sm-2 control-label">Lead</label>
+					<div class="col-sm-10">
+						<select class="form-control" name="lead-search" id="select-lead-search" required data-toggle="tooltip" title="Choose the lead from the list.">
+							<option selected disabled value="0">Select Your Name</option>
+						</select>
+					</div>
+					<span id="select-leads-search-help" class="help-block"></span>
+				</div>
+				<!--
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default" name="submit" id="btn-submit-search">Submit</button>
+					</div>
+				</div>
+			-->
+			</form>
+		</div>
+
+		<div class="well" id="div-leadmonitors">
+			<div class="p-leadmonitors table-responsive" id="p-leadmonitors">
+				<table class="table table-striped" id="leadmonitors-table">
+					<thead class="thead">
+						<tr class="tr">
+							<th class="th">Date</th><th class="th">Full Name</th><th>Score</th><th>Auto-Fail</th>
+						</tr>
+					</thead>
+					<tbody class="tbody" id="leadmonitors-tbody">
+						<!--placeholder-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+</template>

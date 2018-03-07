@@ -1,0 +1,36 @@
+{
+  "name": "callmonitorsapp",
+  "productName": "Call Monitors App",
+  "description": "Application for monitoring agent calls",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "author": "Thomas Clegg",
+  "build": {
+    "appId": "com.electron.callmonitorsapp",
+    "win": {
+      "target": "portable",
+      "icon": "icon.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "^1.7.8",
+    "electron-builder": "^20.2.0",
+    "less": "^3.0.1"
+  },
+  "dependencies": {
+    "bootstrap3": "^3.3.5",
+    "jquery": "^3.3.1",
+    "nedb": "^1.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "localhost"
+  },
+  "scripts": {
+    "start": "npm install && electron .",
+    "pack": "build --dir",
+    "dist": "build",
+    "postinstall": "electron-builder install-app-deps"
+  }
+}

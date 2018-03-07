@@ -1,0 +1,76 @@
+<template class="section-template" data-target="">
+<section id="allmonitors" class="wrapper well">
+
+	<div>
+		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active"><a href="#by-agent" aria-controls="home" role="tab" data-toggle="tab">By Agent</a></li>
+	    <li role="presentation"><a href="#all-monitors" aria-controls="profile" role="tab" data-toggle="tab">This Month</a></li>
+	  </ul>
+
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+			<!--Accordion Tables-->
+			<div role="tabpanel" class="tab-pane active" id="by-agent">
+				<h3 id="monitors-by-agent-h3">Monitors By Agent</h3>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Agent</th><th># Completed</th><th>Month Avg</th><th>Quarter Avg</th>
+							</tr>
+						</thead>
+						<tbody class="tbody" id="agent-accordion-tbody">
+						<!--	<tr class="accordion-toggle" data-toggle="collapse" data-target="#vetterpTable" style="cursor: pointer;">
+								<td>Vetter</td><td>2</td><td>90%</td><td>85%</td>
+							</tr>
+							<tr class="accordion-body collapse" id="vetterpTable">
+								<td colspan="4">
+									<div class="well">
+										<table width=100% class="table table-striped">
+											<thead>
+												<th>Date</th><th>Score</th><th>Auto-Fail</th><th>Lead</th>
+											</thead>
+											<tbody class="tbody" id="agentName-tbody">
+												<tr>
+													<td>Monitor</td><td>example</td><td>no</td><td>me</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</td>
+							</tr>-->
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div  role="tabpanel" class="tab-pane" id="all-monitors">
+				<h3 id="monitorsH2">Montitors for </h3>
+				<p class="p-completed " id="p-completed-monitors">The following call monitors have been completed this month.</p>
+				<div class="well" id="div-completed">
+					<div class="table-responsive">
+						<table class="table table-striped" id="completed-monitors">
+							<thead class="thead">
+								<tr class="tr">
+									<th>Date</th><th>Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th>
+								</tr>
+							</thead>
+							<tbody class="tbody" id="completed-monitors-tbody">
+								<!--<tr>
+									<td>2018-02-01</td><td>Campbell, Ryan</td><td></td><td>Clegg, Thomas</td>
+								</tr>
+								<tr>
+									<td>2018-02-08</td><td>Collins, Wayne</td><td><span class="icon major fa-check-circle"></span></td><td>Cory, James</td>
+								</tr>-->
+							</tbody>
+						</table>
+					</div>
+				</div>
+	      </section>
+	    </div>
+		</div>
+  </div>
+</section>
+</template>
