@@ -14,12 +14,12 @@ function getInstallerConfig () {
   const outPath = path.join(rootPath, 'release-builds')
 
   return Promise.resolve({
-    appDirectory: path.join(outPath, 'Call-Monitors-App-win32-ia32/'),
+    appDirectory: path.join(outPath, 'call-monitors-tracking-win32-ia32/'),
     authors: 'Thomas Clegg',
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
-    exe: 'Call-Monitors-App.exe',
+    exe: 'call-monitors-app.exe',
     setupExe: 'CallMonitorsAppInstaller.exe',
-    setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'icon.png')
+    setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'icon.ico')
   })
 }

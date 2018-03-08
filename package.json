@@ -1,17 +1,17 @@
 {
-  "name": "callmonitorsapp",
-  "productName": "Call Monitors App",
-  "description": "Application for monitoring agent calls",
+  "name": "callmonitortracking",
+  "productName": "Nex-Tech Call Monitor Tracking",
+  "description": "Application for tracking call monitors and performance.",
   "version": "1.0.0",
   "main": "main.js",
   "license": "MIT",
-  "author": "Thomas Clegg",
+  "author": "Nex-Tech Help Desk",
   "build": {
-    "appId": "com.electron.callmonitorsapp",
+    "appId": "com.electron.callmonitortracking",
     "win": {
-      "target": "portable",
+      "target": "nsis",
       "icon": "icon.png"
-    }
+		}
   },
   "devDependencies": {
     "electron": "^1.7.8",
@@ -31,6 +31,7 @@
     "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
+		"dev": "NODE_ENV='development' npm run start",
     "postinstall": "electron-builder install-app-deps"
   }
 }
