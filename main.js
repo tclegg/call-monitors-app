@@ -10,7 +10,8 @@ const electron = require('electron')
 const app = electron.app
 const {ipcMain} = require('electron')
 var path = require('path')
-
+const nedb = require('nedb')
+var dbtest = new nedb({filename: path.resolve(__dirname, '../../db/agents.db'), autoload: true})
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 //Adds the main Menu to our app
@@ -31,17 +32,18 @@ function createWindow () {
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
   })
+	var testArgs = dbtest.find({})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
   // Open the DevTools.
-   //mainWindow.webContents.openDevTools()
+   mainWindow.webContents.openDevTools()
 
 
   // Show the mainwindow when it is loaded and ready to show
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow.show(testArgs)
   })
 
   // Emitted when the window is closed.

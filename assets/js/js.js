@@ -17,16 +17,16 @@ var fs = require('fs'),
 		// Development Database //
 		//////////////////////////
 
-		//db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
-		//leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), //autoload: true}),
-		//agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true}),
+		db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
+		leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), //autoload: true}),
+		agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true}),
 
 		//////////////////////////
 		// Production Datasbase //
 		//////////////////////////
-		db = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', dbname), autoload: true}),
-		leadsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'leads.db'), autoload: true}),
-		agentsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'agents.db'), autoload: true}),
+		//db = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', dbname), autoload: true}),
+		//leadsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'leads.db'), autoload: true}),
+		//agentsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'agents.db'), autoload: true}),
 		agentSelect = 'select-agent',
 		dateInput = 'input-date',
 		failCheck = 'check-fail',
