@@ -1,8 +1,10 @@
+// declare constants for node tools
 const {ipcRenderer} = require('electron')
 		fs = require('fs'),
 		path = require('path'),
 		nedb = require('nedb'),
 		date = new Date();
+// variables for date and database creation/selection
 var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 		year = date.getFullYear(),
 		mm = ("0"+(date.getMonth()+1)).slice(-2),
@@ -14,7 +16,7 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 		dbname = 'monitors-'+year+'.db',
 		fullDateWithSlashes = year + '/' + mm + '/'+dd,
 		fullDateWithDashes =  year + '-' + mm + '-'+dd;
-
+	// check for dev
 	if (!process.env.TODO_DEV){
 			//////////////////////////
 			// Production Datasbase //
@@ -24,7 +26,6 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 			var	db = new nedb({filename: path.resolve(xDrive, dbname), autoload: true}),
 					leadsDb = new nedb({filename: path.resolve(xDrive, 'leads.db'), autoload: true}),
 					agentsDb = new nedb({filename: path.resolve(xDrive, 'agents.db'), autoload: true})
-					console.log(xDrive);
 
 		} else {
 			//////////////////////////
@@ -35,11 +36,14 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 					leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
 					agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true})
 		}
+		// main form inputs
 var	agentSelect = 'select-agent',
 		dateInput = 'input-date',
 		failCheck = 'check-fail',
 		leadSelect = 'select-lead',
 		scoreInput = 'score-agents',
+		dateField = 'input-date',
+		// month tools
 		months= {
 				"01": "Janary",
 				"02": "February",
@@ -55,22 +59,25 @@ var	agentSelect = 'select-agent',
 				"12": "December"
 		},
 		monthName = months[mm],
-		q1 = ["0", "1", "2"],
-		q2 = ["3", "4", "5"],
-		q3 = ["6", "7", "8"],
-		q4 = ["9", "10", "11"],
-		dateField = 'input-date',
+		// objects to store query data
 		leadsObj = {},
 		activeLeadsObj = {},
 		agentsObj = {},
 		activeAgentsObj = {},
 		thisMonthMonitorsObj = {},
 		lastMonthMonitorsObj = {},
+		// arrays for looping
 		agentsArray = [],
 		leadsArray = [],
 		thisMonthMonitorsArray = [],
 		quarterlyMonitorsArray = [],
+		// interval for persistence
 		dbInterval = 60000,
+		// quarter calculation tools
+		q1 = ["0", "1", "2"],
+		q2 = ["3", "4", "5"],
+		q3 = ["6", "7", "8"],
+		q4 = ["9", "10", "11"],
 		qstart = '',
 		qend = '',
 		qm = new Date()
@@ -88,7 +95,9 @@ var	agentSelect = 'select-agent',
 						qstart = new Date(year, 9, 1)
 						qend = new Date(year, 11, 31)
 					}
-
+		/*
+		* DB persistence tools - unused, but saved here just in case
+		*/
 		//db.persistence.setAutocompactionInterval(dbInterval)
 		//leadsDb.persistence.setAutocompactionInterval(dbInterval)
 		//agentsDb.persistence.setAutocompactionInterval(dbInterval)
@@ -149,18 +158,19 @@ function loadToLeadSelect(){
 	})
 }
 function loadLeadsTable(data){
-	var table = document.getElementById('edit-leads-tbody')
-	table.innerHTML = '';
-	//var arr = Object.keys(data);
+	// build the Lead Maintenance table
+	var tbody = document.getElementById('edit-leads-tbody')
+	tbody.innerHTML = '';
 	var nameValue;
 	var arr = Object.keys(data)
 	for (i=0; i < arr.length; i++){
+		// create elements
 		var nameValue = data[i].name,
 				abbreviation = data[i].abbv,
 				inactive = data[i].inactive,
 				leadId = data[i]._id;
 
-		//var nameValue = data[name];
+
 		var fullNameTD = document.createElement('td'),
 				abbreviationTD = document.createElement('td'),
 				edit = document.createElement('td'),
@@ -168,25 +178,28 @@ function loadLeadsTable(data){
 				row = document.createElement('tr'),
 				editHTML = '<a class="edit-lead" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
 				removeHTML = '<a class="remove-lead" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>'
-		$(row).attr('data-abbv', abbreviation)
-					.attr('data-name', nameValue)
-					.attr('data-id', leadId)
-					.attr('data-inactive', inactive)
-					.attr('id', leadId);
-		if (inactive == 1){
+		$(row).attr('data-abbv', data[i].abbv)
+					.attr('data-name', data[i].name)
+					.attr('data-id', data[i]._id)
+					.attr('data-inactive', data[i].inactive)
+					.attr('id', data[i]._id);
+		if (data[i].inactive == 1){
 			$(row).css('text-decoration', 'line-through')
 		}
-		fullNameTD.innerHTML = nameValue
-		abbreviationTD.innerHTML = abbreviation
-
+		// fill TD with data
+		fullNameTD.innerHTML = data[i].name
+		abbreviationTD.innerHTML = data[i].abbv
 		edit.innerHTML = editHTML
 		remove.innerHTML = removeHTML
+		//Append TD to TR then to TBODY
 		row.appendChild(fullNameTD)
 		row.appendChild(abbreviationTD)
 		row.appendChild(edit)
 		row.appendChild(remove)
-		table.appendChild(row)
+		tbody.appendChild(row)
 	}
+
+	// build event listeners for edit/remove/add
 	$('.edit-lead').click( function (e) {
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
@@ -213,6 +226,9 @@ function loadLeadsTable(data){
 	})
 }
 function importAgents(){
+	// query agentsDb to get all active agents and inactive agents
+	// use both objects to load the select with active agents and all agents to
+	// the Agent Maintenance table
 	var query = {abbv: {'$regex': /^[a-z]/}}
 	agentsDb.find(query).sort({name:1}).exec(function(err, data){
 		$.each(data, function(k,v){
@@ -229,6 +245,8 @@ function importAgents(){
 	})
 }
 function loadToAgentSelect(data){
+	// add the agents, as options, to the select elements
+	// selects located on index-main form and the edit-monitor-modal
 	var out = document.getElementById(agentSelect),
 			editMonitorAgent = document.getElementById('edit-monitor-modal-select-agent');
 	out.innerHTML = '<option selected disabled value="0">Select The Agent You Monitored</option>';
@@ -246,11 +264,13 @@ function loadToAgentSelect(data){
 	}
 }
 function loadAgentsTable(data){
-	var table = document.getElementById('edit-agents-tbody')
+	// loads all the active agents to the Agent Maintenance page
+	var tbody = document.getElementById('edit-agents-tbody')
 	var arr = Object.keys(data);
-	table.innerHTML = '';
-
+	tbody.innerHTML = '';
+	// loop through the array of keys from the result object
 	for (i=0; i < arr.length; i++){
+		// create elements
 		let nameValue = data[i].name,
 				abbreviation = data[i].abbv,
 				requiredMonitors = data[i].monitors,
@@ -264,6 +284,7 @@ function loadAgentsTable(data){
 				row = document.createElement('tr'),
 				editHTML = '<a class="edit-agent" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
 				removeHTML = '<a class="remove-agent" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>';
+		// set attributes for the row
 		$(row).attr('data-abbv', abbreviation)
 					.attr('data-name', nameValue)
 					.attr('data-monitors', requiredMonitors)
@@ -273,19 +294,22 @@ function loadAgentsTable(data){
 		if (inactive == 1){
 			$(row).css('text-decoration', 'line-through')
 		}
+		// fill cells
 		fullNameTD.innerHTML = nameValue.toString()
 		abbreviationTD.innerHTML = abbreviation
 		edit.innerHTML = editHTML
 		edit.id = 'edit-'+agentId
 		remove.innerHTML = removeHTML
 		monitors.innerHTML = requiredMonitors
+		//append TD to TR then to TBODY
 		row.appendChild(fullNameTD)
 		row.appendChild(abbreviationTD)
 		row.appendChild(monitors)
 		row.appendChild(edit)
 		row.appendChild(remove)
-		table.appendChild(row)
+		tbody.appendChild(row)
 	}
+	// build event listener for the edit/add/remove
 	$('.edit-agent').click( function (e) {
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
@@ -316,19 +340,18 @@ function loadAgentsTable(data){
 * Monitors Tools
 */
 function post(row){
-	/**
-	posts to the monitors(year).db
-	vars: row		object	required
-	*/
+	// posts to the monitors(year).db
+	// vars: row		object	required
 	db.insert(row)
 	location.reload()
 }
 function completed(result){
-	var table = document.getElementById('completed-monitors-tbody')
-	//console.log(result);
-	//loop through the result of rows
+	// use the result to build the monitors that have been completed.
+	// this fills on the second tab named "This Month"
+	var tbody = document.getElementById('completed-monitors-tbody')
+		// loop through the result of rows
 	$.each(result, function(k, v){
-		//loop through each row
+		// create elements
 		let resultDate = new Date(v.date)
 				resultYear = resultDate.getFullYear(),
 				resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
@@ -341,7 +364,7 @@ function completed(result){
 				leadTd = document.createElement('td'),
 				leadAbbv = v.lead.toString()
 				row = document.createElement('tr');
-
+		//set attributes
 		row.id = v._id;
 		dateTd.innerHTML = resultDateString;
 		nameTd.innerHTML = agentsObj[v.agent].name;
@@ -359,13 +382,13 @@ function completed(result){
 		}
 		leadTd.id = v.lead;
 		leadTd.innerHTML = leadsObj[v.lead].name
-
+		//append TD to TR, then TR to TBODY
 		row.appendChild(dateTd);
 		row.appendChild(nameTd);
 		row.appendChild(scoreTd);
 		row.appendChild(failTd);
 		row.appendChild(leadTd);
-		table.appendChild(row);
+		tbody.appendChild(row);
 	})
 }
 function pullAgentMonitors(query, sort){
@@ -384,6 +407,9 @@ function pullAgentMonitors(query, sort){
 	})
 }
 function buildRow(agent, monitors){
+	// create elements and find the parent tbody to hold the table
+	// this can probably be condensed. The header creation can probably move
+	// before the if(monitors>0){}
 	var tmpObj = [],
 			panelGroup = document.getElementById('agent-accordion-tbody'),
 			panelHead = document.createElement('tr'),
@@ -399,15 +425,18 @@ function buildRow(agent, monitors){
 			subTbody = document.createElement('tbody'),
 			agentName = agentsObj[agent].name
 	$(qAvgTd).attr('id', agent+'-qAvg')
+	// if the agent has monitors this month, else only build the row
 	if (monitors.length > 0){
 		let score = 0,
 		 		count = 0;
-		//Accordion Header Tools
+		// Build the Accordion Header, then loop through individual monitors
+		// to build the subtable
 		$.each(monitors, function(k,v){
 			if (v.fail !== true){
 				score = score + parseInt(v.score)
 			}
 			count++
+			// create elements
 			let resultDate = new Date(v.date)
 					resultYear = resultDate.getFullYear(),
 					resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
@@ -421,6 +450,7 @@ function buildRow(agent, monitors){
 					editTd = document.createElement('td')
 			dateTd.innerHTML = resultDateString
 			scoreTd.innerHTML = v.score+' %'
+			// the data attr contains the table row information for the edit modal
 			$(editTd).html('<span class="glyphicon glyphicon-cog edit-monitor"></span>')
 							.attr('data', 'id').data('id', v._id)
 							.attr('data', 'score').data('score', v.score)
@@ -428,17 +458,20 @@ function buildRow(agent, monitors){
 							.attr('data', 'date').data('date', v.date)
 							.attr('data', 'fail').data('fail', v.fail)
 							.attr('data', 'lead').data('lead', v.lead)
-			let leadName = leadsObj[v.lead].name
+			//let leadName = leadsObj[v.lead].name // <-- this wasn't necessary
 			if (v.fail == true) {
+				//Add red shading to background if there is a fail
 				$(failTd).addClass('bg-danger').html('<span class="glyphicon glyphicon-ok"></span>')
 				$(dateTd).addClass('bg-danger')
 				$(scoreTd).addClass('bg-danger')
 				$(leadTd).addClass('bg-danger')
 				$(editTd).addClass('bg-danger')
 			}
-			leadTd.innerHTML = leadName
+			leadTd.innerHTML = leadsObj[v.lead].name
+			// add each TD to the TR for the subtable
 			$(row).append(dateTd, scoreTd, failTd, leadTd, editTd)
 						.attr('id', v._id)
+			// add the row to the subtable
 			$(subTbody).append(row)
 		})
 		$(subThead).html('<th>Date</th><th>Score</th><th>Auto-Fail</th><th>Lead</th><th>Edit</th>')
@@ -447,13 +480,15 @@ function buildRow(agent, monitors){
 							 .append(subThead).append(subTbody)
 		$(subTableDiv).addClass('well').append(subTable)
 		$(subTableTd).attr('colspan', '4').append(subTableDiv)
-
+		// accordion stuff
 		$(subTableRow).addClass('accordion-body collapse').attr('id', agent+'Table')
 									.append(subTableTd)
+		// Averaging
 		let avg = score/count
 		$(nameTd).html(agentName)
 		$(avgTd).html(avg.toFixed()+' %')
 		if (avg < 75){
+			// watch for poor averages
 			$(avgTd).addClass('bg-danger')
 		}
 		$(completedTd).html(count)
@@ -463,10 +498,10 @@ function buildRow(agent, monitors){
 								.attr('data-target', '#'+agent+'Table')
 								.append(nameTd).append(completedTd)
 								.append(avgTd).append(qAvgTd)
-
+		// add the subtable to the agent's header
 		$(panelGroup).append(panelHead).append(subTableRow)
 	} else {
-
+		//create a blank header
 		$(subThead).html('<th>Date</th><th>Score</th><th>Auto-Fail</th><th>Lead</th>')
 		$(subTbody).attr('id', agent+'-tbody')
 		$(subTable).attr('width', '100%').addClass('table table-striped')
@@ -486,43 +521,46 @@ function buildRow(agent, monitors){
 		$(panelGroup).append(panelHead).append(subTableRow)
 	}
 	$('.accordion-toggle').css('cursor', 'pointer')
-			//console.log(agent, monitors);
 }
 function fillQuarter(agent, monitors){
+	// calculates the average call monitor score
+	// then fill in the quarter abverage field
 	let count = 0, score = 0, qAverage = 0, avgTd = document.getElementById(agent+'-qAvg')
 
 	if(monitors.length > 0){
 		$.each(monitors, function(k,v){
+			// loop to get the total score for the average
 			count++
 			if (v.fail !== true){
+				// add to score if the monitor isn't a fail
+				// ignoring if fail prevents accidental scoring from being included
 				score += parseInt(v.score)
 			}
-			//console.log(score);
 		})
-
+		// calculate the average
 		qAverage = score/count
 
 		if (qAverage < 75){
+			// flag low averages
 			$(avgTd).addClass('bg-danger')
 		}
 		$(avgTd).html(qAverage.toFixed() + ' %')
-		//console.log(avgTd, qAverage, avgTd.innerHTML);
 	}
 }
 function completedPerAgent(){
-
+	// calls async function pullAgentMonitors() that returns a promise,
+	// then builds the table row on All Monitors
+	// edit monitor modal control is set here since the async element creation
+	// prevents jQuery from seeing the element at window load
 	let query={'$and':[{date: {'$gte': startOfMonth}}, {date: {'$lte': endOfMonth}}]},
 			queryQuarter={'$and':[{date: {'$gte': qstart}}, {date: {'$lte': qend}}]},
 			sort = {agent: 1},
 			count = 0
 	pullAgentMonitors(query, sort).then(function(result){
+		//loop through all the agents to filter the result to show each agent
 		for (i in agentsObj){
 			let monitors = result.filter(x => x.agent === i)
-		//	console.log(monitors.length);
-			//row.appendChild(nameTd).appendChild(scoreTd).
-			//panelGroup.appendChild(row)
 			buildRow(i, monitors)
-			//console.log('in build');
 		}
 		$('.edit-monitor').on('click', function(e){
 			var parentData = $(this).parent()
@@ -535,12 +573,10 @@ function completedPerAgent(){
 									'lead': $(parentData).data('lead')}
 			showModal(args)
 		})
-
-		let timeout = setTimeout(function () {
-			$('#agent-acordion-tbody:first-child').collapse('show');
-		}, 1000);
 	})
 	pullAgentMonitors(queryQuarter, sort).then(function(result){
+		// perform another db query to find all monitors for the quarter
+		// then loop through the agents to filter and fill in the #{agent}-qavg field
 		for (i in agentsObj){
 			var monitors = result.filter(x => x.agent ===i)
 			fillQuarter(i, monitors)
@@ -550,60 +586,42 @@ function completedPerAgent(){
 
 }
 
-/*function agentsToArray(){
-	var tmpArr = [],
-			agentKeys = Object.keys(agentsObj);
-	$(agentKeys).each(function (k,v){
-		$(agentsObj[v]).each(function(key, val){
-			var tmpKeys = Object.keys(agentsObj[v])
-			console.log(v, val);
-			tmpArr[v] = [["abbv", val.abbv],["name", val.name],["monitors", val.monitors],["inactive", val.inactive], ["_id", val._id]]
-			//console.log(key,val.abbv);
-		})
-		//console.log(agentsObj[v]);
-		//tmpArr[v] = Array.from(agentsObj[v])
-	})
-	//console.log(tmpArr);
-	//console.log(Array.from(agentsObj));
-}
-*/
-function resultToArray(){
-
-}
-
 function needed(result){
-	var table = document.getElementById('needed-monitors-tbody'),
+	// fill the table on index_main
+	// clean up by moving the row creation outside of the if (result != "")
+	var tbody = document.getElementById('needed-monitors-tbody'),
 			result = result,
 			recentFail = false;
 	var agentKeys = Object.keys(agentsObj),
 			monitorsKeys = Object.keys(thisMonthMonitorsObj);
-	//WhereAmI
 	var n = document.createElement('tr')
 	//n.innerHTML = ''
-	table.appendChild(n)
-
+	tbody.appendChild(n)
+	// check for blank resuilt
 	if (result != ""){
 		// loop through all the agents
-
 		$(agentKeys).each(function(key, val){
-			//key = numerical key
-			//val = agent abbreviation
-			var count = 0
+			// key = numerical key starting at 0
+			// val = agent abbreviation
+			var count = 0 //count # of monitors
 			var recentFail = false, failDate = '';
+			// loop through query result
 			$(result).each(function(key2, val2){
-				//key2 = numerical value of the key
-				//val2 = monitor row properties
-
+				// key2 = numerical value of the key
+				// val2 = monitor row properties
 				if (val2.agent == val && val2.fail != true){
-					count++;
+					count++; // # of monitors found
 				} else	if (val2.agent == val && val2.fail == true) {
+					// did not add to count because a failed monitor doesn't count towards the total
 					recentFail = true;
 					failDate = val2.date
 				}
 			})
+			// count how many monitors are left
 			var monitorsLeft = agentsObj[agentKeys[key]].monitors - count;
+			// stop checking and counting after all the monitors have been completed
 			if (monitorsLeft <= 0){return;}
-
+			// create elemetns
 			var row = document.createElement('tr'),
 					dateTd = document.createElement('td'),
 					nameTd = document.createElement('td'),
@@ -616,6 +634,7 @@ function needed(result){
 			$(numberTd).attr('id', numberTdId).html(monitorsLeft)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[key]]._id)
 			if (recentFail == true){
+				// Flag a fail
 				$(row).attr('data-toggle', 'tooltip').attr('title', `Failed on ${failDate}`)
 				$(dateTd).addClass('bg-danger')
 				$(nameTd).addClass('bg-danger')
@@ -624,7 +643,7 @@ function needed(result){
 			row.appendChild(dateTd)
 			row.appendChild(nameTd)
 			row.appendChild(numberTd)
-			table.appendChild(row)
+			tbody.appendChild(row)
 			count = 0;
 			$(function(){
 				$('[data-toggle="tooltip"]').tooltip()
@@ -646,11 +665,13 @@ function needed(result){
 				row.appendChild(dateTd)
 				row.appendChild(nameTd)
 				row.appendChild(numberTd)
-				table.appendChild(row)
+				tbody.appendChild(row)
 		}
 	}
 }
 function pullThisMonth(){
+	// pull the monitors using async pullAgentMonitors
+	// use completed() and needed() to fill the tables
 	let query = {'$and': [{date: {'$gte': startOfMonth}}, {date: {'$lte':endOfMonth}}]},
 			sort = {date: 1}
 	pullAgentMonitors(query, sort).then(function(result){
@@ -677,7 +698,8 @@ function pullLastMonth(){
 * Date Tools
 */
 function setDate(){
-	//Sets the date index-main.html and allmonitors.html
+	// Sets the date index-main.html, allmonitors.html, and leadsmonitors.html
+	// today = new Date(date.getFullYear(), date.getMonth(), date.getDate())
 	let inputdate = document.getElementById(dateField),
 			monitorsH2 = document.getElementById('monitorsH2'),
 			leadsSearchDate = document.getElementById('input-date-search')
@@ -736,6 +758,7 @@ function checkId(i, field){
 }
 
 function errorHandling(err){
+	// error handling for main form
 	var findInput = $(err.field).parents('.form-group')
 	var findLabel = $(findInput).find('.help-block')
 	$(findInput).addClass('has-error')
@@ -746,8 +769,9 @@ function errorHandling(err){
 	}, 4000);
 }
 function validate(d,a,f,l,s, fields){
+	// validate main form
+	// {date, agent, fail, lead, score, Object{fields} }
 	let inputValues = {d,a,f,l,s}
-
 	try {
 		var validDate = checkFuture(d, fields.d),
 				validAgent = checkAgent(a, fields.a),
@@ -767,6 +791,9 @@ function validate(d,a,f,l,s, fields){
 * Modal Functions
 */
 function showModal(args){
+	// switch to control which modal is built
+	// received from listners built in
+	// loadLeadsTable, loadAgentsTable, and completedPerAgent
 	var modalId = '#'+args.type+'-modal'
 	$('.modal').on('shown.bs.modal', function(){
 		switch (args.type){
@@ -796,6 +823,8 @@ function showModal(args){
 	$(modalId).modal('show')
 }
 function buildEditLeadModal(args){
+	// builds edit agent modal
+	// args {name, id, abbv, inactive}
 	$('#edit-lead-modal').find('.modal-title').html(args.name)
 	$('#edit-lead-modal-name').val(args.name)
 	$('#edit-lead-modal-abbv').val(args.abbv)
@@ -803,6 +832,8 @@ function buildEditLeadModal(args){
 	$('#edit-lead-modal-inactive').val(args.inactive)
 }
 function buildEditAgentModal(args){
+	// builds edit agent modal
+	// args {name, id, abbv, monitors, inactive}
 	$('#edit-agent-modal').find('.modal-title').html(args.name)
 	$('#edit-agent-modal-name').val(args.name)
 	$('#edit-agent-modal-abbv').val(args.abbv)
@@ -812,6 +843,8 @@ function buildEditAgentModal(args){
 }
 
 function buildRemoveLeadModal(args){
+	// builds remove lead modal
+	// args {name, id, inactive}
 	$('#remove-lead-modal').find('.modal-title').text(args.name)
 	$('#remove-lead-modal-name').text(args.name)
 	$('#remove-lead-modal-id').val(args.id)
@@ -823,6 +856,8 @@ function buildRemoveLeadModal(args){
 	}
 }
 function buildRemoveAgentModal(args){
+	// builds remove agent modal
+	// args {name, id, inactive}
 	$('#remove-agent-modal').find('.modal-title').html(args.name)
 	$('#remove-agent-modal-name').text(args.name)
 	$('#remove-agent-modal-id').val(args.id)
@@ -835,22 +870,22 @@ function buildRemoveAgentModal(args){
 }
 
 function buildAddLeadModal(args){
-	//$('#add-lead-modal').find('.modal-title').html(args.name)
+	// builds add lead modal
+	// args {name, abbv}
 	$('#add-lead-modal-name').val('')
 	$('#add-lead-modal-abbv').val('')
-	//$('#add-lead-modal-id').val('')
-	//$('#edit-lead-modal-inactive').val(args.inactive)
 }
 function buildAddAgentModal(args){
-	//$('#edit-agent-modal').find('.modal-title').html(args.name)
+	// builds add agent modal
+	// args {name, abbv, # of monitors}
 	$('#edit-agent-modal-name').val('')
 	$('#edit-agent-modal-abbv').val('')
 	$('#edit-agent-modal-monitors').val('')
-	//$('#edit-agent-modal-id').val(args.id)
-	//$('#edit-agent-modal-inactive').val(args.inactive)
 }
 
 function buildEditScoreModal(args){
+	// builds the modal to edit the score
+	// args object {agent, date, score, fail, lead, id}
 	let argsDate = new Date(args.date),
 			tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12),
 			dateField = document.getElementById('edit-monitor-modal-input-date')
@@ -866,6 +901,7 @@ function buildEditScoreModal(args){
 /**
 *	Add/Edit Modal Controls
 */
+/* ----- Seems to be unused -----
 function changeEditError (err){
 	let errorField = $(err.field).parents('.form-group')
 	let errorHelper = $(errorField).parent().find($('.help-block'))
@@ -875,10 +911,10 @@ function changeEditError (err){
 		$(errorField).toggleClass('has-error')
 		$(errorHelper).toggleClass('has-error').html('')
 	}, 4000);
-}
+}*/
 function dbAgentUpdate(args, field){
-	// update database name
-	// Names: leadsDb and agentsDb
+	// update agentsDb
+	// requires args object + field names object
 	switch(args.type){
 		case 'edit-agent-modal':
 			agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'], 'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'], 'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
@@ -920,6 +956,8 @@ function dbAgentUpdate(args, field){
 	}
 }
 function dbLeadUpdate(args, field){
+	// update leadsDb
+	// requires args object + field names object
 	switch (args.type){
 		case 'edit-lead-modal':
 			leadsDb.update({_id: args['edit-lead-modal-id']}, {$set: {
@@ -960,6 +998,7 @@ function dbLeadUpdate(args, field){
 	}
 }
 function dbAddAgent(args, field){
+	// insert a new agent into agentsDb
 	var inserted = {'abbv': args['add-agent-modal-abbv'], 'name': args['add-agent-modal-name'], 'monitors': args['add-agent-modal-monitors'], 'inactive': args['add-agent-modal-inactive']}
 
 	agentsDb.insert(inserted, function(error, insertedRow){
@@ -973,6 +1012,7 @@ function dbAddAgent(args, field){
 	})
 }
 function dbAddLead(args, field){
+	// insert a new lead into leadsDb
 	var inserted = {'abbv': args['add-lead-modal-abbv'], 'name': args['add-lead-modal-name'], 'inactive': args['add-lead-modal-inactive']}
 	leadsDb.insert(inserted, function(error, insertedRow){
 		//done
@@ -985,6 +1025,8 @@ function dbAddLead(args, field){
 	})
 }
 function modalErrorHandling(err){
+	// error handling for edit monitor modal
+	// requires err object {err, field}
 	var findInput = $(err.field)
 	var findLabel = $(findInput).find('.help-block')
 	$(findInput).addClass('has-error')
@@ -995,6 +1037,7 @@ function modalErrorHandling(err){
 	}, 4000);
 }
 function dbUpdate(row){
+	// update the monitors database with the edit from edit-monitor-modal
 	db.update({'_id': row._id}, {$set: {
 					'date': row.date,
 					'agent': row.agent,
@@ -1020,6 +1063,9 @@ function validateEditModal(d,a,f,l,s,i, fields){
 				validFail = checkFail(f, fields.f),
 				validId = checkId(i, fields.i),
 				validLead = checkLead(l, fields.l)
+		if (validFail === true) {
+			validScore = 0;
+		}
 
 		dbUpdate({'date': validDate, 'agent': validAgent, 'score': validScore, 'fail': validFail, 'lead': validLead, '_id': validId})
 		location.reload()
@@ -1183,7 +1229,7 @@ function loadLeadSearch(result, month){
 }
 
 /**
-*	Event Listeners
+*	Global Event Listeners
 */
 $(window).on('load', function(){
 	setDate()
