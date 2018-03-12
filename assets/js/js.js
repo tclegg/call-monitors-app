@@ -13,22 +13,29 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 		lastMonth = year+'-'+(("0"+(date.getMonth())).slice(-2)),
 		dbname = 'monitors-'+year+'.db',
 		fullDateWithSlashes = year + '/' + mm + '/'+dd,
-		fullDateWithDashes =  year + '-' + mm + '-'+dd,
-		//////////////////////////
-		// Development Database //
-		//////////////////////////
+		fullDateWithDashes =  year + '-' + mm + '-'+dd;
 
-		//db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
-		//leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
-		//agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true}),
+	if (!process.env.TODO_DEV){
+			//////////////////////////
+			// Production Datasbase //
+			//////////////////////////
 
-		//////////////////////////
-		// Production Datasbase //
-		//////////////////////////
-		db = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', dbname), autoload: true}),
-		leadsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'leads.db'), autoload: true}),
-		agentsDb = new nedb({filename: path.resolve('X:/helpdesk/Tech Leads/Call Monitors/monitor-database', 'agents.db'), autoload: true}),
-		agentSelect = 'select-agent',
+			var xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database'
+			var	db = new nedb({filename: path.resolve(xDrive, dbname), autoload: true}),
+					leadsDb = new nedb({filename: path.resolve(xDrive, 'leads.db'), autoload: true}),
+					agentsDb = new nedb({filename: path.resolve(xDrive, 'agents.db'), autoload: true})
+					console.log(xDrive);
+
+		} else {
+			//////////////////////////
+			// Development Database //
+			//////////////////////////
+
+			var db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
+					leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
+					agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true})
+		}
+var	agentSelect = 'select-agent',
 		dateInput = 'input-date',
 		failCheck = 'check-fail',
 		leadSelect = 'select-lead',

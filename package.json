@@ -34,6 +34,7 @@
     "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
+    "dev": "SET TODO_DEV=true&& npm install && electron .",
     "postinstall": "electron-builder install-app-deps"
   }
 }

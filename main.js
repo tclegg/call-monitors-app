@@ -35,9 +35,13 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-
-  // Open the DevTools.
-   //mainWindow.webContents.openDevTools()
+	var isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false;
+	console.log(process.env.TODO_DEV);
+	if (process.env.TODO_DEV){
+		console.log('in conditional');
+		// Open the DevTools.
+		mainWindow.webContents.openDevTools()
+	}
 
 	//mainWindow.webContents.send('ipc-message', testArgs)
   // Show the mainwindow when it is loaded and ready to show
