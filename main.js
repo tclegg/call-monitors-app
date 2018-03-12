@@ -10,7 +10,8 @@ const electron = require('electron')
 const app = electron.app
 const {ipcMain} = require('electron')
 var path = require('path')
-
+const nedb = require('nedb')
+var dbtest = new nedb({filename: path.resolve(__dirname, '../../db/agents.db'), autoload: true})
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 //Adds the main Menu to our app
@@ -38,7 +39,7 @@ function createWindow () {
   // Open the DevTools.
    //mainWindow.webContents.openDevTools()
 
-
+	//mainWindow.webContents.send('ipc-message', testArgs)
   // Show the mainwindow when it is loaded and ready to show
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()

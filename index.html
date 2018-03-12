@@ -11,12 +11,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--<link rel="stylesheet" href="assets/css/main.css" />-->
 		<link rel="stylesheet" href="assets/bootstrap3/dist/css/bootstrap.min.css">
+		<style media="screen">
+			input[type="date"]::-webkit-inner-spin-button{
+					display: none;
+			}
+		</style>
 		<link rel="import" href="sections/index-main.html">
     <link rel="import" href="sections/allmonitors.html">
 		<link rel="import" href="sections/leadmonitors.html">
     <link rel="import" href="sections/agents.html">
     <link rel="import" href="sections/leads.html">
 		<!--<link rel="import" href="sections/ipcremote.html">-->
+
 	</head>
 	<body style="padding-top:70px">
 
@@ -61,34 +67,34 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="add-agent-modal-title">Add an Agent</h4>
 					</div>
-				<div class="modal-body">
-					<form class="" id="add-agent-modal-form" action="#" method="get">
-						<div class="form-group">
-							<label for="abbv" class="control-label">Abbreviation</label>
-							<input type="text" name="abbv" id="add-agent-modal-abbv" value="" class="form-control" required>
-							<span id="add-agent-modal-help" class="help-block"></span>
-						</div>
-						<div class="form-group">
-							<label for="full-name" class="control-label">Full Name</label>
-							<input type="text" name="fullname" id="add-agent-modal-name" value="" class="form-control" required>
-							<span id="add-agent-modal-name-help" class="help-block"></span>
-						</div>
-						<div class="form-group">
-							<label for="add-agent-modal-monitors" class="control-label"># of Monitors</label>
-							<input type="number" name="monitors" id="add-agent-modal-monitors" value="" class="form-control" required>
-							<span id="add-agent-modal-monitors-help" class="help-block"></span>
-							<input type="hidden" name="" value="0" id="add-agent-modal-inactive">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-danger modal-submit" id="add-agent-modal-submit">Save changes</button>
-					<span id="add-agent-modal-success" class="help-block"></span>
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+					<div class="modal-body">
+						<form class="" id="add-agent-modal-form" action="#" method="get">
+							<div class="form-group">
+								<label for="abbv" class="control-label">Abbreviation</label>
+								<input type="text" name="abbv" id="add-agent-modal-abbv" value="" class="form-control" required>
+								<span id="add-agent-modal-help" class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label for="full-name" class="control-label">Full Name</label>
+								<input type="text" name="fullname" id="add-agent-modal-name" value="" class="form-control" required>
+								<span id="add-agent-modal-name-help" class="help-block"></span>
+							</div>
+							<div class="form-group">
+								<label for="add-agent-modal-monitors" class="control-label"># of Monitors</label>
+								<input type="number" name="monitors" id="add-agent-modal-monitors" value="" class="form-control" required>
+								<span id="add-agent-modal-monitors-help" class="help-block"></span>
+								<input type="hidden" name="" value="0" id="add-agent-modal-inactive">
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit" id="add-agent-modal-submit">Save changes</button>
+						<span id="add-agent-modal-success" class="help-block"></span>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
 		<div class="modal fade" id="edit-agent-modal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
@@ -239,7 +245,72 @@
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
+		<div class="modal fade" id="edit-monitor-modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="edit-monitor-modal-title">Edit monitor for <span></span></h4>
+					</div><!-- /.modal-header -->
+					<div class="modal-body">
+						<form class="" id="edit-monitor-modal-form" action="#" method="get">
+							<div class="form-group">
+								<label for="edit-monitor-modal-select-agent" class="control-label">Monitored Agent</label>
+								<div class="">
+									<select class="form-control" name="edit-monitor-modal-agent" id="edit-monitor-modal-select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
+										<option selected disabled value="0">Select The Agent You Monitored</option>
+									</select>
+									<span id="edit-monitor-modal-select-agents-help" class="help-block"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-monitor-modal-date" class="control-label">Monitor Date</label>
+								<div class="">
+										<input type="date" class="form-control" name="edit-monitor-modal-date" id="edit-monitor-modal-input-date" value="">
+										<span id="edit-monitor-modal-date-help" class="help-block"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-monitor-modal-score" class="control-label">Score</label>
+								<div class="">
+									<div class="input-group">
+										<input type="number" class="form-control" name="edit-monitor-modal-score" id="edit-monitor-modal-score" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
+										<span class="input-group-addon">%</span>
+									</div>
+									<span id="edit-monitor-modal-score-help" class="help-block"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="">
+										<div class="checkbox" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
+											<label class="control-label" >
+													<input type="checkbox" class="custom-control-input" name="edit-monitor-modal-fail" id="edit-monitor-modal-check-fail"><strong> Auto Fail</strong>
+											</label>
+											<span id="edit-monitor-modal-check-fail-help" class="help-block"></span>
+										</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-monitor-modal-select-lead" class="control-label">Lead</label>
+								<div class="">
+									<select class="form-control" name="edit-monitor-modal-select-lead" id="edit-monitor-modal-select-lead" required data-toggle="tooltip" title="Select your name from the list.">
+										<option selected disabled value="0">Select Your Name</option>
+									</select>
+									<span id="edit-monitor-modal-select-lead-help" class="help-block"></span>
+								</div>
+							</div>
 
+							<input type="hidden" name="" value="" id="edit-monitor-modal-id">
+						</form>
+					</div><!-- /.modal-body-->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit" id="edit-monitor-modal-submit">Save changes</button>
+						<span id="edit-monitor-modal-success" class="help-block"></span>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
 
 		<!-- Footer -->
