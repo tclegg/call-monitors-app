@@ -32,7 +32,6 @@ function createWindow () {
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
   })
-	var testArgs = dbtest.find({})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
@@ -40,10 +39,10 @@ function createWindow () {
   // Open the DevTools.
    mainWindow.webContents.openDevTools()
 
-
+	//mainWindow.webContents.send('ipc-message', testArgs)
   // Show the mainwindow when it is loaded and ready to show
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show(testArgs)
+    mainWindow.show()
   })
 
   // Emitted when the window is closed.
