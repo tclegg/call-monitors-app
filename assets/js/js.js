@@ -752,7 +752,7 @@ function setDate(){
 			monitorsByAgentDate = document.getElementById('monitors-search-date')
 
 	inputdate.valueAsDate = today;
-	leadsSearchDate.valueAsDate = today;
+	leadsSearchDate.valueAsDate = startOfMonth;
 	monitorsH2.innerHTML = 'Monitors for '+monthName;
 	monitorsByAgentDate.valueAsDate = startOfMonth;
 
