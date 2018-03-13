@@ -559,11 +559,34 @@ function fillLastMonitor(agent, monitor){
 	}
 
 }
-function completedPerAgent(){
+function completedPerAgent(argMonth = null){
 	// calls async function pullAgentMonitors() that returns a promise,
 	// then builds the table row on All Monitors
 	// edit monitor modal control is set here since the async element creation
 	// prevents jQuery from seeing the element at window load
+	if (argMonth){
+		// re-write start/end variables declared at the beginning
+		startOfMonth = new Date(year, argMonth.getMonth(), 1),
+		endOfMonth = new Date(year, argMonth.getMonth()+1, 0),
+		startOfLastMOnth = new Date(year, argMonth.getMonth()-1, 1),
+		lastMonth = year+'-'+(("0"+(argMonth.getMonth())).slice(-2))
+
+		// re-write the qstart/end variables declared at the beginning
+		if ($.inArray(argMonth.getMonth(), q1)){
+			qstart = new Date(year, 0, 1)
+			qend = new Date(year, 2,31)
+		} else if ($.inArray(argMonth.getMonth(), q2)) {
+			qstart = new Date(year, 3, 1)
+			qend = new Date(year, 5, 30)
+		} else if ($.inArray(argMonth.getMonth(), q3)) {
+			qstart = new Date(year, 6, 1)
+			qend = new Date(year, 8, 31)
+		} else {
+			qstart = new Date(year, 9, 1)
+			qend = new Date(year, 11, 31)
+		}
+	}
+
 	let query={'$and':[{date: {'$gte': startOfMonth}}, {date: {'$lte': endOfMonth}}]},
 			queryQuarter={'$and':[{date: {'$gte': qstart}}, {date: {'$lte': qend}}]},
 			sort = {agent: 1},
@@ -717,35 +740,6 @@ function pullThisMonth(){
 	})
 	completedPerAgent()
 }
-function pullQuarter(q){
-
-}
-/*function pullLastMonitor(){
-	let query = {'$and': [{date: {'$gte': startOfLastMOnth}}, {date: {'$lte':endOfMonth}}]},
-			sort = {date: 1},
-			keys = Object.keys(agentsObj)
-			console.log('in pull last monitor');
-
-	pullAgentMonitors(query, sort).then(function(result){
-		console.log(result);
-		if (result.length > 0){
-			for (i in result){
-				var monitors = result.filter(x => x.agent === i)
-				//console.log(monitors);
-				let	keys = Object.keys(result),
-						last = result[keys.length-1]
-				console.log('last monitor => ', last);
-				 last.score + ' on ' + last.date
-			}
-
-
-
-
-		}
-
-	})
-
-}*/
 /**
 * Date Tools
 */
@@ -754,11 +748,13 @@ function setDate(){
 	// today = new Date(date.getFullYear(), date.getMonth(), date.getDate())
 	let inputdate = document.getElementById(dateField),
 			monitorsH2 = document.getElementById('monitorsH2'),
-			leadsSearchDate = document.getElementById('input-date-search')
+			leadsSearchDate = document.getElementById('input-date-search'),
+			monitorsByAgentDate = document.getElementById('monitors-search-date')
 
 	inputdate.valueAsDate = today;
 	leadsSearchDate.valueAsDate = today;
 	monitorsH2.innerHTML = 'Monitors for '+monthName;
+	monitorsByAgentDate.valueAsDate = startOfMonth;
 
 }
 /**
@@ -1351,10 +1347,20 @@ $(window).on('load', function(){
 	$(function(){
 		$('[data-toggle="tooltip"]').tooltip()
 	})
-
 	$('#select-lead-search').on('change', function(){
 		var lead = $(this).val(),
 				month = $('#input-date-search').val();
 		pullLeadMonth(month, lead);
 	})
+	$('#monitors-search-date').change(function(){
+
+		let month = $(this).val().replace(/-/g, '\/'),
+				tmpDate = new Date(month),
+				clearTbody = document.getElementById('agent-accordion-tbody')
+
+				clearTbody.innerHTML = '';
+				completedPerAgent(tmpDate)
+
+	})
+
 })

@@ -13,7 +13,19 @@
 	  <div class="tab-content">
 			<!--Accordion Tables-->
 			<div role="tabpanel" class="tab-pane active" id="by-agent">
-				<h3 id="monitors-by-agent-h3">Monitors By Agent</h3>
+				<ul class="list-inline">
+					<li><h3 id="monitors-by-agent-h3">Monitors By Agent</h3></li>
+					<li>
+						<h3> | </h3>
+					</li>
+					<li>
+						<form class="form-inline" title="Change to a different month." data-tooltip="tooltip">
+							<label for="monitors-search-date" class="control-label">Change Month: </label>
+							<input type="date" id="monitors-search-date" class="form-control">
+						</form>
+					</li>
+				</ul>
+
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
