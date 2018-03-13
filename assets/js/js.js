@@ -8,10 +8,11 @@ const {ipcRenderer} = require('electron')
 var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 		year = date.getFullYear(),
 		mm = ("0"+(date.getMonth()+1)).slice(-2),
-		dd = date.getDate(),
+		dd = ("0"+(date.getDate())).slice(-2),
 		thisMonth = year+'-'+mm,
 		startOfMonth = new Date(year, date.getMonth(), 1),
 		endOfMonth = new Date(year, date.getMonth()+1, 0),
+		startOfLastMOnth = new Date(year, date.getMonth()-1, 1),
 		lastMonth = year+'-'+(("0"+(date.getMonth())).slice(-2)),
 		dbname = 'monitors-'+year+'.db',
 		fullDateWithSlashes = year + '/' + mm + '/'+dd,
@@ -229,7 +230,7 @@ function importAgents(){
 	// query agentsDb to get all active agents and inactive agents
 	// use both objects to load the select with active agents and all agents to
 	// the Agent Maintenance table
-	var query = {abbv: {'$regex': /^[a-z]/}}
+	var query = {abbv: {'$regex': /^[a-zA-z]/}}
 	agentsDb.find(query).sort({name:1}).exec(function(err, data){
 		$.each(data, function(k,v){
 			if(v.inactive != 1){
@@ -241,7 +242,6 @@ function importAgents(){
 		loadToAgentSelect(data)
 		loadAgentsTable(data)
 		pullThisMonth()
-		pullLastMonth()
 	})
 }
 function loadToAgentSelect(data){
@@ -547,6 +547,18 @@ function fillQuarter(agent, monitors){
 		$(avgTd).html(qAverage.toFixed() + ' %')
 	}
 }
+function fillLastMonitor(agent, monitor){
+	let td = document.getElementById(agent+'-last-monitor')
+	if (monitor.length > 0 && td !== null){
+		//console.log(monitor);
+		let	keys = Object.keys(monitor),
+				last = monitor[keys.length-1]
+				argsDate = new Date(last.date),
+				tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12),
+		td.innerHTML = last.score + '% on ' + tmpDate.getFullYear() + '-' + ("0"+(tmpDate.getMonth()+1)).slice(-2) + '-' + ("0"+(tmpDate.getDate())).slice(-2)
+	}
+
+}
 function completedPerAgent(){
 	// calls async function pullAgentMonitors() that returns a promise,
 	// then builds the table row on All Monitors
@@ -578,20 +590,18 @@ function completedPerAgent(){
 		// perform another db query to find all monitors for the quarter
 		// then loop through the agents to filter and fill in the #{agent}-qavg field
 		for (i in agentsObj){
-			var monitors = result.filter(x => x.agent ===i)
+			var monitors = result.filter(x => x.agent === i)
 			fillQuarter(i, monitors)
-			//console.log('in fill')
 		}
 	})
-
 }
-
 function needed(result){
 	// fill the table on index_main
 	// clean up by moving the row creation outside of the if (result != "")
 	var tbody = document.getElementById('needed-monitors-tbody'),
 			result = result,
-			recentFail = false;
+			recentFail = false
+	//		def = new Deferred();
 	var agentKeys = Object.keys(agentsObj),
 			monitorsKeys = Object.keys(thisMonthMonitorsObj);
 	var n = document.createElement('tr')
@@ -605,43 +615,53 @@ function needed(result){
 			// val = agent abbreviation
 			var count = 0 //count # of monitors
 			var recentFail = false, failDate = '';
-			// loop through query result
+			// loop through query result to count the completed monitors
 			$(result).each(function(key2, val2){
 				// key2 = numerical value of the key
 				// val2 = monitor row properties
+				let tmpDate = new Date(val2.date)
 				if (val2.agent == val && val2.fail != true){
 					count++; // # of monitors found
+					recentFail = false;
 				} else	if (val2.agent == val && val2.fail == true) {
 					// did not add to count because a failed monitor doesn't count towards the total
 					recentFail = true;
-					failDate = val2.date
+					failDate = tmpDate.getFullYear() + '-' + ("0"+(tmpDate.getMonth()+1)).slice(-2) + '-' + ("0"+(tmpDate.getDate())).slice(-2)
+
 				}
 			})
 			// count how many monitors are left
 			var monitorsLeft = agentsObj[agentKeys[key]].monitors - count;
 			// stop checking and counting after all the monitors have been completed
 			if (monitorsLeft <= 0){return;}
-			// create elemetns
+			// create elements
 			var row = document.createElement('tr'),
 					dateTd = document.createElement('td'),
 					nameTd = document.createElement('td'),
+					lastTd = document.createElement('td'),
 					numberTd = document.createElement('td'),
 					dateTdId = agentsObj[agentKeys[key]].abbv,
 					nameTdId = agentsObj[agentKeys[key]].abbv + '-name',
-					numberTdId = agentsObj[agentKeys[key]].abbv + '-id';
+					numberTdId = agentsObj[agentKeys[key]].abbv + '-id',
+					lastTdId = agentsObj[agentKeys[key]].abbv+'-last-monitor';
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[key]].name)
 			$(numberTd).attr('id', numberTdId).html(monitorsLeft)
+			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[key]]._id)
+
 			if (recentFail == true){
 				// Flag a fail
 				$(row).attr('data-toggle', 'tooltip').attr('title', `Failed on ${failDate}`)
-				$(dateTd).addClass('bg-danger')
-				$(nameTd).addClass('bg-danger')
-				$(numberTd).addClass('bg-danger')
+				$(dateTd).toggleClass('bg-danger')
+				$(nameTd).toggleClass('bg-danger')
+				$(lastTd).toggleClass('bg-danger')
+				$(numberTd).toggleClass('bg-danger')
 			}
+			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
 			row.appendChild(nameTd)
+			row.appendChild(lastTd)
 			row.appendChild(numberTd)
 			tbody.appendChild(row)
 			count = 0;
@@ -651,21 +671,27 @@ function needed(result){
 		})
 	} else {
 		for (var i=0; i>agentKeys.length; i++){
-				var row = document.createElement('tr'),
-						dateTd = document.createElement('td'),
-						nameTd = document.createElement('td'),
-						numberTd = document.createElement('td')
-						dateTdId = agentsObj[agentKeys[i]].abbv,
-						nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
-						numberTdId = agentsObj[agentKeys[i]].abbv + '-id';
-				$(dateTd).attr('id', dateTdId).html(thisMonth)
-				$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
-				$(numberTd).attr('id', numberTdId).html(agentsObj[agentKeys[i]].monitors)
-				$(row).attr('id', 'row-'+agentsObj[agentKeys[i]]._id)
-				row.appendChild(dateTd)
-				row.appendChild(nameTd)
-				row.appendChild(numberTd)
-				tbody.appendChild(row)
+			//create elements
+			var row = document.createElement('tr'),
+					dateTd = document.createElement('td'),
+					nameTd = document.createElement('td'),
+					numberTd = document.createElement('td'),
+					lastTd = document.createElement('td'),
+					dateTdId = agentsObj[agentKeys[i]].abbv,
+					nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
+					numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
+					lastTdId = agentsObj[agentKeys[i]].abbv+'-last-monitor';
+			$(dateTd).attr('id', dateTdId).html(thisMonth)
+			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
+			$(lastTd).attr('id', lastTdId)
+			$(numberTd).attr('id', numberTdId).html(agentsObj[agentKeys[i]].monitors)
+			$(row).attr('id', 'row-'+agentsObj[agentKeys[i]]._id)
+			// append TDs to TR then to TBODY
+			row.appendChild(dateTd)
+			row.appendChild(nameTd)
+			row.appendChild(lastTd)
+			row.appendChild(numberTd)
+			tbody.appendChild(row)
 		}
 	}
 }
@@ -673,27 +699,53 @@ function pullThisMonth(){
 	// pull the monitors using async pullAgentMonitors
 	// use completed() and needed() to fill the tables
 	let query = {'$and': [{date: {'$gte': startOfMonth}}, {date: {'$lte':endOfMonth}}]},
+			queryTwoMonths={'$and': [{date: {'$gte': startOfLastMOnth}}, {date: {'$lte':endOfMonth}}]},
 			sort = {date: 1}
-	pullAgentMonitors(query, sort).then(function(result){
-		completed(result);
-		needed(result);
-	})
+	pullAgentMonitors(query, sort)
+		.then(function(result){
+			completed(result);
+			needed(result)
 
+		}).then(function(finished){
+				pullAgentMonitors(queryTwoMonths, sort)
+					.then(function(result){
+						for (i in agentsObj){
+							var monitors = result.filter(x => x.agent === i)
+							fillLastMonitor(i, monitors)
+						}
+					})
+	})
 	completedPerAgent()
 }
 function pullQuarter(q){
 
 }
-function pullLastMonth(){
-	var reg = new RegExp(lastMonth)
-	var query = {date: {'$regex': reg}}
-	db.find(query).sort({date:1}).exec(
-		function(err, result){
-			lastMonthMonitorsObj = result;
-			//needed(result)
+/*function pullLastMonitor(){
+	let query = {'$and': [{date: {'$gte': startOfLastMOnth}}, {date: {'$lte':endOfMonth}}]},
+			sort = {date: 1},
+			keys = Object.keys(agentsObj)
+			console.log('in pull last monitor');
+
+	pullAgentMonitors(query, sort).then(function(result){
+		console.log(result);
+		if (result.length > 0){
+			for (i in result){
+				var monitors = result.filter(x => x.agent === i)
+				//console.log(monitors);
+				let	keys = Object.keys(result),
+						last = result[keys.length-1]
+				console.log('last monitor => ', last);
+				 last.score + ' on ' + last.date
+			}
+
+
+
+
 		}
-	)
-}
+
+	})
+
+}*/
 /**
 * Date Tools
 */
