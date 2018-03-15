@@ -627,7 +627,9 @@ function needed(result){
 	//		def = new Deferred();
 	var agentKeys = Object.keys(agentsObj),
 			monitorsKeys = Object.keys(thisMonthMonitorsObj);
-	var n = document.createElement('tr')
+	var n = document.createElement('tr'),
+			total = 0,
+			numLeftTd = document.getElementById('num-left');
 	//n.innerHTML = ''
 	tbody.appendChild(n)
 	// check for blank resuilt
@@ -637,6 +639,8 @@ function needed(result){
 			// key = numerical key starting at 0
 			// val = agent abbreviation
 			var count = 0 //count # of monitors
+			total += parseInt(agentsObj[val].monitors)
+			console.log(total);
 			var recentFail = false, failDate = '';
 			// loop through query result to count the completed monitors
 			$(result).each(function(key2, val2){
@@ -645,6 +649,8 @@ function needed(result){
 				let tmpDate = new Date(val2.date)
 				if (val2.agent == val && val2.fail != true){
 					count++; // # of monitors found
+					total--;
+					console.log(total);
 					recentFail = false;
 				} else	if (val2.agent == val && val2.fail == true) {
 					// did not add to count because a failed monitor doesn't count towards the total
@@ -687,6 +693,8 @@ function needed(result){
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
 			tbody.appendChild(row)
+
+			numLeftTd.innerHTML = total;
 			count = 0;
 			$(function(){
 				$('[data-toggle="tooltip"]').tooltip()
@@ -704,6 +712,7 @@ function needed(result){
 					nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
 					numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
 					lastTdId = agentsObj[agentKeys[i]].abbv+'-last-monitor';
+			total += parseInt(agentsObj[agentKeys[i]].monitors)
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
 			$(lastTd).attr('id', lastTdId)
@@ -715,7 +724,27 @@ function needed(result){
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
 			tbody.appendChild(row)
+
+			numLeftTd.innerHTML = total;
 		}
+	}
+	let x = parseInt(numLeftTd.innerHTML)
+	switch (true){
+		case (x >=20):
+			$(numLeftTd).parent().addClass('bg-danger')
+													.removeClass('bg-warning')
+													.removeClass('bg-info')
+			break;
+		case (x >=10 && x <20):
+			$(numLeftTd).parent().addClass('bg-warning')
+													.removeClass('bg-danger')
+													.removeClass('bg-info')
+			break;
+		default:
+			$(numLeftTd).parent().addClass('bg-info')
+													.removeClass('bg-warning')
+													.removeClass('bg-danger')
+			break;
 	}
 }
 function pullThisMonth(){
