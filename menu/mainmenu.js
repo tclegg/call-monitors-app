@@ -70,6 +70,14 @@ const template = [
       },
       {
         role: 'close', label: i18n.__('Close')
+      },
+      {
+        role: 'toggledevtools',
+        label: i18n.__('Toggle Developer Tools'),
+        accelerator: 'CmdOrCtrl+Shift+I',
+        click (item, focusedWindow) {
+          if (focusedWindow) focusedWindow.webContents.openDevTools()
+        }
       }
     ]
   },
