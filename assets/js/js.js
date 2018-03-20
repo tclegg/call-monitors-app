@@ -126,20 +126,20 @@ function importLeads(){
 function loadToLeadSelect(){
 	//create options and add to the select
 	var out = document.getElementById(leadSelect),
-			leadsMonitorSelect = document.getElementById('select-lead-search'),
-			editMonitorLead = document.getElementById('edit-monitor-modal-select-lead')
-			activeKeys = Object.keys(activeLeadsObj),
-			allKeys = Object.keys(leadsObj),
-			i = 0,
-			x = 0
+		leadsMonitorSelect = document.getElementById('select-lead-search'),
+		editMonitorLead = document.getElementById('edit-monitor-modal-select-lead')
+		activeKeys = Object.keys(activeLeadsObj),
+		allKeys = Object.keys(leadsObj),
+		i = 0,
+		x = 0
 	out.innerHTML = '<option selected disabled value="0">Select Your Name</option>';
 	leadsMonitorSelect.innerHTML = '<option selected disabled value="0">Select Your Name</option>';
 	editMonitorLead.innerHTML = '<option selected disabled value="0">Select Your Name</option>'
 	$(activeKeys).each(function(k, v){
 		var option = document.createElement('option');
 		$(option).val(activeLeadsObj[v].abbv)
-						.html(activeLeadsObj[v].name)
-						.data('lead-id', activeLeadsObj[v]._id)
+				.html(activeLeadsObj[v].name)
+				.data('lead-id', activeLeadsObj[v]._id)
 		out.appendChild(option);
 		i++
 	})
@@ -147,11 +147,11 @@ function loadToLeadSelect(){
 		let allLeadsOption = document.createElement('option'),
 				modalLeadsOption = document.createElement('option');
 		$(allLeadsOption).val(leadsObj[v].abbv)
-							.html(leadsObj[v].name)
-							.attr('data-lead-id', leadsObj[v]._id)
+						.html(leadsObj[v].name)
+						.attr('data-lead-id', leadsObj[v]._id)
 		$(modalLeadsOption).val(leadsObj[v].abbv)
-							.html(leadsObj[v].name)
-							.attr('data-lead-id', leadsObj[v]._id)
+						.html(leadsObj[v].name)
+						.attr('data-lead-id', leadsObj[v]._id)
 
 		leadsMonitorSelect.appendChild(allLeadsOption);
 		editMonitorLead.appendChild(modalLeadsOption);
@@ -167,23 +167,23 @@ function loadLeadsTable(data){
 	for (i=0; i < arr.length; i++){
 		// create elements
 		var nameValue = data[i].name,
-				abbreviation = data[i].abbv,
-				inactive = data[i].inactive,
-				leadId = data[i]._id;
+			abbreviation = data[i].abbv,
+			inactive = data[i].inactive,
+			leadId = data[i]._id;
 
 
 		var fullNameTD = document.createElement('td'),
-				abbreviationTD = document.createElement('td'),
-				edit = document.createElement('td'),
-				remove = document.createElement('td'),
-				row = document.createElement('tr'),
-				editHTML = '<a class="edit-lead" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
-				removeHTML = '<a class="remove-lead" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>'
+			abbreviationTD = document.createElement('td'),
+			edit = document.createElement('td'),
+			remove = document.createElement('td'),
+			row = document.createElement('tr'),
+			editHTML = '<a class="edit-lead" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
+			removeHTML = '<a class="remove-lead" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>'
 		$(row).attr('data-abbv', data[i].abbv)
-					.attr('data-name', data[i].name)
-					.attr('data-id', data[i]._id)
-					.attr('data-inactive', data[i].inactive)
-					.attr('id', data[i]._id);
+			.attr('data-name', data[i].name)
+			.attr('data-id', data[i]._id)
+			.attr('data-inactive', data[i].inactive)
+			.attr('id', data[i]._id);
 		if (data[i].inactive == 1){
 			$(row).css('text-decoration', 'line-through')
 		}
@@ -205,19 +205,19 @@ function loadLeadsTable(data){
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
 		var args = {'type': 'edit-lead',
-								'abbv': $(parentData).data('abbv'),
-								'name': $(parentData).data('name'),
-								'id': $(parentData).data('id'),
-								'inactive': $(parentData).data('inactive')}
+					'abbv': $(parentData).data('abbv'),
+					'name': $(parentData).data('name'),
+					'id': $(parentData).data('id'),
+					'inactive': $(parentData).data('inactive')}
 		showModal(args)
 	})
 	$('.remove-lead').click(function(e){
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
 		var args = {'type': 'remove-lead',
-								'id': $(parentData).data('id'),
-								'name': $(parentData).data('name'),
-								'inactive': $(parentData).data('inactive')}
+					'id': $(parentData).data('id'),
+					'name': $(parentData).data('name'),
+					'inactive': $(parentData).data('inactive')}
 		showModal(args)
 	})
 	$('.add-lead').click(function(e){
@@ -253,10 +253,10 @@ function loadToAgentSelect(data){
 	editMonitorAgent.innerHTML = '<option selected disabled value="0">Select The Agent You Monitored</option>';
 	for (i=0; i < data.length; i++) {
 		var nameValue = data[i].name,
-				abbreviation = data[i].abbv,
-				agentId = data[i]._id,
-				agentOption = document.createElement('option')
-				modalOption = document.createElement('option');
+			abbreviation = data[i].abbv,
+			agentId = data[i]._id,
+			agentOption = document.createElement('option')
+			modalOption = document.createElement('option');
 		$(agentOption).val(abbreviation).html(nameValue).attr('data-agent-id', agentId)
 		$(modalOption).val(abbreviation).html(nameValue).attr('data-agent-id', agentId)
 		out.appendChild(agentOption);
@@ -272,25 +272,25 @@ function loadAgentsTable(data){
 	for (i=0; i < arr.length; i++){
 		// create elements
 		let nameValue = data[i].name,
-				abbreviation = data[i].abbv,
-				requiredMonitors = data[i].monitors,
-				inactive = data[i].inactive,
-				agentId = data[i]._id,
-				fullNameTD = document.createElement('td'),
-				abbreviationTD = document.createElement('td'),
-				edit = document.createElement('td'),
-				remove = document.createElement('td'),
-				monitors = document.createElement('td'),
-				row = document.createElement('tr'),
-				editHTML = '<a class="edit-agent" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
-				removeHTML = '<a class="remove-agent" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>';
+			abbreviation = data[i].abbv,
+			requiredMonitors = data[i].monitors,
+			inactive = data[i].inactive,
+			agentId = data[i]._id,
+			fullNameTD = document.createElement('td'),
+			abbreviationTD = document.createElement('td'),
+			edit = document.createElement('td'),
+			remove = document.createElement('td'),
+			monitors = document.createElement('td'),
+			row = document.createElement('tr'),
+			editHTML = '<a class="edit-agent" href="#" id="edit-'+abbreviation+'"><span class="glyphicon glyphicon-pencil"></span></a>',
+			removeHTML = '<a class="remove-agent" href="#" id="remove-'+abbreviation+'"><span class="glyphicon glyphicon-remove"></span></a>';
 		// set attributes for the row
 		$(row).attr('data-abbv', abbreviation)
-					.attr('data-name', nameValue)
-					.attr('data-monitors', requiredMonitors)
-					.attr('data-id', agentId)
-					.attr('data-inactive', inactive)
-					.attr('id', agentId);
+				.attr('data-name', nameValue)
+				.attr('data-monitors', requiredMonitors)
+				.attr('data-id', agentId)
+				.attr('data-inactive', inactive)
+				.attr('id', agentId);
 		if (inactive == 1){
 			$(row).css('text-decoration', 'line-through')
 		}
@@ -314,20 +314,20 @@ function loadAgentsTable(data){
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
 		var args = {'type': 'edit-agent',
-								'abbv': $(parentData).data('abbv'),
-								'name': $(parentData).data('name'),
-								'id': $(parentData).data('id'),
-								'monitors': $(parentData).data('monitors'),
-								'inactive': $(parentData).data('inactive')}
+					'abbv': $(parentData).data('abbv'),
+					'name': $(parentData).data('name'),
+					'id': $(parentData).data('id'),
+					'monitors': $(parentData).data('monitors'),
+					'inactive': $(parentData).data('inactive')}
 		showModal(args);
 	})
 	$('.remove-agent').click(function(e){
 		e.preventDefault();
 		var parentData = $(this).parent().parent()
 		var args = {'type':'remove-agent',
-								'id': $(parentData).data('id'),
-								'name': $(parentData).data('name'),
-								'inactive': $(parentData).data('inactive')}
+					'id': $(parentData).data('id'),
+					'name': $(parentData).data('name'),
+					'inactive': $(parentData).data('inactive')}
 		showModal(args);
 	})
 	$('.add-agent').click(function(e){
@@ -353,26 +353,26 @@ function completed(result){
 	$.each(result, function(k, v){
 		// create elements
 		let resultDate = new Date(v.date)
-				resultYear = resultDate.getFullYear(),
-				resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
-				resultDD = ("0"+resultDate.getDate()).slice(-2),
-				resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
-				dateTd = document.createElement('td'),
-				nameTd = document.createElement('td'),
-				scoreTd = document.createElement('td'),
-				failTd = document.createElement('td'),
-				leadTd = document.createElement('td'),
-				leadAbbv = v.lead.toString()
-				row = document.createElement('tr');
+			resultYear = resultDate.getFullYear(),
+			resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
+			resultDD = ("0"+resultDate.getDate()).slice(-2),
+			resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
+			dateTd = document.createElement('td'),
+			nameTd = document.createElement('td'),
+			scoreTd = document.createElement('td'),
+			failTd = document.createElement('td'),
+			leadTd = document.createElement('td'),
+			leadAbbv = v.lead.toString()
+			row = document.createElement('tr');
 		//set attributes
 		row.id = v._id;
 		dateTd.innerHTML = resultDateString;
 		nameTd.innerHTML = agentsObj[v.agent].name;
 		$(row).attr('data-date', v.date)
-					.attr('data-agent', v.agent)
-					.attr('data-fail', v.fail)
-					.attr('data-lead', v.lead)
-					.attr('data-id', v._id)
+			.attr('data-agent', v.agent)
+			.attr('data-fail', v.fail)
+			.attr('data-lead', v.lead)
+			.attr('data-id', v._id)
 		scoreTd.innerHTML = v.score+' %';
 		if(v.fail == true){
 			failTd.innerHTML = '<span class="glyphicon glyphicon-ok">';
@@ -411,19 +411,19 @@ function buildRow(agent, monitors){
 	// this can probably be condensed. The header creation can probably move
 	// before the if(monitors>0){}
 	var tmpObj = [],
-			panelGroup = document.getElementById('agent-accordion-tbody'),
-			panelHead = document.createElement('tr'),
-			nameTd = document.createElement('td'),
-			completedTd = document.createElement('td'),
-			avgTd = document.createElement('td'),
-			qAvgTd = document.createElement('td'),
-			subTableRow = document.createElement('tr'),
-			subTableTd = document.createElement('td'),
-			subTableDiv = document.createElement('div'),
-			subTable = document.createElement('table'),
-			subThead = document.createElement('thead'),
-			subTbody = document.createElement('tbody'),
-			agentName = agentsObj[agent].name
+		panelGroup = document.getElementById('agent-accordion-tbody'),
+		panelHead = document.createElement('tr'),
+		nameTd = document.createElement('td'),
+		completedTd = document.createElement('td'),
+		avgTd = document.createElement('td'),
+		qAvgTd = document.createElement('td'),
+		subTableRow = document.createElement('tr'),
+		subTableTd = document.createElement('td'),
+		subTableDiv = document.createElement('div'),
+		subTable = document.createElement('table'),
+		subThead = document.createElement('thead'),
+		subTbody = document.createElement('tbody'),
+		agentName = agentsObj[agent].name
 	$(qAvgTd).attr('id', agent+'-qAvg')
 	// if the agent has monitors this month, else only build the row
 	if (monitors.length > 0){
@@ -438,26 +438,26 @@ function buildRow(agent, monitors){
 			count++
 			// create elements
 			let resultDate = new Date(v.date)
-					resultYear = resultDate.getFullYear(),
-					resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
-					resultDD = ("0"+resultDate.getDate()).slice(-2),
-					resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
-					row = document.createElement('tr'),
-					dateTd = document.createElement('td'),
-					scoreTd = document.createElement('td'),
-					failTd = document.createElement('td'),
-					leadTd = document.createElement('td'),
-					editTd = document.createElement('td')
+				resultYear = resultDate.getFullYear(),
+				resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
+				resultDD = ("0"+resultDate.getDate()).slice(-2),
+				resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
+				row = document.createElement('tr'),
+				dateTd = document.createElement('td'),
+				scoreTd = document.createElement('td'),
+				failTd = document.createElement('td'),
+				leadTd = document.createElement('td'),
+				editTd = document.createElement('td')
 			dateTd.innerHTML = resultDateString
 			scoreTd.innerHTML = v.score+' %'
 			// the data attr contains the table row information for the edit modal
 			$(editTd).html('<span class="glyphicon glyphicon-cog edit-monitor"></span>')
-							.attr('data', 'id').data('id', v._id)
-							.attr('data', 'score').data('score', v.score)
-							.attr('data', 'name').data('agent', v.agent)
-							.attr('data', 'date').data('date', v.date)
-							.attr('data', 'fail').data('fail', v.fail)
-							.attr('data', 'lead').data('lead', v.lead)
+					.attr('data', 'id').data('id', v._id)
+					.attr('data', 'score').data('score', v.score)
+					.attr('data', 'name').data('agent', v.agent)
+					.attr('data', 'date').data('date', v.date)
+					.attr('data', 'fail').data('fail', v.fail)
+					.attr('data', 'lead').data('lead', v.lead)
 			//let leadName = leadsObj[v.lead].name // <-- this wasn't necessary
 			if (v.fail == true) {
 				//Add red shading to background if there is a fail
@@ -493,11 +493,11 @@ function buildRow(agent, monitors){
 		}
 		$(completedTd).html(count)
 		$(panelHead).addClass('accordion-toggle')
-								.attr('data-parent', '#agent-accordion-tbody')
-								.attr('data-toggle', 'collapse')
-								.attr('data-target', '#'+agent+'Table')
-								.append(nameTd).append(completedTd)
-								.append(avgTd).append(qAvgTd)
+					.attr('data-parent', '#agent-accordion-tbody')
+					.attr('data-toggle', 'collapse')
+					.attr('data-target', '#'+agent+'Table')
+					.append(nameTd).append(completedTd)
+					.append(avgTd).append(qAvgTd)
 		// add the subtable to the agent's header
 		$(panelGroup).append(panelHead).append(subTableRow)
 	} else {
@@ -513,10 +513,10 @@ function buildRow(agent, monitors){
 									.append(subTableTd)
 		$(nameTd).html(agentName)
 		$(panelHead).addClass('accordion-toggle')
-								.attr('data-toggle', 'collapse')
-								.attr('data-target', '#'+agent+'Table')
-								.append(nameTd).append(completedTd)
-								.append(avgTd).append(qAvgTd)
+					.attr('data-toggle', 'collapse')
+					.attr('data-target', '#'+agent+'Table')
+					.append(nameTd).append(completedTd)
+					.append(avgTd).append(qAvgTd)
 
 		$(panelGroup).append(panelHead).append(subTableRow)
 	}
@@ -552,9 +552,9 @@ function fillLastMonitor(agent, monitor){
 	if (monitor.length > 0 && td !== null){
 		//console.log(monitor);
 		let	keys = Object.keys(monitor),
-				last = monitor[keys.length-1]
-				argsDate = new Date(last.date),
-				tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12),
+			last = monitor[keys.length-1]
+			argsDate = new Date(last.date),
+			tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12)
 		td.innerHTML = last.score + '% on ' + tmpDate.getFullYear() + '-' + ("0"+(tmpDate.getMonth()+1)).slice(-2) + '-' + ("0"+(tmpDate.getDate())).slice(-2)
 	}
 
@@ -600,12 +600,12 @@ function completedPerAgent(argMonth = null){
 		$('.edit-monitor').on('click', function(e){
 			var parentData = $(this).parent()
 			var args = {'type': 'edit-monitor',
-									'id': $(parentData).data('id'),
-									'agent': $(parentData).data('agent'),
-									'date': $(parentData).data('date'),
-									'score': $(parentData).data('score'),
-									'fail': $(parentData).data('fail'),
-									'lead': $(parentData).data('lead')}
+						'id': $(parentData).data('id'),
+						'agent': $(parentData).data('agent'),
+						'date': $(parentData).data('date'),
+						'score': $(parentData).data('score'),
+						'fail': $(parentData).data('fail'),
+						'lead': $(parentData).data('lead')}
 			showModal(args)
 		})
 	})
@@ -640,7 +640,7 @@ function needed(result){
 			// val = agent abbreviation
 			var count = 0 //count # of monitors
 			total += parseInt(agentsObj[val].monitors)
-			console.log(total);
+			//console.log(total);
 			var recentFail = false, failDate = '';
 			// loop through query result to count the completed monitors
 			$(result).each(function(key2, val2){
@@ -650,7 +650,7 @@ function needed(result){
 				if (val2.agent == val && val2.fail != true){
 					count++; // # of monitors found
 					total--;
-					console.log(total);
+					//console.log(total);
 					recentFail = false;
 				} else	if (val2.agent == val && val2.fail == true) {
 					// did not add to count because a failed monitor doesn't count towards the total
@@ -665,14 +665,14 @@ function needed(result){
 			if (monitorsLeft <= 0){return;}
 			// create elements
 			var row = document.createElement('tr'),
-					dateTd = document.createElement('td'),
-					nameTd = document.createElement('td'),
-					lastTd = document.createElement('td'),
-					numberTd = document.createElement('td'),
-					dateTdId = agentsObj[agentKeys[key]].abbv,
-					nameTdId = agentsObj[agentKeys[key]].abbv + '-name',
-					numberTdId = agentsObj[agentKeys[key]].abbv + '-id',
-					lastTdId = agentsObj[agentKeys[key]].abbv+'-last-monitor';
+				dateTd = document.createElement('td'),
+				nameTd = document.createElement('td'),
+				lastTd = document.createElement('td'),
+				numberTd = document.createElement('td'),
+				dateTdId = agentsObj[agentKeys[key]].abbv,
+				nameTdId = agentsObj[agentKeys[key]].abbv + '-name',
+				numberTdId = agentsObj[agentKeys[key]].abbv + '-id',
+				lastTdId = agentsObj[agentKeys[key]].abbv+'-last-monitor';
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[key]].name)
 			$(numberTd).attr('id', numberTdId).html(monitorsLeft)
@@ -704,14 +704,14 @@ function needed(result){
 		for (var i=0; i>agentKeys.length; i++){
 			//create elements
 			var row = document.createElement('tr'),
-					dateTd = document.createElement('td'),
-					nameTd = document.createElement('td'),
-					numberTd = document.createElement('td'),
-					lastTd = document.createElement('td'),
-					dateTdId = agentsObj[agentKeys[i]].abbv,
-					nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
-					numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
-					lastTdId = agentsObj[agentKeys[i]].abbv+'-last-monitor';
+				dateTd = document.createElement('td'),
+				nameTd = document.createElement('td'),
+				numberTd = document.createElement('td'),
+				lastTd = document.createElement('td'),
+				dateTdId = agentsObj[agentKeys[i]].abbv,
+				nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
+				numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
+				lastTdId = agentsObj[agentKeys[i]].abbv+'-last-monitor';
 			total += parseInt(agentsObj[agentKeys[i]].monitors)
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
@@ -732,18 +732,18 @@ function needed(result){
 	switch (true){
 		case (x >=20):
 			$(numLeftTd).parent().addClass('bg-danger')
-													.removeClass('bg-warning')
-													.removeClass('bg-info')
+						.removeClass('bg-warning')
+						.removeClass('bg-info')
 			break;
 		case (x >=10 && x <20):
 			$(numLeftTd).parent().addClass('bg-warning')
-													.removeClass('bg-danger')
-													.removeClass('bg-info')
+						.removeClass('bg-danger')
+						.removeClass('bg-info')
 			break;
 		default:
 			$(numLeftTd).parent().addClass('bg-info')
-													.removeClass('bg-warning')
-													.removeClass('bg-danger')
+						.removeClass('bg-warning')
+						.removeClass('bg-danger')
 			break;
 	}
 }
@@ -751,8 +751,8 @@ function pullThisMonth(){
 	// pull the monitors using async pullAgentMonitors
 	// use completed() and needed() to fill the tables
 	let query = {'$and': [{date: {'$gte': startOfMonth}}, {date: {'$lte':endOfMonth}}]},
-			queryTwoMonths={'$and': [{date: {'$gte': startOfLastMOnth}}, {date: {'$lte':endOfMonth}}]},
-			sort = {date: 1}
+		queryTwoMonths={'$and': [{date: {'$gte': startOfLastMOnth}}, {date: {'$lte':endOfMonth}}]},
+		sort = {date: 1}
 	pullAgentMonitors(query, sort)
 		.then(function(result){
 			completed(result);
@@ -851,10 +851,10 @@ function validate(d,a,f,l,s, fields){
 	let inputValues = {d,a,f,l,s}
 	try {
 		var validDate = checkFuture(d, fields.d),
-				validAgent = checkAgent(a, fields.a),
-				validScore = checkScore(s, fields.s),
-				validFail = checkFail(f, fields.f),
-				validLead = checkLead(l, fields.l)
+			validAgent = checkAgent(a, fields.a),
+			validScore = checkScore(s, fields.s),
+			validFail = checkFail(f, fields.f),
+			validLead = checkLead(l, fields.l)
 		if (validFail === true){
 			validScore = 0;
 		}
@@ -895,7 +895,7 @@ function showModal(args){
 		}
 	})
 	$('.modal').on('shown.bs.modal', function () {
-  	$('.modal').focus()
+  		$('.modal').focus()
 	})
 	$(modalId).modal('show')
 }
@@ -964,8 +964,8 @@ function buildEditScoreModal(args){
 	// builds the modal to edit the score
 	// args object {agent, date, score, fail, lead, id}
 	let argsDate = new Date(args.date),
-			tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12),
-			dateField = document.getElementById('edit-monitor-modal-input-date')
+		tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12),
+		dateField = document.getElementById('edit-monitor-modal-input-date')
 	dateField.valueAsDate = tmpDate
 	$('#edit-monitor-modal').find('.modal-title > span').html(agentsObj[args.agent].name)
 	$('#edit-monitor-modal-select-agent').val(args.agent)
@@ -978,23 +978,14 @@ function buildEditScoreModal(args){
 /**
 *	Add/Edit Modal Controls
 */
-/* ----- Seems to be unused -----
-function changeEditError (err){
-	let errorField = $(err.field).parents('.form-group')
-	let errorHelper = $(errorField).parent().find($('.help-block'))
-	$(errorField).addClass('has-error')
-	$(errorHelper).html(err.message).addClass('has-error')
-	var timeout = setTimeout(function(){
-		$(errorField).toggleClass('has-error')
-		$(errorHelper).toggleClass('has-error').html('')
-	}, 4000);
-}*/
 function dbAgentUpdate(args, field){
 	// update agentsDb
 	// requires args object + field names object
 	switch(args.type){
 		case 'edit-agent-modal':
-			agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'], 'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'], 'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
+			agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'],
+							'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'],
+							'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
 				//done
 				if (error) {
 					throw {message: error, field: $(field)}
@@ -1037,11 +1028,11 @@ function dbLeadUpdate(args, field){
 	// requires args object + field names object
 	switch (args.type){
 		case 'edit-lead-modal':
-			leadsDb.update({_id: args['edit-lead-modal-id']}, {$set: {
-							'abbv': args['edit-lead-modal-abbv'],
-							'name': args['edit-lead-modal-name'],
-							'inactive': args['edit-lead-modal-inactive']}
-						}, {}, function(error, numReplaced){
+			leadsDb.update({_id: args['edit-lead-modal-id']}, {
+							$set: {'abbv': args['edit-lead-modal-abbv'],
+									'name': args['edit-lead-modal-name'],
+									'inactive': args['edit-lead-modal-inactive']}
+							}, {}, function(error, numReplaced){
 				//done
 				if (error) {
 					throw {message: error, field: $(field)}
@@ -1076,7 +1067,8 @@ function dbLeadUpdate(args, field){
 }
 function dbAddAgent(args, field){
 	// insert a new agent into agentsDb
-	var inserted = {'abbv': args['add-agent-modal-abbv'], 'name': args['add-agent-modal-name'], 'monitors': args['add-agent-modal-monitors'], 'inactive': args['add-agent-modal-inactive']}
+	var inserted = {'abbv': args['add-agent-modal-abbv'], 'name': args['add-agent-modal-name'], 
+				'monitors': args['add-agent-modal-monitors'], 'inactive': args['add-agent-modal-inactive']}
 
 	agentsDb.insert(inserted, function(error, insertedRow){
 		//done
@@ -1135,11 +1127,11 @@ function validateEditModal(d,a,f,l,s,i, fields){
 	//console.log(inputValues);
 	try {
 		let validAgent = checkAgent(a, fields.a),
-				validDate = checkFuture(d, fields.d),
-				validScore = checkScore(s, fields.s),
-				validFail = checkFail(f, fields.f),
-				validId = checkId(i, fields.i),
-				validLead = checkLead(l, fields.l)
+			validDate = checkFuture(d, fields.d),
+			validScore = checkScore(s, fields.s),
+			validFail = checkFail(f, fields.f),
+			validId = checkId(i, fields.i),
+			validLead = checkLead(l, fields.l)
 		if (validFail === true) {
 			validScore = 0;
 		}
@@ -1159,15 +1151,15 @@ function validateModal(type, args){
 				args.type = 'edit-agent-modal';
 				if(!args['edit-agent-modal-abbv']){
 					throw {message: 'You must enter an abbreviation for the agent!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				if(!args['edit-agent-modal-name']){
 					throw {message: 'You must enter an agent\'s name!',
-								field: $('#'+type+'-name').parent()}
+							field: $('#'+type+'-name').parent()}
 				}
 				if(args['edit-agent-modal-monitors']<1){
 					throw {message: 'The number of monitors must be greater than zero!',
-								field: $('#'+type+'-monitors').parent()}
+							field: $('#'+type+'-monitors').parent()}
 				}
 				dbAgentUpdate(args, $('#'+type+'-success'));
 				break;
@@ -1175,11 +1167,11 @@ function validateModal(type, args){
 				args.type = 'edit-lead-modal';
 				if(!args['edit-lead-modal-abbv']){
 					throw {message: 'You must enter an abbreviation for the lead!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				if(!args['edit-lead-modal-name']){
 					throw {message: 'You must enter a lead\'s name!',
-								field: $('#'+type+'-name').parent()}
+							field: $('#'+type+'-name').parent()}
 				}
 				dbAgentUpdate(args, $('#'+type+'-success'));
 				break;
@@ -1196,15 +1188,15 @@ function validateModal(type, args){
 				//console.log(args);
 				if(!args['add-agent-modal-abbv']){
 					throw {message: 'You must enter an abbreviation for the agent!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				if(!args['add-agent-modal-name']){
 					throw {message: 'You must enter an agent\'s name!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				if(args['add-agent-modal-monitors']<1){
 					throw {message: 'The number of monitors must be greater than zero!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				dbAddAgent(args, $('#'+type+'-success'))
 				break;
@@ -1212,11 +1204,11 @@ function validateModal(type, args){
 				args.type = 'add-lead-modal';
 				if(!args['add-lead-modal-abbv']){
 					throw {message: 'You must enter an abbreviation for the lead!',
-								field: $('#'+type+'-abbv').parent()}
+							field: $('#'+type+'-abbv').parent()}
 				}
 				if(!args['add-lead-modal-name']){
 					throw {message: 'You must enter a lead\'s name!',
-								field: $('#'+type+'-name').parent()}
+							field: $('#'+type+'-name').parent()}
 				}
 				dbAddLead(args, $('#'+type+'-success'))
 				break;
@@ -1247,17 +1239,12 @@ function pullLeadMonth(month, lead){
 			loadBlankLeadSearch(month)
 		}
 	})
-/*
-	db.find(query).sort({date: 1}).exec(function(err, result){
-
-
-	})*/
 }
 function loadBlankLeadSearch(month){
 	var table = document.getElementById('leadmonitors-tbody')
 	table.innerHTML = "";
 	var row = document.createElement('tr'),
-			dateTd = document.createElement('td');
+		dateTd = document.createElement('td');
 	row.id = "blankresult";
 	dateTd.innerHTML = 'No results found for ' + month;
 	$(dateTd).attr('colspan', '4')
@@ -1272,25 +1259,25 @@ function loadLeadSearch(result, month){
 	$.each(result, function(k, v){
 		//loop through each row
 		var resultDate = new Date(v.date)
-				resultYear = resultDate.getFullYear(),
-				resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
-				resultDD = ("0"+resultDate.getDate()).slice(-2),
-				resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
-				row = document.createElement('tr'),
-				dateTd = document.createElement('td'),
-				nameTd = document.createElement('td'),
-				failTd = document.createElement('td'),
-				scoreTd = document.createElement('td');
+			resultYear = resultDate.getFullYear(),
+			resultMM = ("0"+(resultDate.getMonth()+1)).slice(-2),
+			resultDD = ("0"+resultDate.getDate()).slice(-2),
+			resultDateString = resultYear+'-'+resultMM+'-'+resultDD,
+			row = document.createElement('tr'),
+			dateTd = document.createElement('td'),
+			nameTd = document.createElement('td'),
+			failTd = document.createElement('td'),
+			scoreTd = document.createElement('td');
 
 		row.id = 'leadmonitor-'+v._id
 		dateTd.innerHTML = resultDateString;
 		nameTd.innerHTML = agentsObj[v.agent].name;
 		scoreTd.innerHTML = v.score+' %';
 		$(row).attr('data-date', v.date)
-					.attr('data-agent', v.agent)
-					.attr('data-fail', v.fail)
-					.attr('data-score', v.score)
-					.attr('data-id', v._id)
+				.attr('data-agent', v.agent)
+				.attr('data-fail', v.fail)
+				.attr('data-score', v.score)
+				.attr('data-id', v._id)
 		if(v.fail == true){
 			failTd.innerHTML = '<span class="glyphicon glyphicon-ok">'
 		} else {
@@ -1319,15 +1306,15 @@ $(window).on('load', function(){
 	$('#form-monitors').submit(function(e){
 		e.preventDefault();
 		var aField = document.getElementById(agentSelect),
-				lField = document.getElementById(leadSelect),
-				fField = document.getElementById(failCheck),
-				dField = document.getElementById(dateInput),
-				sField = document.getElementById(scoreInput),
-				a = aField.value,
-				l = lField.value,
-				f = fField.checked,
-				d = new Date(dField.value.replace(/-/g, '\/')),
-				s = sField.value;
+			lField = document.getElementById(leadSelect),
+			fField = document.getElementById(failCheck),
+			dField = document.getElementById(dateInput),
+			sField = document.getElementById(scoreInput),
+			a = aField.value,
+			l = lField.value,
+			f = fField.checked,
+			d = new Date(dField.value.replace(/-/g, '\/')),
+			s = sField.value;
 
 		let fields = {"a": aField, "l": lField, "f": fField, "d": dField, "s": sField}
 		validate(d,a,f,l,s,fields);
@@ -1336,9 +1323,9 @@ $(window).on('load', function(){
 	$('.modal-submit').click( function (e) {
 		//delete modalArgs;
 		let parentModal = $(this).parent().parent().parent().parent(),
-				type = $(parentModal).attr('id'),
-				fields = $(this).parents('.modal-content').find('[name]')
-				modalArgs = {'type': type};
+			type = $(parentModal).attr('id'),
+			fields = $(this).parents('.modal-content').find('[name]')
+			modalArgs = {'type': type};
 
 		$(fields).each(function(k,v){
 			modalArgs[$(v).attr('id')] = $(v).val();
@@ -1347,18 +1334,18 @@ $(window).on('load', function(){
 		if (type == 'edit-monitor-modal'){
 			let tmpArgs = {'type': type}
 			let aField = document.getElementById('edit-monitor-modal-select-agent'),
-					lField = document.getElementById('edit-monitor-modal-select-lead'),
-					fField = document.getElementById('edit-monitor-modal-check-fail'),
-					dField = document.getElementById('edit-monitor-modal-input-date'),
-					sField = document.getElementById('edit-monitor-modal-score'),
-					iField = document.getElementById('edit-monitor-modal-id');
+				lField = document.getElementById('edit-monitor-modal-select-lead'),
+				fField = document.getElementById('edit-monitor-modal-check-fail'),
+				dField = document.getElementById('edit-monitor-modal-input-date'),
+				sField = document.getElementById('edit-monitor-modal-score'),
+				iField = document.getElementById('edit-monitor-modal-id');
 
 			let a = aField.value,
-					l = lField.value,
-					f = fField.checked,
-					d = new Date(dField.value.replace(/-/g, '\/')),
-					s = sField.value,
-					i = iField.value;
+				l = lField.value,
+				f = fField.checked,
+				d = new Date(dField.value.replace(/-/g, '\/')),
+				s = sField.value,
+				i = iField.value;
 
 			let fields = {'a':aField, 'l':lField, 'f':fField, 'd':dField, 's':sField, 'i':iField}
 			validateEditModal(d,a,f,l,s,i, fields)
@@ -1384,11 +1371,11 @@ $(window).on('load', function(){
 	$('#monitors-search-date').change(function(){
 
 		let month = $(this).val().replace(/-/g, '\/'),
-				tmpDate = new Date(month),
-				clearTbody = document.getElementById('agent-accordion-tbody')
+			tmpDate = new Date(month),
+			clearTbody = document.getElementById('agent-accordion-tbody')
 
-				clearTbody.innerHTML = '';
-				completedPerAgent(tmpDate)
+		clearTbody.innerHTML = '';
+		completedPerAgent(tmpDate)
 
 	})
 
