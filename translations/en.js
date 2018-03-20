@@ -33,5 +33,7 @@
 	"Who we are": "IPC/Remote",
 	"What we do": "What we do",
 	"Get in touch": "Get in touch",
-	"Learn more": "Learn more"
+	"Learn more": "Learn more",
+	"Toggle Developer Tools": "Toggle Developer Tools",
+	"Reload": "Reload"
 }
