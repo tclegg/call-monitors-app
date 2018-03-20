@@ -33,5 +33,7 @@
 	"Who we are": "IPC/Remote",
 	"What we do": "Vår verksamhet",
 	"Get in touch": "Kontakta oss",
-	"Learn more": "Läs mer"
+	"Learn more": "Läs mer",
+	"Toggle Developer Tools": "Byt ut utvecklingsverktyg",
+	"Reload": "Ladda om"
 }
