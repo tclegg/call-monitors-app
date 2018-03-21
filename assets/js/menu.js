@@ -1,3 +1,5 @@
+const {app} = require('electron').remote; 
+
 window.navigation = window.navigation || {},
 function(n) {
     navigation.menu = {
@@ -6,6 +8,8 @@ function(n) {
         contentContainer: '#wrapper',
         startSectionMenuItem: '#main-menu',
         startSection: '#main',
+        footerContainer: '#footer',
+        footerVersion: '.app-version'
       },
 
       importSectionsToDOM: function() {
@@ -13,7 +17,12 @@ function(n) {
         Array.prototype.forEach.call(links, function (link) {
           let template = link.import.querySelector(navigation.menu.constants.sectionTemplate)
           let clone = document.importNode(template.content, true)
-          document.querySelector(navigation.menu.constants.contentContainer).appendChild(clone)
+          if ($(link).hasClass('footer-link')){
+            document.querySelector(navigation.menu.constants.footerContainer).appendChild(clone)
+            document.querySelector(navigation.menu.constants.footerVersion).innerHTML = app.getVersion()
+          } else {
+            document.querySelector(navigation.menu.constants.contentContainer).appendChild(clone)
+          }
         })
       },
 

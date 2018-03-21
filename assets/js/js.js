@@ -1,32 +1,34 @@
 // declare constants for node tools
-const {ipcRenderer} = require('electron')
-		fs = require('fs'),
-		path = require('path'),
-		nedb = require('nedb'),
-		date = new Date();
+// electron = require('electron'),
+ const	{app} = require('electron').remote,// electron.app,
+	{ipcRenderer} = require('electron'),
+	fs = require('fs'),
+	path = require('path'),
+	nedb = require('nedb'),
+	date = new Date();
 // variables for date and database creation/selection
 var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
-		year = date.getFullYear(),
-		mm = ("0"+(date.getMonth()+1)).slice(-2),
-		dd = ("0"+(date.getDate())).slice(-2),
-		thisMonth = year+'-'+mm,
-		startOfMonth = new Date(year, date.getMonth(), 1),
-		endOfMonth = new Date(year, date.getMonth()+1, 0),
-		startOfLastMOnth = new Date(year, date.getMonth()-1, 1),
-		lastMonth = year+'-'+(("0"+(date.getMonth())).slice(-2)),
-		dbname = 'monitors-'+year+'.db',
-		fullDateWithSlashes = year + '/' + mm + '/'+dd,
-		fullDateWithDashes =  year + '-' + mm + '-'+dd;
+	year = date.getFullYear(),
+	mm = ("0"+(date.getMonth()+1)).slice(-2),
+	dd = ("0"+(date.getDate())).slice(-2),
+	thisMonth = year+'-'+mm,
+	startOfMonth = new Date(year, date.getMonth(), 1),
+	endOfMonth = new Date(year, date.getMonth()+1, 0),
+	startOfLastMOnth = new Date(year, date.getMonth()-1, 1),
+	lastMonth = year+'-'+(("0"+(date.getMonth())).slice(-2)),
+	dbname = 'monitors-'+year+'.db';
+	//fullDateWithSlashes = year + '/' + mm + '/'+dd,
+	//fullDateWithDashes =  year + '-' + mm + '-'+dd;
 	// check for dev
 	if (!process.env.TODO_DEV){
-			//////////////////////////
-			// Production Datasbase //
-			//////////////////////////
+		//////////////////////////
+		// Production Datasbase //
+		//////////////////////////
 
-			var xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database'
-			var	db = new nedb({filename: path.resolve(xDrive, dbname), autoload: true}),
-					leadsDb = new nedb({filename: path.resolve(xDrive, 'leads.db'), autoload: true}),
-					agentsDb = new nedb({filename: path.resolve(xDrive, 'agents.db'), autoload: true})
+		var xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database'
+		var	db = new nedb({filename: path.resolve(xDrive, dbname), autoload: true}),
+			leadsDb = new nedb({filename: path.resolve(xDrive, 'leads.db'), autoload: true}),
+			agentsDb = new nedb({filename: path.resolve(xDrive, 'agents.db'), autoload: true})
 
 		} else {
 			//////////////////////////
@@ -34,74 +36,74 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 			//////////////////////////
 
 			var db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
-					leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
-					agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true})
+				leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
+				agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true})
 		}
-		// main form inputs
+	// main form inputs
 var	agentSelect = 'select-agent',
-		dateInput = 'input-date',
-		failCheck = 'check-fail',
-		leadSelect = 'select-lead',
-		scoreInput = 'score-agents',
-		dateField = 'input-date',
-		// month tools
-		months= {
-				"01": "Janary",
-				"02": "February",
-				"03": "March",
-				"04": "April",
-				"05": "May",
-				"06": "June",
-				"07": "July",
-				"08": "August",
-				"09": "September",
-				"10": "October",
-				"11": "November",
-				"12": "December"
-		},
-		monthName = months[mm],
-		// objects to store query data
-		leadsObj = {},
-		activeLeadsObj = {},
-		agentsObj = {},
-		activeAgentsObj = {},
-		thisMonthMonitorsObj = {},
-		lastMonthMonitorsObj = {},
-		// arrays for looping
-		agentsArray = [],
-		leadsArray = [],
-		thisMonthMonitorsArray = [],
-		quarterlyMonitorsArray = [],
-		// interval for persistence
-		dbInterval = 60000,
-		// quarter calculation tools
-		q1 = ["0", "1", "2"],
-		q2 = ["3", "4", "5"],
-		q3 = ["6", "7", "8"],
-		q4 = ["9", "10", "11"],
-		qstart = '',
-		qend = '',
-		qm = new Date()
+	dateInput = 'input-date',
+	failCheck = 'check-fail',
+	leadSelect = 'select-lead',
+	scoreInput = 'score-agents',
+	dateField = 'input-date',
+	// month tools
+	months= {
+			"01": "Janary",
+			"02": "February",
+			"03": "March",
+			"04": "April",
+			"05": "May",
+			"06": "June",
+			"07": "July",
+			"08": "August",
+			"09": "September",
+			"10": "October",
+			"11": "November",
+			"12": "December"
+	},
+	monthName = months[mm],
+	// objects to store query data
+	leadsObj = {},
+	activeLeadsObj = {},
+	agentsObj = {},
+	activeAgentsObj = {},
+	thisMonthMonitorsObj = {},
+	lastMonthMonitorsObj = {},
+	// arrays for looping
+	agentsArray = [],
+	leadsArray = [],
+	thisMonthMonitorsArray = [],
+	quarterlyMonitorsArray = [],
+	// interval for persistence
+	dbInterval = 60000,
+	// quarter calculation tools
+	q1 = ["0", "1", "2"],
+	q2 = ["3", "4", "5"],
+	q3 = ["6", "7", "8"],
+	q4 = ["9", "10", "11"],
+	qstart = '',
+	qend = '',
+	qm = new Date()
 
-		if ($.inArray(qm.getMonth(), q1)){
-			qstart = new Date(year, 0, 1)
-			qend = new Date(year, 2,31)
-			} else if ($.inArray(qm.getMonth(), q2)) {
-				qstart = new Date(year, 3, 1)
-				qend = new Date(year, 5, 30)
-				} else if ($.inArray(qm.getMonth(), q3)) {
-					qstart = new Date(year, 6, 1)
-					qend = new Date(year, 8, 31)
-					} else {
-						qstart = new Date(year, 9, 1)
-						qend = new Date(year, 11, 31)
-					}
-		/*
-		* DB persistence tools - unused, but saved here just in case
-		*/
-		//db.persistence.setAutocompactionInterval(dbInterval)
-		//leadsDb.persistence.setAutocompactionInterval(dbInterval)
-		//agentsDb.persistence.setAutocompactionInterval(dbInterval)
+	if ($.inArray(qm.getMonth(), q1)){
+		qstart = new Date(year, 0, 1)
+		qend = new Date(year, 2,31)
+		} else if ($.inArray(qm.getMonth(), q2)) {
+			qstart = new Date(year, 3, 1)
+			qend = new Date(year, 5, 30)
+			} else if ($.inArray(qm.getMonth(), q3)) {
+				qstart = new Date(year, 6, 1)
+				qend = new Date(year, 8, 31)
+				} else {
+					qstart = new Date(year, 9, 1)
+					qend = new Date(year, 11, 31)
+				}
+	/*
+	* DB persistence tools - unused, but saved here just in case
+	*/
+	//db.persistence.setAutocompactionInterval(dbInterval)
+	//leadsDb.persistence.setAutocompactionInterval(dbInterval)
+	//agentsDb.persistence.setAutocompactionInterval(dbInterval)
 
 
 
@@ -342,6 +344,7 @@ function loadAgentsTable(data){
 function post(row){
 	// posts to the monitors(year).db
 	// vars: row		object	required
+	console.log(db)
 	db.insert(row)
 	location.reload()
 }
@@ -397,6 +400,7 @@ function pullAgentMonitors(query, sort){
 	// so the next step can be perfromed
 
 	return new Promise(function(resolve, reject){
+		console.log(db)
 		db.find(query).sort(sort).exec(function (err, result){
 			if (err) {
 				reject(err)
@@ -1365,7 +1369,7 @@ $(window).on('load', function(){
 	})
 	$('#select-lead-search').on('change', function(){
 		var lead = $(this).val(),
-				month = $('#input-date-search').val();
+			month = $('#input-date-search').val();
 		pullLeadMonth(month, lead);
 	})
 	$('#monitors-search-date').change(function(){
@@ -1378,5 +1382,5 @@ $(window).on('load', function(){
 		completedPerAgent(tmpDate)
 
 	})
-
+	$('.app-version').html(`v${app.getVersion()}`)
 })
