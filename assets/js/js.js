@@ -344,9 +344,20 @@ function loadAgentsTable(data){
 function post(row){
 	// posts to the monitors(year).db
 	// vars: row		object	required
-	console.log(db)
-	db.insert(row)
-	location.reload()
+
+	//need to do this with a promise because the page is reloading too quickly and the ASYNC action isn't going through
+	return new Promise(function(resolve, reject){
+		//console.log(db)
+		db.insert(row, function (err, result){
+			if (err) {
+				reject(err)
+			} else {
+				resolve(result)
+			}
+		})
+	}).catch(function(err){
+		errorHandling({message: err, field: 'post'})
+	})
 }
 function completed(result){
 	// use the result to build the monitors that have been completed.
@@ -400,7 +411,7 @@ function pullAgentMonitors(query, sort){
 	// so the next step can be perfromed
 
 	return new Promise(function(resolve, reject){
-		console.log(db)
+		//console.log(db)
 		db.find(query).sort(sort).exec(function (err, result){
 			if (err) {
 				reject(err)
@@ -840,14 +851,18 @@ function checkId(i, field){
 
 function errorHandling(err){
 	// error handling for main form
-	var findInput = $(err.field).parents('.form-group')
-	var findLabel = $(findInput).find('.help-block')
-	$(findInput).addClass('has-error')
-	$(findLabel).addClass('has-error').html(err.message)
-	var timeout = setTimeout(function(){
-		$(findInput).toggleClass('has-error')
-		$(findLabel).toggleClass('has-error').html('')
-	}, 4000);
+	if (err.field === "post"){
+		alert(err.message)
+	} else {
+		var findInput = $(err.field).parents('.form-group')
+		var findLabel = $(findInput).find('.help-block')
+		$(findInput).addClass('has-error')
+		$(findLabel).addClass('has-error').html(err.message)
+		var timeout = setTimeout(function(){
+			$(findInput).toggleClass('has-error')
+			$(findLabel).toggleClass('has-error').html('')
+		}, 4000);
+	}
 }
 function validate(d,a,f,l,s, fields){
 	// validate main form
@@ -862,7 +877,23 @@ function validate(d,a,f,l,s, fields){
 		if (validFail === true){
 			validScore = 0;
 		}
-		post({"date": validDate, "agent":validAgent, "score":validScore, "fail": validFail, "lead": validLead})
+		post({
+				"date": validDate, 
+				"agent":validAgent, 
+				"score":validScore, 
+				"fail": validFail, 
+				"lead": validLead
+			}).then(
+				function(result){
+					console.log(result)
+					//location.reload()
+					if (!result || Object.keys(result).length < 1){
+						return
+					} else {
+						location.reload()
+					}
+				}
+			)
 	} catch (err){
 		errorHandling(err)
 	}
