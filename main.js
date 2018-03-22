@@ -20,6 +20,7 @@ const BrowserWindow = electron.BrowserWindow
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let secondWindow
+let helpWindow
 
 function createWindow () {
   // Create the browser window.
@@ -35,9 +36,13 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-
-  // Open the DevTools.
-   //mainWindow.webContents.openDevTools()
+	var isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false;
+	console.log(process.env.TODO_DEV);
+	if (process.env.TODO_DEV){
+		console.log('in conditional');
+		// Open the DevTools.
+		mainWindow.webContents.openDevTools()
+	}
 
 	//mainWindow.webContents.send('ipc-message', testArgs)
   // Show the mainwindow when it is loaded and ready to show
@@ -67,6 +72,7 @@ function createWindow () {
 	// secondWindow.webContents.openDevTools()
   secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
 
+
   require('./menu/mainmenu')
 }
 
@@ -77,6 +83,7 @@ ipcMain.on('open-second-window', (event, arg)=> {
 ipcMain.on('close-second-window', (event, arg)=> {
     secondWindow.hide()
 })
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
