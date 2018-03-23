@@ -1016,116 +1016,140 @@ function buildEditScoreModal(args){
 function dbAgentUpdate(args, field){
 	// update agentsDb
 	// requires args object + field names object
-	switch(args.type){
-		case 'edit-agent-modal':
-			agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'],
-							'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'],
-							'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
-				//done
-				if (error) {
-					throw {message: error, field: $(field)}
+	return new Promise(function(resolve, reject){
+		switch(args.type){
+			case 'edit-agent-modal':
+				agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'],
+								'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'],
+								'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
+					//done
+					if (error) {
+						//throw {message: error, field: $(field)}
+						reject({message: error, field: $(field)})
+					} else {
+						
+						return resolve(numReplaced);
+					}
+				})
+				break;
+
+			case 'remove-agent-modal':
+				if (args['remove-agent-modal-inactive'] == 1){
+					agentsDb.update({_id: args['remove-agent-modal-id']}, {'$set': {inactive: 0}}, {}, function(error, numReplaced){
+						//done
+						if (error) {
+							//throw {message: error, field: $(field)}
+							reject({message: error, field: $(field)})
+						} else {
+							//importAgents()
+							return resolve(numReplaced);
+						}
+					})
 				} else {
-					importAgents()
-					return true;
+					agentsDb.update({_id: args['remove-agent-modal-id']}, {'$set': {inactive: 1}}, {}, function(error, numReplaced){
+						//done
+						if (error) {
+							//throw {message: error, field: $(field)}
+							reject({message: error, field: $(field)})
+						} else {
+							//importAgents()
+							return resolve(numReplaced);
+						}
+					})
 				}
-			})
-			break;
 
-		case 'remove-agent-modal':
-			if (args['remove-agent-modal-inactive'] == 1){
-				agentsDb.update({_id: args['remove-agent-modal-id']}, {'$set': {inactive: 0}}, {}, function(error, numReplaced){
-					//done
-					if (error) {
-						throw {message: error, field: $(field)}
-					} else {
-						importAgents()
-						return true;
-					}
-				})
-			} else {
-				agentsDb.update({_id: args['remove-agent-modal-id']}, {'$set': {inactive: 1}}, {}, function(error, numReplaced){
-					//done
-					if (error) {
-						throw {message: error, field: $(field)}
-					} else {
-						importAgents()
-						return true;
-					}
-				})
-			}
+				break;
 
-			break;
+		}
+	}).catch(function (err){
+		errorHandling({message: err, field: 'post'})
+	})
 
-	}
 }
 function dbLeadUpdate(args, field){
 	// update leadsDb
 	// requires args object + field names object
-	switch (args.type){
-		case 'edit-lead-modal':
-			leadsDb.update({_id: args['edit-lead-modal-id']}, {
-							$set: {'abbv': args['edit-lead-modal-abbv'],
-									'name': args['edit-lead-modal-name'],
-									'inactive': args['edit-lead-modal-inactive']}
-							}, {}, function(error, numReplaced){
-				//done
-				if (error) {
-					throw {message: error, field: $(field)}
+	return new Promise(function(resolve, reject){
+		switch (args.type){
+			case 'edit-lead-modal':
+				leadsDb.update({_id: args['edit-lead-modal-id']}, {
+								$set: {'abbv': args['edit-lead-modal-abbv'],
+										'name': args['edit-lead-modal-name'],
+										'inactive': args['edit-lead-modal-inactive']}
+								}, {}, function(error, numReplaced){
+					//done
+					if (error) {
+						//throw {message: error, field: $(field)}
+						reject({message: error, field: $(field)})
+					} else {
+						//importLeads()
+						return resolve(numReplaced);
+					}
+				})
+				break;
+			case 'remove-lead-modal':
+				if (args['remove-lead-modal-inactive'] == 0){
+					leadsDb.update({_id: args['remove-lead-modal-id']}, {'$set': {inactive: 1}}, {}, function(error, numReplaced){
+						if (error) {
+							//throw {message: error, field: $(field)}
+							reject({message: error, field: $(field)})
+						} else {
+							//importLeads()
+							return resolve(numReplaced);
+						}
+					})
 				} else {
-					importLeads()
-					return true;
+					leadsDb.update({'_id': args['remove-lead-modal-id']}, {'$set': {inactive: 0}}, {}, function(error, numReplaced){
+						if (error) {
+							//throw {message: error, field: $(field)}
+							reject({message: error, field: $(field)})
+						} else {
+							//importLeads()
+							return resolve(numReplaced);
+						}
+					})
 				}
-			})
-			break;
-		case 'remove-lead-modal':
-			if (args['remove-lead-modal-inactive'] == 0){
-				leadsDb.update({_id: args['remove-lead-modal-id']}, {'$set': {inactive: 1}}, {}, function(error, numReplaced){
-					if (error) {
-						throw {message: error, field: $(field)}
-					} else {
-						importLeads()
-						return true;
-					}
-				})
-			} else {
-				leadsDb.update({'_id': args['remove-lead-modal-id']}, {'$set': {inactive: 0}}, {}, function(error, numReplaced){
-					if (error) {
-						throw {message: error, field: $(field)}
-					} else {
-						importLeads()
-						//return true;
-					}
-				})
-			}
-			break;
-	}
+				break;
+		}
+	}).catch(function (err){
+		errorHandling({message: err, field: 'post'})
+	})
 }
 function dbAddAgent(args, field){
 	// insert a new agent into agentsDb
 	var inserted = {'abbv': args['add-agent-modal-abbv'], 'name': args['add-agent-modal-name'], 
 				'monitors': args['add-agent-modal-monitors'], 'inactive': args['add-agent-modal-inactive']}
-
-	agentsDb.insert(inserted, function(error, insertedRow){
-		//done
-		if (error) {
-			throw {message: error, field: $(field)}
-		} else {
-			importAgents()
-			return true;
-		}
+	return new Promise(function(resolve, reject){
+		agentsDb.insert(inserted, function(error, insertedRow){
+			//done
+			if (error) {
+				//throw {message: error, field: $(field)}
+				reject({message: error, field: $(field)})
+			} else {
+				importAgents()
+				return resolve(insertedRow);
+			}
+		})
+	}).catch(function (err){
+		errorHandling({message: err, field: 'post'})
 	})
 }
 function dbAddLead(args, field){
 	// insert a new lead into leadsDb
 	var inserted = {'abbv': args['add-lead-modal-abbv'], 'name': args['add-lead-modal-name'], 'inactive': args['add-lead-modal-inactive']}
-	leadsDb.insert(inserted, function(error, insertedRow){
-		//done
-		if (error) {
-			throw {message: error, field: $(field)}
-		} else {
-			importLeads()
-			return true;
-		}
+	return new Promise(function(resolve, reject){
+		leadsDb.insert(inserted, function(error, insertedRow){
+			//done
+			if (error) {
+				//throw {message: error, field: $(field)}
+				reject({message: error, field: $(field)})
+			} else {
+				importLeads()
+				return resolve(insertedRow);
+			}
+		})
+	}).catch(function (err){
+		errorHandling({message: err, field: 'post'})
 	})
 }
 function modalErrorHandling(err){
@@ -1142,21 +1166,27 @@ function modalErrorHandling(err){
 }
 function dbUpdate(row){
 	// update the monitors database with the edit from edit-monitor-modal
-	db.update({'_id': row._id}, {$set: {
-					'date': row.date,
-					'agent': row.agent,
-					'score': row.score,
-					'fail': row.fail,
-					'lead': row.lead}
-				}, {}, function(error, numReplaced){
-		//done
-		if (error) {
-			throw {message: error, field: $(field)}
-		} else {
-			importLeads()
-			return true;
-		}
+	return new Promise(function(resolve, reject){
+		//console.log(db)
+		db.update({'_id': row._id}, {$set: {
+			'date': row.date,
+			'agent': row.agent,
+			'score': row.score,
+			'fail': row.fail,
+			'lead': row.lead}
+			}, {}, function(error, numReplaced){
+			//done
+			if (error) {
+				return reject({message: error, field: $(field)})
+			} else {
+				importLeads()
+				return resolve(numReplaced)
+			}
+		})
+	}).catch(function(err){
+		errorHandling({message: err, field: 'post'})
 	})
+	
 }
 function validateEditModal(d,a,f,l,s,i, fields){
 	//console.log(inputValues);
@@ -1172,7 +1202,10 @@ function validateEditModal(d,a,f,l,s,i, fields){
 		}
 
 		dbUpdate({'date': validDate, 'agent': validAgent, 'score': validScore, 'fail': validFail, 'lead': validLead, '_id': validId})
-		location.reload()
+			.then(
+				location.reload()
+			)
+			//location.reload()
 	} catch (err){
 		console.log(err.message);
 		console.log(err.field);
@@ -1196,7 +1229,8 @@ function validateModal(type, args){
 					throw {message: 'The number of monitors must be greater than zero!',
 							field: $('#'+type+'-monitors').parent()}
 				}
-				dbAgentUpdate(args, $('#'+type+'-success'));
+				dbAgentUpdate(args, $('#'+type+'-success'))
+					.then(importAgents())
 				break;
 			case 'edit-lead-modal':
 				args.type = 'edit-lead-modal';
@@ -1208,15 +1242,18 @@ function validateModal(type, args){
 					throw {message: 'You must enter a lead\'s name!',
 							field: $('#'+type+'-name').parent()}
 				}
-				dbAgentUpdate(args, $('#'+type+'-success'));
+				dbAgentUpdate(args, $('#'+type+'-success'))
+					.then(importLeads());
 				break;
 			case 'remove-agent-modal':
 				args.type = 'remove-lead-modal';
-				dbLeadUpdate(args, $('#'+type+'-success'));
+				dbLeadUpdate(args, $('#'+type+'-success'))
+					.then(importAgents());
 				break;
 			case 'remove-lead-modal':
 				args.type = 'remove-lead-modal';
-				dbLeadUpdate(args, $('#'+type+'-success'));
+				dbLeadUpdate(args, $('#'+type+'-success'))
+					.then(importLeads());
 				break;
 			case 'add-agent-modal':
 				args.type = 'add-agent-modal';
@@ -1234,6 +1271,7 @@ function validateModal(type, args){
 							field: $('#'+type+'-abbv').parent()}
 				}
 				dbAddAgent(args, $('#'+type+'-success'))
+					.then(importAgents());
 				break;
 			case 'add-lead-modal':
 				args.type = 'add-lead-modal';
@@ -1246,6 +1284,7 @@ function validateModal(type, args){
 							field: $('#'+type+'-name').parent()}
 				}
 				dbAddLead(args, $('#'+type+'-success'))
+					.then(importLeads());
 				break;
 			default:
 				break;
