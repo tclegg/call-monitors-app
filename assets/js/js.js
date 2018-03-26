@@ -277,9 +277,11 @@ function loadAgentsTable(data){
 			abbreviation = data[i].abbv,
 			requiredMonitors = data[i].monitors,
 			inactive = data[i].inactive,
-			agentId = data[i]._id,
+			agentRowId = data[i]._id,
+			agentId = data[i].agentid,
 			fullNameTD = document.createElement('td'),
 			abbreviationTD = document.createElement('td'),
+			agentIdTd = document.createElement('td'),
 			edit = document.createElement('td'),
 			remove = document.createElement('td'),
 			monitors = document.createElement('td'),
@@ -290,9 +292,10 @@ function loadAgentsTable(data){
 		$(row).attr('data-abbv', abbreviation)
 				.attr('data-name', nameValue)
 				.attr('data-monitors', requiredMonitors)
-				.attr('data-id', agentId)
+				.attr('data-id', agentRowId)
+				.attr('data-agentid', agentId)
 				.attr('data-inactive', inactive)
-				.attr('id', agentId);
+				.attr('id', 'row-' + abbreviation);
 		if (inactive == 1){
 			$(row).css('text-decoration', 'line-through')
 		}
@@ -300,12 +303,15 @@ function loadAgentsTable(data){
 		fullNameTD.innerHTML = nameValue.toString()
 		abbreviationTD.innerHTML = abbreviation
 		edit.innerHTML = editHTML
-		edit.id = 'edit-'+agentId
+		edit.id = 'edit-'+agentRowId
+		agentIdTd.innerHTML = agentId
+		$(agentIdTd).addClass('agentid')
 		remove.innerHTML = removeHTML
 		monitors.innerHTML = requiredMonitors
 		//append TD to TR then to TBODY
 		row.appendChild(fullNameTD)
 		row.appendChild(abbreviationTD)
+		row.appendChild(agentIdTd)
 		row.appendChild(monitors)
 		row.appendChild(edit)
 		row.appendChild(remove)
@@ -320,8 +326,10 @@ function loadAgentsTable(data){
 					'name': $(parentData).data('name'),
 					'id': $(parentData).data('id'),
 					'monitors': $(parentData).data('monitors'),
+					'agentid': $(parentData).data('agentid'),
 					'inactive': $(parentData).data('inactive')}
-		showModal(args);
+		var oldId = $(parentData).attr('agentid')
+		showModal(args, oldId);
 	})
 	$('.remove-agent').click(function(e){
 		e.preventDefault();
@@ -682,14 +690,17 @@ function needed(result){
 			var row = document.createElement('tr'),
 				dateTd = document.createElement('td'),
 				nameTd = document.createElement('td'),
+				agentIdTd = document.createElement('td'),
 				lastTd = document.createElement('td'),
 				numberTd = document.createElement('td'),
 				dateTdId = agentsObj[agentKeys[key]].abbv,
 				nameTdId = agentsObj[agentKeys[key]].abbv + '-name',
+				agentIdTdId = agentsObj[agentKeys[key]].abbv + '-agentid',
 				numberTdId = agentsObj[agentKeys[key]].abbv + '-id',
 				lastTdId = agentsObj[agentKeys[key]].abbv+'-last-monitor';
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[key]].name)
+			$(agentIdTd).attr('id', agentIdTdId).html(agentsObj[agentKeys[key]].agentid)
 			$(numberTd).attr('id', numberTdId).html(monitorsLeft)
 			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[key]]._id)
@@ -699,12 +710,14 @@ function needed(result){
 				$(row).attr('data-toggle', 'tooltip').attr('title', `Failed on ${failDate}`)
 				$(dateTd).toggleClass('bg-danger')
 				$(nameTd).toggleClass('bg-danger')
+				$(agentIdTd).toggleClass('bg-danger')
 				$(lastTd).toggleClass('bg-danger')
 				$(numberTd).toggleClass('bg-danger')
 			}
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
 			row.appendChild(nameTd)
+			row.appendChild(agentIdTd)
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
 			tbody.appendChild(row)
@@ -721,21 +734,25 @@ function needed(result){
 			var row = document.createElement('tr'),
 				dateTd = document.createElement('td'),
 				nameTd = document.createElement('td'),
+				agentIdTd = document.createElement('td'),
 				numberTd = document.createElement('td'),
 				lastTd = document.createElement('td'),
 				dateTdId = agentsObj[agentKeys[i]].abbv,
 				nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
+				agentIdTdId = agentsObj[agentKeys[i]].abbv + '-agentid',
 				numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
 				lastTdId = agentsObj[agentKeys[i]].abbv+'-last-monitor';
 			total += parseInt(agentsObj[agentKeys[i]].monitors)
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
+			$(agentIdTd).attr('id', agentIdTdId).html(agentsObj[agentKeys[i]].name)
 			$(lastTd).attr('id', lastTdId)
 			$(numberTd).attr('id', numberTdId).html(agentsObj[agentKeys[i]].monitors)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[i]]._id)
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
 			row.appendChild(nameTd)
+			row.appendChild(agentIdTd)
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
 			tbody.appendChild(row)
@@ -902,7 +919,7 @@ function validate(d,a,f,l,s, fields){
 /**
 * Modal Functions
 */
-function showModal(args){
+function showModal(args, agentRow = null){
 	// switch to control which modal is built
 	// received from listners built in
 	// loadLeadsTable, loadAgentsTable, and completedPerAgent
@@ -921,7 +938,7 @@ function showModal(args){
 				break;
 			case 'edit-agent':
 				//agent
-				buildEditAgentModal(args)
+				buildEditAgentModal(args, agentRow)
 				break;
 			case 'edit-monitor':
 				buildEditScoreModal(args)
@@ -945,11 +962,13 @@ function buildEditLeadModal(args){
 }
 function buildEditAgentModal(args){
 	// builds edit agent modal
-	// args {name, id, abbv, monitors, inactive}
+	// args {name, id, abbv, monitors, agentid, inactive}
+	var modalName = $('#edit-agent-modal-name')
 	$('#edit-agent-modal').find('.modal-title').html(args.name)
-	$('#edit-agent-modal-name').val(args.name)
+	$(modalName).val(args.name).data('oldId', args.agentid)
 	$('#edit-agent-modal-abbv').val(args.abbv)
 	$('#edit-agent-modal-monitors').val(args.monitors)
+	$('#edit-agent-modal-agent-id').val(args.agentid)
 	$('#edit-agent-modal-id').val(args.id)
 	$('#edit-agent-modal-inactive').val(args.inactive)
 }
@@ -993,6 +1012,8 @@ function buildAddAgentModal(args){
 	$('#edit-agent-modal-name').val('')
 	$('#edit-agent-modal-abbv').val('')
 	$('#edit-agent-modal-monitors').val('')
+	$('#edit-agent-modal-name').data('oldId', '')
+	$('#edit-agent-modal-agent-id').val('')
 }
 
 function buildEditScoreModal(args){
@@ -1021,7 +1042,8 @@ function dbAgentUpdate(args, field){
 			case 'edit-agent-modal':
 				agentsDb.update({_id: args['edit-agent-modal-id'], }, {$set: {'abbv': args['edit-agent-modal-abbv'],
 								'name': args['edit-agent-modal-name'], 'monitors': args['edit-agent-modal-monitors'],
-								'inactive': args['edit-agent-modal-inactive']}}, {}, function(error, numReplaced){
+								'agentid': args['edit-agent-modal-agent-id'],'inactive': args['edit-agent-modal-inactive']}
+								}, {}, function(error, numReplaced){
 					//done
 					if (error) {
 						//throw {message: error, field: $(field)}
@@ -1118,7 +1140,7 @@ function dbLeadUpdate(args, field){
 function dbAddAgent(args, field){
 	// insert a new agent into agentsDb
 	var inserted = {'abbv': args['add-agent-modal-abbv'], 'name': args['add-agent-modal-name'], 
-				'monitors': args['add-agent-modal-monitors'], 'inactive': args['add-agent-modal-inactive']}
+				'monitors': args['add-agent-modal-monitors'], 'agentid': args['add-agent-modal-agent-id'], 'inactive': args['add-agent-modal-inactive']}
 	return new Promise(function(resolve, reject){
 		agentsDb.insert(inserted, function(error, insertedRow){
 			//done
@@ -1228,6 +1250,19 @@ function validateModal(type, args){
 				if(args['edit-agent-modal-monitors']<1){
 					throw {message: 'The number of monitors must be greater than zero!',
 							field: $('#'+type+'-monitors').parent()}
+				}
+				if(args['edit-agent-modal-agent-id']<1){
+					throw {message: 'You must enter an agent ID!',
+							field: $('#'+type+'-agent-id').parent()}
+				}
+				var divs = $('.agentid'),
+					vals = []
+				$(divs).each(function(k, v){
+					vals.push(v.innerHTML)
+				})
+				if (vals.includes(args['edit-agent-modal-agent-id']) && parseInt(args['edit-agent-modal-agent-id']) !== $('#edit-agent-modal-name').data('oldId')){
+					throw {message: 'The Agent ID must be unique!',
+							field: $('#'+type+'-agent-id').parent()}
 				}
 				dbAgentUpdate(args, $('#'+type+'-success'))
 					.then(importAgents())
