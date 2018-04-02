@@ -20,16 +20,19 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 	//fullDateWithSlashes = year + '/' + mm + '/'+dd,
 	//fullDateWithDashes =  year + '-' + mm + '-'+dd;
 	// check for dev
+try {
 	if (!process.env.TODO_DEV){
 		//////////////////////////
 		// Production Datasbase //
 		//////////////////////////
 
-		var xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database'
+		const xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database'
 		var	db = new nedb({filename: path.resolve(xDrive, dbname), autoload: true}),
 			leadsDb = new nedb({filename: path.resolve(xDrive, 'leads.db'), autoload: true}),
 			agentsDb = new nedb({filename: path.resolve(xDrive, 'agents.db'), autoload: true})
-
+			if (!db || !leadsDb || !agentsDb){
+				throw('Database connection error')
+			}
 		} else {
 			//////////////////////////
 			// Development Database //
@@ -38,7 +41,14 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 			var db = new nedb({filename: path.resolve(__dirname, '../../db/', dbname), autoload: true}),
 				leadsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'leads.db'), autoload: true}),
 				agentsDb = new nedb({filename: path.resolve(__dirname, '../../db/', 'agents.db'), autoload: true})
+			if (!db || !leadsDb || !agentsDb){
+				throw('Database connection error')
+			}
 		}
+	} catch (e) {
+		//location.reload()
+		alert(`An Error Has Occurred\nPlease reload the page\n\n${e}`)
+	}
 	// main form inputs
 var	agentSelect = 'select-agent',
 	dateInput = 'input-date',
@@ -440,6 +450,7 @@ function buildRow(agent, monitors){
 		completedTd = document.createElement('td'),
 		avgTd = document.createElement('td'),
 		qAvgTd = document.createElement('td'),
+		yAvgTd = document.createElement('td'),
 		subTableRow = document.createElement('tr'),
 		subTableTd = document.createElement('td'),
 		subTableDiv = document.createElement('div'),
@@ -448,6 +459,7 @@ function buildRow(agent, monitors){
 		subTbody = document.createElement('tbody'),
 		agentName = agentsObj[agent].name
 	$(qAvgTd).attr('id', agent+'-qAvg')
+	$(yAvgTd).attr('id', agent+'-yAvg')
 	// if the agent has monitors this month, else only build the row
 	if (monitors.length > 0){
 		let score = 0,
@@ -520,7 +532,7 @@ function buildRow(agent, monitors){
 					.attr('data-toggle', 'collapse')
 					.attr('data-target', '#'+agent+'Table')
 					.append(nameTd).append(completedTd)
-					.append(avgTd).append(qAvgTd)
+					.append(avgTd).append(qAvgTd).append(yAvgTd)
 		// add the subtable to the agent's header
 		$(panelGroup).append(panelHead).append(subTableRow)
 	} else {
@@ -539,7 +551,7 @@ function buildRow(agent, monitors){
 					.attr('data-toggle', 'collapse')
 					.attr('data-target', '#'+agent+'Table')
 					.append(nameTd).append(completedTd)
-					.append(avgTd).append(qAvgTd)
+					.append(avgTd).append(qAvgTd).append(yAvgTd)
 
 		$(panelGroup).append(panelHead).append(subTableRow)
 	}
@@ -568,6 +580,30 @@ function fillQuarter(agent, monitors){
 			$(avgTd).addClass('bg-danger')
 		}
 		$(avgTd).html(qAverage.toFixed() + ' %')
+	}
+}
+function fillYear(agent, monitors){
+	// calculates the average call monitor score
+	// then fill in the quarter abverage field
+	let count = 0, score = 0, yAverage = 0, avgTd = document.getElementById(agent+'-yAvg')
+	if (monitors.length > 0){
+		$.each(monitors, function(k,v){
+			// loop to get the total score for the average
+			count++
+			if (v.fail !== true){
+				// add to score if the monitor isn't a fail
+				// ignoring if fail prevents accidental scoring from being included
+				score += parseInt(v.score)
+			}
+		})
+		// calculate the average
+		yAverage = score/count
+		
+		if (yAverage < 75){
+			//flag low averages
+			$(avgTd).addClass('bg-danger')
+		}
+		$(avgTd).html(yAverage.toFixed() + ' %')
 	}
 }
 function fillLastMonitor(agent, monitor){
@@ -609,9 +645,11 @@ function completedPerAgent(argMonth = null){
 			qend = new Date(year, 11, 31)
 		}
 	}
+	var yearStart = new Date('1/1/'+year)
 
 	let query={'$and':[{date: {'$gte': startOfMonth}}, {date: {'$lte': endOfMonth}}]},
 			queryQuarter={'$and':[{date: {'$gte': qstart}}, {date: {'$lte': qend}}]},
+			queryYear = {'$and':[{date: {'$gte': yearStart}}, {date: {'$lte': today}}]},
 			sort = {agent: 1},
 			count = 0
 	pullAgentMonitors(query, sort).then(function(result){
@@ -634,12 +672,17 @@ function completedPerAgent(argMonth = null){
 	})
 	pullAgentMonitors(queryQuarter, sort).then(function(result){
 		// perform another db query to find all monitors for the quarter
-		// then loop through the agents to filter and fill in the #{agent}-qavg field
+		// then loop through the agents to filter and fill in the ${agent}-qavg field
 		for (i in agentsObj){
 			var monitors = result.filter(x => x.agent === i)
 			fillQuarter(i, monitors)
 		}
-	})
+	}).then(pullAgentMonitors(queryYear, sort).then(function(result){
+		for (i in agentsObj){
+			var monitors = result.filter(x => x.agent === i)
+			fillYear(i, monitors)
+		}
+	}))
 }
 function needed(result){
 	// fill the table on index_main
@@ -656,7 +699,7 @@ function needed(result){
 	//n.innerHTML = ''
 	tbody.appendChild(n)
 	// check for blank resuilt
-	if (result != ""){
+	if (result){
 		// loop through all the agents
 		$(agentKeys).each(function(key, val){
 			// key = numerical key starting at 0
@@ -701,7 +744,7 @@ function needed(result){
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[key]].name)
 			$(agentIdTd).attr('id', agentIdTdId).html(agentsObj[agentKeys[key]].agentid)
-			$(numberTd).attr('id', numberTdId).html(monitorsLeft)
+			$(numberTd).attr('id', numberTdId).html(`${monitorsLeft} / ${agentsObj[agentKeys[key]].monitors}`)
 			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[key]]._id)
 
@@ -747,7 +790,7 @@ function needed(result){
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
 			$(agentIdTd).attr('id', agentIdTdId).html(agentsObj[agentKeys[i]].name)
 			$(lastTd).attr('id', lastTdId)
-			$(numberTd).attr('id', numberTdId).html(agentsObj[agentKeys[i]].monitors)
+			$(numberTd).attr('id', numberTdId).html(`${agentsObj[agentKeys[i]].monitors} / ${agentsObj[agentKeys[i]].monitors}`)
 			$(row).attr('id', 'row-'+agentsObj[agentKeys[i]]._id)
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
