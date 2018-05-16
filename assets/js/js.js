@@ -520,6 +520,9 @@ function buildRow(agent, monitors) {
 		agentName = agentsObj[agent].name
 	$(qAvgTd).attr('id', agent + '-qAvg')
 	$(yAvgTd).attr('id', agent + '-yAvg')
+	if (agentsObj[agent].inactive == 1) {
+		$(panelHead).css('text-decoration', 'line-through')
+	}
 	// if the agent has monitors this month, else only build the row
 	if (monitors.length > 0) {
 		let score = 0,
@@ -597,6 +600,9 @@ function buildRow(agent, monitors) {
 		$(panelGroup).append(panelHead).append(subTableRow)
 	} else {
 		//create a blank header
+		if (agentsObj[agent].inactive == 1) {
+			return
+		}
 		$(subThead).html('<th>Date</th><th>Score</th><th>Auto-Fail</th><th>Lead</th>')
 		$(subTbody).attr('id', agent + '-tbody')
 		$(subTable).attr('width', '100%').addClass('table table-striped')
