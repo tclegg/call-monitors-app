@@ -308,6 +308,9 @@ function loadToAgentSelect(data) {
 	out.innerHTML = '<option selected disabled value="0">Select The Agent You Monitored</option>';
 	editMonitorAgent.innerHTML = '<option selected disabled value="0">Select The Agent You Monitored</option>';
 	for (var i = 0; i < data.length; i++) {
+		if (data[i].inactive == 1){
+			continue
+		}
 		var nameValue = data[i].name,
 			abbreviation = data[i].abbv,
 			agentId = data[i]._id,
@@ -791,6 +794,9 @@ function needed(result) {
 			 * @param {number} key = numerical key starting at 0
 			 * @param {string} val = agent abbreviation
 			 */ 
+			if (agentsObj[val].inactive == 1){
+				return;
+			}
 			var count = 0 //count # of monitors
 			total += parseInt(agentsObj[val].monitors)
 			//console.log(total);
@@ -865,6 +871,9 @@ function needed(result) {
 		})
 	} else {
 		for (var i = 0; i > agentKeys.length; i++) {
+			if (agentsObj[agentKeys[i]].inactive == 1){
+				continue
+			}
 			//create elements
 			var row = document.createElement('tr'),
 				dateTd = document.createElement('td'),
