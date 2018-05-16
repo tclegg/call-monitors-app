@@ -1276,6 +1276,7 @@ function dbAgentUpdate(args, field) {
 				break;
 
 			case 'remove-agent-modal':
+			console.log(args)
 				if (args['remove-agent-modal-inactive'] == 1) {
 					agentsDb.update({_id: args['remove-agent-modal-id']}, {
 						'$set': {
@@ -1595,12 +1596,12 @@ function validateModal(type, args, eField) {
 						field: $('#' + type + '-name').parent()
 					}
 				}
-				dbAgentUpdate(args, $('#' + type + '-success'))
+				dbLeadUpdate(args, $('#' + type + '-success'))
 					.then(importLeads());
 				break;
 			case 'remove-agent-modal':
-				args.type = 'remove-lead-modal';
-				dbLeadUpdate(args, $('#' + type + '-success'))
+				args.type = 'remove-agent-modal';
+				dbAgentUpdate(args, $('#' + type + '-success'))
 					.then(importAgents());
 				break;
 			case 'remove-lead-modal':
@@ -1610,7 +1611,6 @@ function validateModal(type, args, eField) {
 				break;
 			case 'add-agent-modal':
 				args.type = 'add-agent-modal';
-				//console.log(args);
 				if (!args['add-agent-modal-abbv']) {
 					throw {
 						message: 'You must enter an abbreviation for the agent!',
@@ -1790,7 +1790,7 @@ $(window).on('load', function () {
 		$(fields).each(function (k, v) {
 			modalArgs[$(v).attr('id')] = $(v).val();
 		})
-
+		
 		if (type == 'edit-monitor-modal') {
 			let tmpArgs = {
 				'type': type
