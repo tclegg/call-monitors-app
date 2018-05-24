@@ -39,6 +39,10 @@ try {
 			agentsDb = new nedb({
 				filename: path.resolve(xDrive, 'agents.db'),
 				autoload: true
+			}),
+			claimedDb = new nedb({
+				filename: path.resolve(xDrive, 'claimed.db'),
+				autoload: true
 			})
 		if (!db || !leadsDb || !agentsDb) {
 			throw ('Database connection error')
@@ -59,8 +63,12 @@ try {
 			agentsDb = new nedb({
 				filename: path.resolve(__dirname, '../../db/', 'agents.db'),
 				autoload: true
+			}),
+			claimedDb = new nedb({
+				filename: path.resolve(__dirname, '../../db/', 'claimed.db'),
+				autoload: true
 			})
-		if (!db || !leadsDb || !agentsDb) {
+		if (!db || !leadsDb || !agentsDb || !claimedDb) {
 			throw ('Database connection error')
 		}
 	}
@@ -489,7 +497,69 @@ function completed(result) {
 		tbody.appendChild(row);
 	})
 }
-
+var ClaimedMonitors = {
+	pull: function () {
+		/**
+		 * @param dateRange Included in the function - does not need to be supplied
+		 */
+		query = {'$and': [ 
+						{date: { '$gte': startOfMonth }},
+						{date: { '$lte': endOfMonth }}
+					]
+				}
+		return new Promise(function (resolve, reject){
+			claimedDb.find(query).sort({'agent': 1}).exec(function (err, result){
+				if (err) {
+					reject (err)
+				} else {
+					resolve (result)
+				}
+			})
+		})
+	},
+	post: function (leadAbbv, agentAbbv){
+		query = {
+			'agentAbbv': agentAbbv,
+			'leadAbbv': leadAbbv,
+			'date': new Date()
+		}
+		return new Promise(function (resolve, reject){
+			claimedDb.insert(query, function(err, result) {
+				
+				if (err) {
+					reject (err)
+				} else {
+					resolve (result)
+				}
+			})
+		})
+	},
+	remove: function (agentAbbv) {
+		query = {'agentAbbv': agentAbbv}
+		return new Promise(function (resolve, reject){
+			claimedDb.remove(query, {}, function (err, result){
+				if (err) {
+					reject (err)
+				} else {
+					resolve (result)
+				}
+			})
+		})
+	}
+}
+/**
+	function pullClaimedMonitors(query, sort) {
+		return new Promise(function (resolve, reject){
+			claimedDb.find(query).sort(sort).exec(function (err, result){
+				if (err) {
+					reject (err)
+				} else {
+					resolve (result)
+				}
+			})
+		})
+	}
+*/
 function pullAgentMonitors(query, sort) {
 	// async datastore connction from the montiors db
 	// returns the promise that it has completed the pull
@@ -797,7 +867,8 @@ function needed(result) {
 		monitorsKeys = Object.keys(thisMonthMonitorsObj);
 	var n = document.createElement('tr'),
 		total = 0,
-		numLeftTd = document.getElementById('num-left');
+		numLeftTd = document.getElementById('num-left'),
+		tempcount = 0;
 	//n.innerHTML = ''
 	tbody.appendChild(n)
 	// check for blank resuilt
@@ -811,9 +882,9 @@ function needed(result) {
 			if (agentsObj[val].inactive == 1){
 				return;
 			}
+			
 			var count = 0 //count # of monitors
 			total += parseInt(agentsObj[val].monitors)
-			//console.log(total);
 			var recentFail = false,
 				failDate = '';
 			// loop through query result to count the completed monitors
@@ -824,7 +895,6 @@ function needed(result) {
 				if (val2.agent == val && val2.fail != true) {
 					count++; // # of monitors found
 					total--;
-					//console.log(total);
 					recentFail = false;
 				} else if (val2.agent == val && val2.fail == true) {
 					// did not add to count because a failed monitor doesn't count towards the total
@@ -850,7 +920,8 @@ function needed(result) {
 				nameTdId = agentsObj[agentKeys[key]].abbv + '-name',
 				agentIdTdId = agentsObj[agentKeys[key]].abbv + '-agentid',
 				numberTdId = agentsObj[agentKeys[key]].abbv + '-id',
-				lastTdId = agentsObj[agentKeys[key]].abbv + '-last-monitor';
+				lastTdId = agentsObj[agentKeys[key]].abbv + '-last-monitor',
+				claimedTd = document.createElement('td');
 
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[key]].name)
@@ -858,6 +929,9 @@ function needed(result) {
 			$(numberTd).attr('id', numberTdId).html(`${monitorsLeft} / ${agentsObj[agentKeys[key]].monitors}`)
 			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[key]]._id)
+			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed').addClass('claim').attr('claimed', false).data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
+			
 
 			if (recentFail) {
 				// Flag a fail
@@ -874,6 +948,7 @@ function needed(result) {
 			row.appendChild(agentIdTd)
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
+			row.appendChild(claimedTd)
 			tbody.appendChild(row)
 
 			numLeftTd.innerHTML = total.toString();
@@ -883,6 +958,7 @@ function needed(result) {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
 		})
+		
 	} else {
 		for (var i = 0; i > agentKeys.length; i++) {
 			if (agentsObj[agentKeys[i]].inactive == 1){
@@ -899,7 +975,8 @@ function needed(result) {
 				nameTdId = agentsObj[agentKeys[i]].abbv + '-name',
 				agentIdTdId = agentsObj[agentKeys[i]].abbv + '-agentid',
 				numberTdId = agentsObj[agentKeys[i]].abbv + '-id',
-				lastTdId = agentsObj[agentKeys[i]].abbv + '-last-monitor';
+				lastTdId = agentsObj[agentKeys[i]].abbv + '-last-monitor',
+				claimedTd = docuemnt.createElement('td');
 			total += parseInt(agentsObj[agentKeys[i]].monitors)
 			$(dateTd).attr('id', dateTdId).html(thisMonth)
 			$(nameTd).attr('id', nameTdId).html(agentsObj[agentKeys[i]].name)
@@ -907,12 +984,15 @@ function needed(result) {
 			$(lastTd).attr('id', lastTdId)
 			$(numberTd).attr('id', numberTdId).html(`${agentsObj[agentKeys[i]].monitors} / ${agentsObj[agentKeys[i]].monitors}`)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[i]]._id)
+			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed').addClass('claim').attr('claimed', false).data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
 			row.appendChild(nameTd)
 			row.appendChild(agentIdTd)
 			row.appendChild(lastTd)
 			row.appendChild(numberTd)
+			row.appendChild(claimedTd)
 			tbody.appendChild(row)
 
 			numLeftTd.innerHTML = total.toString();
@@ -936,8 +1016,40 @@ function needed(result) {
 				.removeClass('bg-danger')
 			break;
 	}
-}
+	ClaimedMonitors.pull().then(function nextstep(result){
+			loadClaimed(result)
+		}).then(function (){
+			$('.claim').on('click', function(e){
+				if ($(this).data('claimed') === true){
+					$(this).empty()
+					$(this).html('<span class="glyphicon glyphicon-unchecked"></span>')
+					$(this).data('claimed', false)
+					ClaimedMonitors.remove($(this).data('agentAbbv'))
+				} else {
+					$(this).empty()
+					$(this).html('<span class="glyphicon glyphicon-ok"></span>')
+					$(this).data('claimed', true)
+					console.log($(this).data())
+					ClaimedMonitors.post(loggedOnUser, $(this).data('agentAbbv'))
+				}
+			})
+		})
 
+}
+function loadClaimed (result) {
+	if (result.length > 0) {
+		$(result).each(function(k,v){
+			claimed = document.getElementById(v.agentAbbv+'-claimed')
+			claimed.innerHTML = ''
+			claimed.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+			$(claimed).data('claimed', true)
+			$(claimed).data('_id', v._id)
+		})
+	}
+}
+function createClaimEventListeners(){
+	
+}
 function pullThisMonth() {
 	// pull the monitors using async pullAgentMonitors
 	// use completed() and needed() to fill the tables
