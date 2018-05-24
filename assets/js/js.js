@@ -182,6 +182,11 @@ function loadToLeadSelect() {
 	leadsMonitorSelect.innerHTML = '<option selected disabled value="0">Select Your Name</option>';
 	editMonitorLead.innerHTML = '<option selected disabled value="0">Select Your Name</option>'
 	$(activeKeys).each(function (k, v) {
+		if (!activeLeadsObj[loggedOnUser]){
+			setTimeout(function(){
+				$('section').empty().html(`<h1>${loggedOnUser.toUpperCase()} does not exist in the Active Leads table. Please contact another Lead or Supervisor to get access to this software.</h1>`)
+			}, 1000)
+		}
 		var option = document.createElement('option');
 		$(option).val(activeLeadsObj[v].abbv)
 			.html(activeLeadsObj[v].name)
