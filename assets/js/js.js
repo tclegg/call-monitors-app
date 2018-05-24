@@ -552,19 +552,6 @@ var ClaimedMonitors = {
 		})
 	}
 }
-/**
-	function pullClaimedMonitors(query, sort) {
-		return new Promise(function (resolve, reject){
-			claimedDb.find(query).sort(sort).exec(function (err, result){
-				if (err) {
-					reject (err)
-				} else {
-					resolve (result)
-				}
-			})
-		})
-	}
-*/
 function pullAgentMonitors(query, sort) {
 	// async datastore connction from the montiors db
 	// returns the promise that it has completed the pull
@@ -934,7 +921,12 @@ function needed(result) {
 			$(numberTd).attr('id', numberTdId).html(`${monitorsLeft} / ${agentsObj[agentKeys[key]].monitors}`)
 			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[key]]._id)
-			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed').addClass('claim').attr('claimed', false).data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed')
+				.addClass('claim')
+				.attr('claimed', false)
+				.data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+				.attr('data-toggle', 'tooltip')
+				.attr('title', 'Unclaimed')
 			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
 			
 
@@ -958,10 +950,6 @@ function needed(result) {
 
 			numLeftTd.innerHTML = total.toString();
 			count = 0;
-			$(function () {
-				
-				$('[data-toggle="tooltip"]').tooltip()
-			})
 		})
 		
 	} else {
@@ -989,7 +977,12 @@ function needed(result) {
 			$(lastTd).attr('id', lastTdId)
 			$(numberTd).attr('id', numberTdId).html(`${agentsObj[agentKeys[i]].monitors} / ${agentsObj[agentKeys[i]].monitors}`)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[i]]._id)
-			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed').addClass('claim').attr('claimed', false).data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed')
+				.addClass('claim')
+				.attr('claimed', false)
+				.data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+				.attr('data-toggle', 'tooltip')
+				.attr('title', 'Unclaimed')
 			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
@@ -1003,6 +996,10 @@ function needed(result) {
 			numLeftTd.innerHTML = total.toString();
 		}
 	}
+	$(function () {
+				
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 	let x = parseInt(numLeftTd.innerHTML)
 	switch (true) {
 		case (x >= 20):
@@ -1026,15 +1023,20 @@ function needed(result) {
 		}).then(function (){
 			$('.claim').on('click', function(e){
 				if ($(this).data('claimed') === true){
-					$(this).empty()
-					$(this).html('<span class="glyphicon glyphicon-unchecked"></span>')
-					$(this).data('claimed', false)
+					$(this).attr('title', 'Unclaimed')
+						.tooltip('fixTitle')
+						.tooltip('show')
+						.empty()
+						.html('<span class="glyphicon glyphicon-unchecked"></span>')
+						.data('claimed', false)
 					ClaimedMonitors.remove($(this).data('agentAbbv'))
 				} else {
 					$(this).empty()
-					$(this).html('<span class="glyphicon glyphicon-ok"></span>')
-					$(this).data('claimed', true)
-					console.log($(this).data())
+						.html('<span class="glyphicon glyphicon-ok"></span>')
+						.data('claimed', true)
+						.attr('title', `${activeLeadsObj[loggedOnUser].name}`)
+						.tooltip('fixTitle')
+						.tooltip('show')
 					ClaimedMonitors.post(loggedOnUser, $(this).data('agentAbbv'))
 				}
 			})
@@ -1049,8 +1051,16 @@ function loadClaimed (result) {
 			claimed.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
 			$(claimed).data('claimed', true)
 			$(claimed).data('_id', v._id)
+			$(claimed).attr('title', `${activeLeadsObj[v.leadAbbv].name}`)
+			$(claimed).tooltip('fixTitle')
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
 		})
 	}
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 }
 function createClaimEventListeners(){
 	
