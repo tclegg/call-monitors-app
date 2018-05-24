@@ -16,7 +16,8 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 	endOfMonth = new Date(year, date.getMonth() + 1, 0),
 	startOfLastMOnth = new Date(year, date.getMonth() - 1, 1),
 	lastMonth = year + '-' + (("0" + (date.getMonth())).slice(-2)),
-	dbname = 'monitors-' + year + '.db';
+	dbname = 'monitors-' + year + '.db',
+	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2];
 //fullDateWithSlashes = year + '/' + mm + '/'+dd,
 //fullDateWithDashes =  year + '-' + mm + '-'+dd;
 // check for dev
@@ -178,6 +179,9 @@ function loadToLeadSelect() {
 			.html(activeLeadsObj[v].name)
 			.data('lead-id', activeLeadsObj[v]._id)
 		out.appendChild(option);
+		if (activeLeadsObj[v].abbv == loggedOnUser){
+			$(option).prop('selected', true)
+		}
 		i++
 	})
 	$(allKeys).each(function (k, v) {
@@ -189,11 +193,15 @@ function loadToLeadSelect() {
 		$(modalLeadsOption).val(leadsObj[v].abbv)
 			.html(leadsObj[v].name)
 			.attr('data-lead-id', leadsObj[v]._id)
-
+		if (leadsObj[v].abbv == loggedOnUser){
+			$(allLeadsOption).prop('selected', true);
+			$(modalLeadsOption).prop('selected', true);
+		}
 		leadsMonitorSelect.appendChild(allLeadsOption);
 		editMonitorLead.appendChild(modalLeadsOption);
 		x++
 	})
+	
 }
 
 function loadLeadsTable(data) {
