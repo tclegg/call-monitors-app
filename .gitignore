@@ -6,3 +6,4 @@ dist/*
 !dist/.gitkeep
 db/*
 !db/.gitkeep
+package-lock\.json
