@@ -514,17 +514,25 @@ var ClaimedMonitors = {
 				}
 		return new Promise(function (resolve, reject){
 			claimedDb.find(query).sort({'agent': 1}).exec(function (err, result){
+				var newResult = []
+				for (i of result) {
+					if (document.getElementById(i.agentabbv)) {
+						newResult.push(i)
+					} else {
+						ClaimedMonitors.remove(i.agentabbv)
+					}
+				}
 				if (err) {
-					reject (err)
+					return reject (err)
 				} else {
-					resolve (result)
+					return resolve (newResult)
 				}
 			})
 		})
 	},
-	post: function (leadAbbv, agentAbbv){
+	post: function (leadAbbv, agentabbv){
 		query = {
-			'agentAbbv': agentAbbv,
+			'agentabbv': agentabbv,
 			'leadAbbv': leadAbbv,
 			'date': new Date()
 		}
@@ -532,21 +540,21 @@ var ClaimedMonitors = {
 			claimedDb.insert(query, function(err, result) {
 				
 				if (err) {
-					reject (err)
+					return reject (err)
 				} else {
-					resolve (result)
+					return resolve (result)
 				}
 			})
 		})
 	},
-	remove: function (agentAbbv) {
-		query = {'agentAbbv': agentAbbv}
+	remove: function (agentabbv) {
+		query = {'agentabbv': agentabbv}
 		return new Promise(function (resolve, reject){
 			claimedDb.remove(query, {}, function (err, result){
 				if (err) {
-					reject (err)
+					return reject (err)
 				} else {
-					resolve (result)
+					return resolve (result)
 				}
 			})
 		})
@@ -921,12 +929,19 @@ function needed(result) {
 			$(numberTd).attr('id', numberTdId).html(`${monitorsLeft} / ${agentsObj[agentKeys[key]].monitors}`)
 			$(lastTd).attr('id', lastTdId)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[key]]._id)
+			claimedTd.setAttribute('id', agentsObj[agentKeys[key]].abbv + '-claimed')
+				claimedTd.setAttribute('data-claimed', false)
+				claimedTd.setAttribute('data-agentabbv', agentsObj[agentKeys[key]].abbv)
+				claimedTd.setAttribute('data-toggle', 'tooltip')
+				claimedTd.setAttribute('title', 'Unclaimed')
+				claimedTd.classList.add('claimed')
+				/*
 			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed')
 				.addClass('claim')
-				.attr('claimed', false)
-				.data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+				.data('claimed', false)
+				.data('agentabbv', agentsObj[agentKeys[key]].abbv)
 				.attr('data-toggle', 'tooltip')
-				.attr('title', 'Unclaimed')
+				.attr('title', 'Unclaimed')*/
 			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
 			
 
@@ -977,12 +992,19 @@ function needed(result) {
 			$(lastTd).attr('id', lastTdId)
 			$(numberTd).attr('id', numberTdId).html(`${agentsObj[agentKeys[i]].monitors} / ${agentsObj[agentKeys[i]].monitors}`)
 			$(row).attr('id', 'row-' + agentsObj[agentKeys[i]]._id)
-			$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed')
+			claimedTd.setAttribute('id', agentsObj[agentKeys[key]].abbv + '-claimed')
+				claimedTd.setAttribute('data-claimed', false)
+				claimedTd.setAttribute('data-agentabbv', agentsObj[agentKeys[key]].abbv)
+				claimedTd.setAttribute('data-toggle', 'tooltip')
+				claimedTd.setAttribute('title', 'Unclaimed')
+				claimedTd.classList.add('claimed')
+
+				/*$(claimedTd).attr('id', agentsObj[agentKeys[key]].abbv + '-claimed')
 				.addClass('claim')
-				.attr('claimed', false)
-				.data('agentAbbv', agentsObj[agentKeys[key]].abbv)
+				.data('claimed', false)
+				.data('agentabbv', agentsObj[agentKeys[key]].abbv)
 				.attr('data-toggle', 'tooltip')
-				.attr('title', 'Unclaimed')
+				.attr('title', 'Unclaimed')*/
 			claimedTd.innerHTML = `<span class="glyphicon glyphicon-unchecked"></span>`
 			// append TDs to TR then to TBODY
 			row.appendChild(dateTd)
@@ -1018,53 +1040,75 @@ function needed(result) {
 				.removeClass('bg-danger')
 			break;
 	}
-	ClaimedMonitors.pull().then(function nextstep(result){
-			loadClaimed(result)
-		}).then(function (){
-			$('.claim').on('click', function(e){
-				if ($(this).data('claimed') === true){
-					$(this).attr('title', 'Unclaimed')
-						.tooltip('fixTitle')
-						.tooltip('show')
-						.empty()
-						.html('<span class="glyphicon glyphicon-unchecked"></span>')
-						.data('claimed', false)
-					ClaimedMonitors.remove($(this).data('agentAbbv'))
-				} else {
-					$(this).empty()
-						.html('<span class="glyphicon glyphicon-ok"></span>')
-						.data('claimed', true)
-						.attr('title', `${activeLeadsObj[loggedOnUser].name}`)
-						.tooltip('fixTitle')
-						.tooltip('show')
-					ClaimedMonitors.post(loggedOnUser, $(this).data('agentAbbv'))
-				}
+	
+	return new Promise((resolve, reject) => {
+		return ClaimedMonitors.pull().then((result) => {
+				return loadClaimed(result)
+			}).then((result) => {
+				claimed = document.querySelectorAll('.claimed')
+				$(claimed).on('click', function(e){
+					if ($(this).data('claimed') === true){
+						$(this).attr('title', 'Unclaimed')
+							.tooltip('fixTitle')
+							.tooltip('show')
+							.empty()
+							.html('<span class="glyphicon glyphicon-unchecked"></span>')
+							.data('claimed', false)
+						ClaimedMonitors.remove($(this).data('agentabbv'))
+					} else {
+						console.log($(this))
+						$(this).empty()
+							.html('<span class="glyphicon glyphicon-ok"></span>')
+							.data('claimed', true)
+							.attr('title', `${activeLeadsObj[loggedOnUser].name}`)
+							.tooltip('fixTitle')
+							.tooltip('show')
+							console.log($(this).data('agentabbv'))
+						ClaimedMonitors.post(loggedOnUser, $(this).data('agentabbv'))
+					}
+				})
+				
 			})
-		})
-
-}
-function loadClaimed (result) {
-	if (result.length > 0) {
-		$(result).each(function(k,v){
-			claimed = document.getElementById(v.agentAbbv+'-claimed')
-			claimed.innerHTML = ''
-			claimed.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
-			$(claimed).data('claimed', true)
-			$(claimed).data('_id', v._id)
-			$(claimed).attr('title', `${activeLeadsObj[v.leadAbbv].name}`)
-			$(claimed).tooltip('fixTitle')
-			$(function () {
-				$('[data-toggle="tooltip"]').tooltip()
-			})
-		})
-	}
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
 	})
 }
-function createClaimEventListeners(){
+function loadClaimed (result) {
+	return new Promise((resolve, reject) => {
+		if (result.length > 0) {
+			
+			var count = 0
+			for (v of result) {
+				count ++
+				claimed = document.getElementById(v.agentabbv+'-claimed')
+				if (claimed) {
+					console.log(claimed)
+					claimed.innerHTML = ''
+					claimed.innerHTML = '<span class="glyphicon glyphicon-ok"></span>'
+					$(claimed).data('claimed', true)
+					$(claimed).data('agentabbv', v.agentabbv)
+					$(claimed).data('_id', v._id)
+					$(claimed).attr('title', `${activeLeadsObj[v.leadAbbv].name}`)
+					$(claimed).tooltip('fixTitle')
+					$(function () {
+						$('[data-toggle="tooltip"]').tooltip()
+					})
+				} else {
+					console.log(v)
+					continue;
+				}
+				if (count == result.length) {
+					$(function () {
+						$('[data-toggle="tooltip"]').tooltip()
+					})
+					return resolve()
+				}
+			}
+		} else {
+			return resolve()
+		}
+	})
 	
 }
+
 function pullThisMonth() {
 	// pull the monitors using async pullAgentMonitors
 	// use completed() and needed() to fill the tables
@@ -1238,10 +1282,18 @@ function validate(d, a, f, l, s, fields) {
 			validAgent = checkAgent(a, fields.a),
 			validScore = checkScore(s, fields.s),
 			validFail = checkFail(f, fields.f),
-			validLead = checkLead(l, fields.l)
+			validLead = checkLead(l, fields.l),
+			claimed = document.getElementById(a+'-claimed')
+		if ($(claimed).data('claimed') === true) {
+			ClaimedMonitors.remove($(claimed).data('agentabbv'))
+		}
 		if (validFail === true) {
 			validScore = 0;
 		}
+		
+		//if (claimed) {
+		//	ClaimedMonitors.remove()
+		//}
 		post({
 			"date": validDate,
 			"agent": validAgent,
@@ -1250,7 +1302,6 @@ function validate(d, a, f, l, s, fields) {
 			"lead": validLead
 		}).then(
 			function (result) {
-				console.log(result)
 				//location.reload()
 				if (!result || Object.keys(result).length < 1) {
 					return
@@ -1417,7 +1468,6 @@ function dbAgentUpdate(args, field) {
 				break;
 
 			case 'remove-agent-modal':
-			console.log(args)
 				if (args['remove-agent-modal-inactive'] == 1) {
 					agentsDb.update({_id: args['remove-agent-modal-id']}, {
 						'$set': {
