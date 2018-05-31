@@ -13,7 +13,7 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 	dd = ("0" + (date.getDate())).slice(-2),
 	thisMonth = year + '-' + mm,
 	startOfMonth = new Date(year, date.getMonth(), 1),
-	endOfMonth = new Date(year, date.getMonth() + 1, 0),
+	endOfMonth = new Date(year, date.getMonth()+2, 1),
 	startOfLastMOnth = new Date(year, date.getMonth() - 1, 1),
 	lastMonth = year + '-' + (("0" + (date.getMonth())).slice(-2)),
 	dbname = 'monitors-' + year + '.db',
@@ -515,6 +515,7 @@ var ClaimedMonitors = {
 		return new Promise(function (resolve, reject){
 			claimedDb.find(query).sort({'agent': 1}).exec(function (err, result){
 				var newResult = []
+				//console.log(year, new Date (year, date.getMonth()+2, 1))
 				for (i of result) {
 					if (document.getElementById(i.agentabbv)) {
 						newResult.push(i)
