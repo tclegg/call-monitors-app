@@ -105,9 +105,6 @@ var agentSelect = 'select-agent',
 	},
 	monthName = months[mm],
 	// objects to store query data
-	activeStaff = {"agents": {}, "leads": {}},
-	allStaff = {"agents": {}, "leads": {}},
-	//remove after complete
 	leadsObj = {},
 	activeLeadsObj = {},
 	agentsObj = {},
@@ -360,7 +357,6 @@ var DBSubmitTools = {
 		//var query = {'_id': {'$regex': /^[a-zA-Zd]/}}
 		return new Promise((resolve, reject) => {
 			db[dbname].find(query).sort(sort).exec(function (err, result) {
-				console.log(db[dbname], query, result, 'whoops')
 				if (err) {
 					return reject(err)
 				} else {
@@ -426,7 +422,7 @@ var BuildStaffDom = {
 			}).then((result) => {
 				return resolve()
 			})
-		})
+		}).catch((err) => console.log(err))
 		
 		
 	},
@@ -450,7 +446,6 @@ var BuildStaffDom = {
 				for (var i of result){
 					if (i.inactive != 1) {
 						activeAgentsObj[i.abbv] = i
-						//activeResult[k] = v
 					}
 					agentsObj[i.abbv] = i
 				}
@@ -488,7 +483,6 @@ var BuildStaffDom = {
 					}
 					leadsObj[i.abbv] = i
 					if (Object.keys(leadsObj).length == result.length) {
-						console.log(loggedOnUserFullname)
 						return resolve(activeLeadsObj)
 					}
 				}
@@ -530,25 +524,22 @@ var BuildStaffDom = {
 
 				var length = Object.keys(activeLeadsObj).length, count = 1
 				for (var x in activeLeadsObj) {
-
 					let option1 = document.createElement('option'),
 						option2 = document.createElement('option')
-					
 					if (loggedOnUser == x) {
 						option1.selected = true
 						option2.selected = true
 					}
-
+					//set select on main form
 					option1.value = activeLeadsObj[x].abbv
-					option2.value = activeLeadsObj[x].abbv
-
 					option1.setAttribute('data-lead-id', activeLeadsObj[x]._id)
-					option2.setAttribute('data-lead-id', activeLeadsObj[x]._id)
-
 					option1.innerHTML = activeLeadsObj[x].name
-					option2.innerHTML = activeLeadsObj[x].name
-
 					newMonitorSelect.appendChild(option1)
+
+					//set select on monitor search form
+					option2.value = activeLeadsObj[x].abbv
+					option2.setAttribute('data-lead-id', activeLeadsObj[x]._id)
+					option2.innerHTML = activeLeadsObj[x].name
 					leadMonitorSelect.appendChild(option2)
 					if (count == length) {
 						return resolve(count)
@@ -564,7 +555,7 @@ var BuildStaffDom = {
 		activeAgents: function() {
 
 		},
-		alLeads: function() {
+		allLeads: function() {
 
 		},
 		activeLeads: function() {
@@ -574,27 +565,32 @@ var BuildStaffDom = {
 
 var LoadMonitors = {
 	init: function () {
-		console.log('in this.init()')
 		return new Promise ((resolve, reject) => {
 			this.pullNeeded().then((result) => {
-				console.log(result)
 				return this.buildNeeded(result)
+			}).then ((result) => {
+				return this.pullCompleted()
+			}).then ((result) => {
+				return this.buildCompleted()
 			}).then ((result) => {
 				return resolve()
 			})
 		})
 	},
 	pullNeeded: function () {
-	/*	let agent = "",
-		query = {'$and': [ {'agent': {agent}, date: { '$gte': startOfMonth }},{date: { '$lte': endOfMonth }} ]},
-		sort = {'agent': 1}*/
-		console.log('before promise')
+		let agent = "",
+		query = {'$and': [ {date: { '$gte': startOfMonth }},{date: { '$lte': endOfMonth }} ]},
+		sort = {'agent': 1}
 		
-//loop through all staff and pull monitors individuall, then load to a sorted result?
+		//loop through all staff and pull monitors individuall, then load to a sorted result?
 		return new Promise ((resolve, reject) => {
-			console.log('loop')
 			let count = 0, length = Object.keys(activeAgentsObj).length, monitors = []
-			for (i in activeAgentsObj) {
+			DBSubmitTools.pull('monitors', query, sort).then((result) => {
+				//loop through all the monitors to filter the result to show each agent
+				domTools.domMethods.buildNeeded(document.getElementById('needed-monitors-tbody'), result, activeAgentsObj)
+			})
+		
+		/*	for (i in activeAgentsObj) {
 				console.log(count, length, i)
 				let agent = activeAgentsObj[i].abbv, 
 					query = {'$and': [ {date: { '$gte': startOfMonth }},{date: { '$lte': endOfMonth }} ]},
@@ -619,21 +615,20 @@ var LoadMonitors = {
 				} else {
 					count ++
 				}
+			}*/
+			/*	for (i of activeAgentsObj) {
+				console.log(i.abbv)
+				DBSubmitTools.pull(
+					'monitors', query, sort
+				).then(
+						function(result){
+
+						}
+				)
 			}
-		})
-		
-
-		/*	for (i of activeAgentsObj){
-			console.log(i.abbv)
-			DBSubmitTools.pull(
-				'monitors', query, sort
-			).then(
-					function(result){
-
-					}
-			)
-		}
 		*/	
+		
+		})
 	},
 	buildNeeded: function(result) {
 		let container = document.getElementById('needed-monitors-tbody')
@@ -647,9 +642,9 @@ var LoadMonitors = {
 			sort = {'agent': 1}
 
 		DBSubmitTools.pull('monitors', query, sort)
-			.then(
-				function(result){
+			.then((result) => {
 					console.log(result)
+					return this.buildCompleted(result)
 				}
 			)
 	},
@@ -657,6 +652,10 @@ var LoadMonitors = {
 		let accordionContainer = document.getElementById('agent-accordion-tbody')
 		accordionContainer.innerHTML = ''
 
+		for (var i in agentsObj) {
+			let monitors = result.filter(x => x.agent === i)
+			domTools.domMethods.buildAccordion(i, monitors)
+		}
 		
 	},
 	buildCompletedThisMonth: function(result) {
@@ -671,15 +670,38 @@ var LoadMonitors = {
 
 var LoadStaffEdit = {
 	init: function(){
-
+		return new Promise ((resolve, reject) => {
+			this.agentMaintenance().then((result) => {
+				return this.leadMaintenance()
+			}).then((result) => {
+				//finally
+				return resolve()
+			})
+		}).catch((err) => console.log(err))
 	},
 	agentMaintenance: function() {
-		let conatiner = document.getElementById('edit-agents-tbody')
+		let container = document.getElementById('edit-agents-tbody')
 		container.innerHTML = ''
+
+		return new Promise ((resolve, reject) => {
+			if (domTools.domMethods.buildTable(container, agentsObj)){
+				return resolve()
+			} else {
+				return reject()
+			}
+		})
+		
+
 	},
 	leadMaintenance: function() {
 		let container = document.getElementById('edit-leads-tbody')
 		container.innerHTML = ''
+
+		return new Promise ((resolve, reject) => {
+			if (domTools.domMethods.buildTable(container, leadsObj)) {
+				return resolve()
+			}
+		})
 	}
 }
 
@@ -737,9 +759,11 @@ $(window).on('load', function () {
 	// Build the Dom for the first time
 	var load = new Promise((resolve, reject) => {
 		BuildStaffDom.init().then((result)=>{
-			return LoadMonitors.init()
-		}).then((result) => {
+			//return LoadMonitors.init()
 			return LoadStaffEdit.init()
+		}).then((result) => {
+			//return LoadStaffEdit.init()
+			return LoadMonitors.init()
 		})
 	}).catch((err) => {
 		console.log(err)

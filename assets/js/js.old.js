@@ -431,11 +431,13 @@ function buildRow(agent, monitors) {
 	var tmpObj = [],
 		panelGroup = document.getElementById('agent-accordion-tbody'),
 		panelHead = document.createElement('tr'),
+		
 		nameTd = document.createElement('td'),
 		completedTd = document.createElement('td'),
 		avgTd = document.createElement('td'),
 		qAvgTd = document.createElement('td'),
 		yAvgTd = document.createElement('td'),
+		
 		subTableRow = document.createElement('tr'),
 		subTableTd = document.createElement('td'),
 		subTableDiv = document.createElement('div'),
