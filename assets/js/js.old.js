@@ -639,7 +639,7 @@ function completedPerAgent(argMonth = null) {
 		// re-write start/end variables declared at the beginning
 		startOfMonth = new Date(year, argMonth.getMonth(), 1),
 			endOfMonth = new Date(year, argMonth.getMonth() + 1, 0),
-			startOfLastMOnth = new Date(year, argMonth.getMonth() - 1, 1),
+			startOfLastMonth = new Date(year, argMonth.getMonth() - 1, 1),
 			lastMonth = year + '-' + (("0" + (argMonth.getMonth())).slice(-2))
 
 		// re-write the qstart/end variables declared at the beginning
@@ -941,7 +941,7 @@ function pullThisMonth() {
 		queryTwoMonths = {
 			'$and': [{
 				date: {
-					'$gte': startOfLastMOnth
+					'$gte': startOfLastMonth
 				}
 			}, {
 				date: {

@@ -2,7 +2,7 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "main.js",
   "license": "MIT",
   "author": "Nex-Tech Help Desk",
@@ -24,7 +24,8 @@
   "dependencies": {
     "bootstrap3": "^3.3.5",
     "jquery": "^3.3.1",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "nedb-promises": "^3.0.0"
   },
   "repository": {
     "type": "git",
