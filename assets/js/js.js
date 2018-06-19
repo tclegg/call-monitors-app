@@ -1,14 +1,12 @@
 // declare constants for node tools
-// electron = require('electron')
 const {app} = require('electron').remote, // electron.app,
-	{ipcRenderer} = require('electron'),
-	fs = require('fs'),
-	path = require('path'),
-	nedb = require('nedb'),
+	{ipcRenderer} = require('electron'), // send data back and forth between windows (used for help (?))
+	fs = require('fs'), // Access the PC's File System
+	path = require('path'), // Resolve paths in the FS
+	nedb = require('nedb'), // Flat File Database
 	date = new Date(),
-	validation = require('callmonitorhelpers/cmvalidationhelpers'),
-	domTools = require('callmonitorhelpers/cmdomhelpers'),
-	dbhelper = require('callmonitorhelpers/cmdbhelpers'),
+	validation = require('callmonitorhelpers/cmvalidationhelpers'), // Valdiate
+	domTools = require('callmonitorhelpers/cmdomhelpers'), // Build the DOM
 	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2],
 	xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database';
 	
@@ -24,16 +22,16 @@ var today = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12),
 	lastMonth = year + '-' + (("0" + (date.getMonth())).slice(-2)),
 	dbname = 'monitors-' + year + '.db',
 	db = {},
-	loggedOnUserFullname,
-	globalCount = 0;
+	loggedOnUserFullname;
+
+// I don't think these are used
 //fullDateWithSlashes = year + '/' + mm + '/'+dd,
 //fullDateWithDashes =  year + '-' + mm + '-'+dd;
-// check for dev
-let prodPath = xDrive, // Production Database
-	devPath = path.resolve(__dirname, '../../db/') //Dev Database
 
-//set the database location
-let datastorePath = (!process.env.TODO_DEV) ? path.resolve(xDrive) : path.resolve(devPath)
+// check for dev and set the database location if dev === true
+let prodPath = xDrive, // Production Database
+	devPath = path.resolve(__dirname, '../../db/'), //Dev Database
+	datastorePath = (!process.env.TODO_DEV) ? path.resolve(xDrive) : path.resolve(devPath)
 
 try {
 		db.monitors = new nedb({
@@ -52,8 +50,6 @@ try {
 				filename: path.resolve(datastorePath, 'claimed.db'),
 				autoload: true
 			})
-		
-		
 } catch (err) {
 	//location.reload()
 	console.log(err)
@@ -61,27 +57,8 @@ try {
 }
 
 
-
-/*function(){
-	(async function (){
-	  await Promise.resolve();
-	  var a1 = await new Promise(function(resolve) { setTimeout(resolve,800,"foo"); });
-	  var a2 = await new Promise(function(resolve) { setTimeout(resolve,800,"bar"); });
-	  if (a1 + a2 === "foobar") {
-		asyncTestPassed();
-	  }
-	}());
-}*/
-
-// main form inputs
-var agentSelect = 'select-agent',
-	dateInput = 'input-date',
-	failCheck = 'check-fail',
-	leadSelect = 'select-lead',
-	scoreInput = 'score-agents',
-	dateField = 'input-date',
 	// month tools
-	months = {
+var months = {
 		"01": "Janary",
 		"02": "February",
 		"03": "March",
@@ -96,20 +73,6 @@ var agentSelect = 'select-agent',
 		"12": "December"
 	},
 	monthName = months[mm],
-	// objects to store query data
-	leadsObj = {},
-	activeLeadsObj = {},
-	agentsObj = {},
-	activeAgentsObj = {},
-	thisMonthMonitorsObj = {},
-	lastMonthMonitorsObj = {},
-	// arrays for looping
-	agentsArray = [],
-	leadsArray = [],
-	thisMonthMonitorsArray = [],
-	quarterlyMonitorsArray = [],
-	// interval for persistence
-	dbInterval = 60000,
 	// quarter calculation tools
 	q1 = ["0", "1", "2"],
 	q2 = ["3", "4", "5"],
@@ -119,25 +82,24 @@ var agentSelect = 'select-agent',
 	qend = {},
 	qm = new Date()
 
-if ($.inArray(qm.getMonth().toString(), q1)) {
-	qstart = new Date(year, 0, 1)
-	qend = new Date(year, 2, 31)
-} else if ($.inArray(qm.getMonth().toString(), q2)) {
-	qstart = new Date(year, 3, 1)
-	qend = new Date(year, 5, 30)
-} else if ($.inArray(qm.getMonth().toString(), q3)) {
-	qstart = new Date(year, 6, 1)
-	qend = new Date(year, 8, 31)
-} else {
-	qstart = new Date(year, 9, 1)
-	qend = new Date(year, 11, 31)
-}
-/*
- * DB persistence tools - unused, but saved here just in case
- */
-//db.persistence.setAutocompactionInterval(dbInterval)
-//leadsDb.persistence.setAutocompactionInterval(dbInterval)
-//agentsDb.persistence.setAutocompactionInterval(dbInterval)
+	if ($.inArray(qm.getMonth().toString(), q1)) {
+		qstart = new Date(year, 0, 1)
+		qend = new Date(year, 2, 31)
+	} else if ($.inArray(qm.getMonth().toString(), q2)) {
+		qstart = new Date(year, 3, 1)
+		qend = new Date(year, 5, 30)
+	} else if ($.inArray(qm.getMonth().toString(), q3)) {
+		qstart = new Date(year, 6, 1)
+		qend = new Date(year, 8, 31)
+	} else {
+		qstart = new Date(year, 9, 1)
+		qend = new Date(year, 11, 31)
+	}
+	// objects to store query data
+var	leadsObj = {},
+	activeLeadsObj = {},
+	agentsObj = {},
+	activeAgentsObj = {}
 
 /**
  * Date Tools
@@ -145,33 +107,33 @@ if ($.inArray(qm.getMonth().toString(), q1)) {
 function setDate() {
 	// Sets the date index-main.html, allmonitors.html, and leadsmonitors.html
 	// today = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-	let inputdate = document.getElementById(dateField),
+	let inputdate = document.getElementById('input-date'),
 		monitorsH2 = document.getElementById('monitorsH2'),
 		leadsSearchDate = document.getElementById('input-date-search'),
 		monitorsByAgentDate = document.getElementById('monitors-search-date')
 
-	
+	// Set the main form
 	inputdate.valueAsDate = today;
-	
+	// Set the Lead Search
 	leadsSearchDate.valueAsDate = startOfMonth;
+	// Set All Monitors by Month
 	monitorsH2.innerHTML = 'Monitors for ' + monthName;
-	
+	// Set All Monitors by Agent
 	monitorsByAgentDate.valueAsDate = startOfMonth;
-
 }
+
+/**
+* Reload the page after submit
+*/
 var ReloadInit = {
 	init: function () {
 		return new Promise ((resolve, reject) => {
-			//console.log(result)
-			let returnval =  BuildStaffDom.init()
-			console.log(returnval)
-			return resolve(returnval)
-		}).then((result) => {
-			console.log(178, result)
-			return LoadStaffEdit.init()
-		}).then((result) => {
-			console.log(181, result)
-			return LoadMonitors.init()
+			return BuildStaffDom.init().then((result) => {
+				return LoadStaffEdit.init()
+			}).then((result) => {
+				console.log(activeAgentsObj)
+				return LoadMonitors.init()
+			})
 		}).catch(err => console.log(err))
 	}
 }
@@ -182,9 +144,6 @@ var ReloadInit = {
  */
 
 var DBSubmitTools = {
-	test: function(vals, fields){
-		console.log('in DBSubmitTools')
-	},
 	init: function(formName, formValues, formFields){
 		/**
 		 * Routes based on the validated form (not used for claimed)
@@ -193,24 +152,14 @@ var DBSubmitTools = {
 		 * @param {Object} formValues All the values from the fields of the form
 		 * @param {Object} formFields Fields listed as {name: HTML-FIELD-ELEMENT}
 		 */
-
 		return new Promise ((resolve, reject) => {
 			 this[formName](formValues).then((result) => {
 				$('.modal').modal('hide')
-				//if (formName === 'newmonitor') {
-				//	location.reload()
-				//}
-				let returnval = this.clearfields(formValues)
-				console.log(returnval)
-				return returnval
-			}).then((result) => {
-				console.log(result)
+				return resolve(this.clearfields(formValues))
+			})/*.then((result) => {
 				return ReloadInit.init()
-			})
+			})*/
 		}).catch((err) => console.log(err))
-	},
-	submitStep2: function () {
-		return ReloadInit.init()
 	},
 	/**
 	 * Routing
@@ -223,24 +172,14 @@ var DBSubmitTools = {
 		 */
 		
 		return new Promise ((resolve, reject) => {
-			/*for (i of dbFields) {
-				console.log(i, dbFields)
-				postObject[i] = values[i.charAt(0)]
-			}*/
-			//console.log(values)
 			let test = this.post('monitors', values)
-			console.log(test)
 			if(test) {
 				return resolve(values)
 			} else {
 				return reject(values)
 			}
 			
-		})/*.then((returnVal) => {
-			//go to loading init()
-			console.log(returnVal)
-			return resolve(returnVal)
-		})*/.catch((err) => console.log(err))
+		}).catch((err) => console.log(err))
 	},
 	editmonitor: function (values){
 		/**
@@ -278,11 +217,12 @@ var DBSubmitTools = {
 	},
 	addagent: function (values){
 		/**
-		 * @param {Object} form Form Object - The form from the Add Agent or Add Lead modal
+		 * @param {Object} values Form Object - The form from the Add Agent or Add Lead modal
 		 * TYPE=LEAD form fields: abbv, name, inactive, _id
 		 * TYPE=AGENT form fields: abbv (lastname with first initial), name (last, first), monitors, agentid
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let query = values
 			return this.post('agentsDb', query).then((result) => {
 				if (result) {
@@ -298,15 +238,14 @@ var DBSubmitTools = {
 	},
 	editagent: function (values){
 		/**
-		 * @param {Object} form Form Object - The form submitted from the edit modal
+		 * @param {Object} values Object - The form submitted from the edit modal
 		 * Must have the data attributes on the element that opens the form
 		 * TYPE=LEAD form fields: abbv, name, inactive, _id
 		 * TYPE=AGENT form fields: abbv (lastname with first initial), name (last, first), monitors, agentid
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let row = {'_id': values._id}, query = values
-			//console.log(row, query)
-			
 			return this.update('agentsDb', row, query).then((result) => {
 				if (result) {
 					return resolve(result)
@@ -320,13 +259,15 @@ var DBSubmitTools = {
 	},
 	removeagent: function(values){
 		/**
-		 * @param {Object} form Form Object - The form submitted from the remove confirmation modal
+		 * @param {Object} values Object - The form submitted from the remove confirmation modal
 		 * Must have the _id from the data attribute on the element that opens the form
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let row = {'_id': values._id},
 				inactive = (values.inactive == "0") ? "1" : "0"
 			values.inactive = inactive
+
 			let query = values
 			if (inactive === "0"){
 				let claimedcell = document.querySelector('#'+values.abbv+'-claimed')
@@ -348,11 +289,12 @@ var DBSubmitTools = {
 	},
 	addlead: function (values){
 		/**
-		 * @param {Object} form Form Object - The form from the Add Agent or Add Lead modal
+		 * @param {Object} values Object - The form from the Add Agent or Add Lead modal
 		 * TYPE=LEAD form fields: abbv, name, inactive, _id
 		 * TYPE=AGENT form fields: abbv (lastname with first initial), name (last, first), monitors, agentid
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let query = values
 			return this.post('leadsDb', query).then((result) => {
 				if (result) {
@@ -368,14 +310,14 @@ var DBSubmitTools = {
 	},
 	editlead: function (values){
 		/**
-		 * @param {Object} form Form Object - The form submitted from the edit modal
+		 * @param {Object} values Object - The form submitted from the edit modal
 		 * Must have the data attributes on the element that opens the form
 		 * TYPE=LEAD form fields: abbv, name, inactive, _id
 		 * TYPE=AGENT form fields: abbv (lastname with first initial), name (last, first), monitors, agentid
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let row = {'_id': values._id}, query = values
-			console.log(row, query)
 			return this.update('leadsDb', row, query).then((result) => {
 				if (result) {
 					return resolve(result)
@@ -389,10 +331,11 @@ var DBSubmitTools = {
 	},
 	removelead: function(values){
 		/**
-		 * @param {Object} form Form Object - The form submitted from the remove confirmation modal
+		 * @param {Object} values Object - The form submitted from the remove confirmation modal
 		 * Must have the _id from the data attribute on the element that opens the form
 		 */
 		return new Promise ((resolve, reject) => {
+			values.date = new Date()
 			let row = {'_id': values._id},
 				inactive = (values.inactive == "0") ? "1" : "0"
 			values.inactive = inactive
@@ -451,21 +394,14 @@ var DBSubmitTools = {
 		 * @return {Object} Promise & Result
 		 */
 		query.date = new Date
-		console.log('in post', dbname)
-
 		return new Promise ((resolve, reject) => {
 			return db[dbname].insert(query, function (err, newDoc) {
-				
 				if (err) {
-					throw new Error(err)
 					return reject(err) 
 				} else {
-					console.log(newDoc)
 					return resolve(newDoc)
 				}
-			})/*.then ((result) => {
-				return resolve(result)
-			})*/
+			})
 		}).catch((err) => console.log(err))
 	},
 	update: function (dbname, row, query){
@@ -478,7 +414,6 @@ var DBSubmitTools = {
 		return new Promise((resolve, reject) => {
 			return db[dbname].update(row, query, {}, function(err, numReplaced) {
 				if (err){
-					console.log(err)
 					return reject(err)
 				} else {
 					return resolve(numReplaced)
@@ -500,7 +435,7 @@ var DBSubmitTools = {
 					return resolve(numRemoved)
 				}
 			})
-		})
+		}).catch((err) => console.log(err))
 	},
 	clearfields: function (formValues) {
 		/**
@@ -531,39 +466,41 @@ var DBSubmitTools = {
 				}
 
 			
-		})
+		}).catch((err) => console.log(err))
 	}
 }
 
 var BuildStaffDom = {
-	//uses DBSubmitTools
+	//uses DBSubmitTools on each "import..." function
 	init: function(){
-		//var first = this.importAgents()
-		//var order = [this.importAgents(), this.agentSelect(), this.importLeads()]
 		return new Promise ((resolve, reject) => {
-			return this.importAgents().then((result) => {
-				return this.agentsToObj(result)
+			return this.importAllAgents().then((result) => {
+				return this.allAgentsToObj(result)
 			}).then((result) => {
-				return this.importLeads()
+				return this.importActiveAgents()
 			}).then((result) => {
-				return this.leadsToObj(result)
+				return this.activeAgentsToObj(result)
+			}).then((result) => {
+				return this.importAllLeads()
+			}).then((result) => {
+				return this.allLeadsToObj(result)
+			}).then((result) => {
+				return this.importActiveLeads()
+			}).then((result) => {
+				return this.activeLeadsToObj(result)
 			}).then((result) => {
 				return this.agentSelect()
 			}).then((result) => {
 				return this.leadSelect()
 			}).then((result) => {
-				console.log(result)
 				return resolve(true)
 			})
 		}).catch((err) => console.log(err))
-		
-		
 	},
-	importAgents: function (DBquery = null) {
+	importAllAgents: function (DBquery = null) {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
-			sort = {abbv: 1},
-			activeResult = {}
-		return new Promise (function (resolve, reject) {
+			sort = {'agent': 1}
+		return new Promise ((resolve, reject) => {
 			return db.agentsDb.find(query).sort(sort).exec(function(err, result){
 				if (err) {
 					return reject(err)
@@ -573,15 +510,12 @@ var BuildStaffDom = {
 			})
 		}).catch((err) => console.log(err))
 	},
-	agentsToObj: function (result) {
-		return new Promise (function (resolve, reject){
+	allAgentsToObj: function (result) {
+		agentObj = {}
+		return new Promise ((resolve, reject) => {
 			let count = 1
 			for (var i in result){
-				if (result[i].inactive != 1) {
-					activeAgentsObj[result[i].abbv] = result[i]
-				}
 				agentsObj[result[i].abbv] = result[i]
-				
 				if (count == Object.keys(result).length) {
 					return resolve(result)
 				} else {
@@ -591,11 +525,38 @@ var BuildStaffDom = {
 			
 		}).catch((err) => console.log(err))
 	},
-	importLeads: function () {
+	importActiveAgents: function (DBquery = null) {
+		let query = {inactive: "0"},
+			sort = {'agent': 1}
+		return new Promise ((resolve, reject) => {
+			return db.agentsDb.find(query).sort(sort).exec((err, result) => {
+				if (err) {
+					return reject(err)
+				} else {
+					return resolve(result)
+				}
+			})
+		}).catch((err) => console.log(err))
+	},
+	activeAgentsToObj: function (result) {
+		activeAgentsObj = {}
+		return new Promise ((resolve, reject) => {
+			let count = 1
+			for  (var i in result) {
+				activeAgentsObj[result[i].abbv] = result[i]
+				if (count == Object.keys(result).length) {
+					return resolve(result)
+				} else {
+					count ++
+				}
+			}
+		}).catch ((err) => console.log(err))
+	},
+	importAllLeads: function () {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
-			sort = {abbv: 1}
+			sort = {'agent': 1}
 
-		return new Promise (function(resolve, reject){
+		return new Promise ((resolve, reject) => {
 			return db.leadsDb.find(query).sort(sort).exec(function(err, result){
 				if (err) {
 					return reject(err)
@@ -605,24 +566,53 @@ var BuildStaffDom = {
 			})
 		}).catch((err) => console.log(err))
 	},
-	leadsToObj: function (result) {
-		return new Promise (function (resolve, reject){
+	allLeadsToObj: function (result) {
+		leadsObj = {}
+		return new Promise ((resolve, reject) => {
 			let count = 1
 			for (var i in result) {
-				if (result[i].inactive == 0) {
-					activeLeadsObj[result[i].abbv] = result[i]
-				}
-				if (result[i].abbv == loggedOnUser) {
-					loggedOnUserFullname = result[i].name
-				}
 				leadsObj[result[i].abbv] = result[i]
+
 				if (count == Object.keys(result).length) {
 					return resolve(activeLeadsObj)
 				} else {
 					count ++
 				}
 			}
-		})
+		}).catch((err) => console.log(err))
+	},
+	importActiveLeads: function () {
+		let query = {inactive: "0"},
+			sort = {'agent': 1}
+
+		return new Promise ((resolve, reject) => {
+			return db.leadsDb.find(query).sort(sort).exec(function(err, result){
+				if (err) {
+					return reject(err)
+				} else {
+					return resolve(result)
+				}
+			})
+		}).catch((err) => console.log(err))
+	},
+	activeLeadsToObj: function (result) {
+		activeLeadsObj = {}
+		return new Promise ((resolve, reject) => {
+			let count = 1
+			for (var i in result) {
+				activeLeadsObj[result[i].abbv] = result[i]
+
+				if (result[i].abbv == loggedOnUser) {
+					loggedOnUserFullname = result[i].name
+				}
+				
+				if (count == Object.keys(result).length) {
+					return resolve(activeLeadsObj)
+				} else {
+					count ++
+				}
+			}
+		}).catch((err) => console.log(err))
 	},
 	agentSelect: function() {
 		let select = document.getElementById('select-agent'),
@@ -704,21 +694,10 @@ var BuildStaffDom = {
 				}
 			}
 		}).catch((err) => console.log(err))
-	},
-	allAgents: function () {
-		
-	},
-	activeAgents: function() {
-
-	},
-	allLeads: function() {
-
-	},
-	activeLeads: function() {
-
 	}
 }
 var LoadMonitors = {
+	// Uses DBSubmitTools for each "pull..." function
 	init: function () {
 		return new Promise ((resolve, reject) => {
 			return this.pullNeeded().then((result) => {
@@ -753,11 +732,7 @@ var LoadMonitors = {
 				return this.fillLastMonitor(result)
 			}).then ((result) => {
 				return this.averageBadges()
-			})/*.then ((result) => {
-					return this.eventListeners()
-			})/*.then ((result) => {
-				return this.alternateRefresh()
-			})*/.then ((result) => {
+			}).then ((result) => {
 				return resolve(result)
 			}).catch(err => {console.log(err)})
 		}).catch(err => {console.log(err)})
@@ -837,12 +812,12 @@ var LoadMonitors = {
 
 		let container = document.getElementById('needed-monitors-tbody')
 		container.innerHTML = ''
+
 		return new Promise ((resolve, reject) => {
 			if (result) {
-				let built = domTools.domMethods.buildNeeded(container, result, activeAgentsObj)
-				if (built) {
-					return resolve()
-				}
+				
+					return resolve(domTools.domMethods.buildNeeded(container, result, activeAgentsObj))
+				
 			} else {
 				return resolve()
 			}
@@ -1063,7 +1038,7 @@ var LoadMonitors = {
 				}
 				
 			});
-		})
+		}).catch((err) => console.log(err))
 		
 	},
 	buildCompleted: function(result) {
@@ -1196,7 +1171,6 @@ var LoadMonitors = {
 			tmpStart = new Date(month)
 			start = new Date(tmpStart.getFullYear(), tmpStart.getMonth(), 1)
 			end = new Date(tmpStart.getFullYear(), tmpStart.getMonth() + 1, 1)
-			//console.log(month, tmpStart, start, end)
 		}
 		let query = {'$and': [ {date: { '$gte': start }}, {date: { '$lte': end }} ] }
 			
@@ -1301,24 +1275,7 @@ var LoadMonitors = {
 				return resolve()
 			})
 		}).catch((err) => console.log(err))
-	}/*,
-	/*eventListeners: function() {
-		/**
-		 * All the event listners - Has to be here because the DOM is created after load
-		 * @return Promise RESOLVE() when all listeners are created
-		 */
-		/*console.log('event listeners')
-		return new Promise ((resolve, reject) => {
-				
-				return resolve('Event Listeners Created')
-			
-		}).catch((err) => console.log(err))*/
-	/*}/*,
-	runOnce: function (count){
-		if (count % 2 > 0){
-			return true
-		}
-	}*/
+	}
 }
 
 var LoadStaffEdit = {
@@ -1372,12 +1329,7 @@ var FormSubmitTools = {
 		 */
 		return new Promise ((resolve, reject) => {
 			return this[type](args).then((modal) => {
-				//if (modal.id == 'edit-monitor-modal' || modal.id == 'remove-monitor-modal') {
-					return domTools.buildModal.createModal(modal, args, agentsObj)
-			/*	} else {
-					return domTools.buildModal.createModal(modal, args)
-				}
-			*/	
+					return domTools.buildModal.createModal(modal, args, agentsObj, leadsObj)
 			}).then ((modal) => {
 				$(modal).on('shown.bs.modal', function (e){
 					return resolve()
@@ -1431,9 +1383,7 @@ var FormSubmitTools = {
 	changeClaimed: function (agent, lead, type) {
 		return new Promise((resolve, reject) => {
 			let setRemove = (type === 'unclaimed') ? 'setClaimed' : 'removeClaimed'
-			let test =  this[setRemove](agent, lead)
-			console.log(test)
-			return resolve(test)
+			return resolve(this[setRemove](agent, lead))
 		}).catch((err) => console.log(err))
 	},
 	setClaimed: function (agent, lead) {
@@ -1463,73 +1413,32 @@ var FormSubmitTools = {
 	modalSubmit: function (form) {
 		return new Promise ((resolve, reject) => {
 			let formname = $(form).attr('name')
-			return validation.formValidation.init(formname, form).then((result) => {
+			
+			return validation.formValidation.init(formname, form).then ((result) => {
 				return DBSubmitTools.init(formname, result)
 			}).then ((result) => {
-				return resolve(document.getElementById(form))
+				return ReloadInit.init()
 			})
 		}).catch((err) => console.log(err))
 	},
 	submit: function (form) {
-		//return new Promise ((resolve, reject) => {
+		return new Promise ((resolve, reject) => {
 			let formname = $(form).attr('name')
-			
-			console.log('holy crap it worked', form, formname)
+		
 			// Validate the form fields, then make them into a useable object for the submit.
-			 validation.formValidation.init(formname, form).then ((result) => {
+			 return validation.formValidation.init(formname, form).then ((result) => {
 				if (result.fail === true) {
 					result.score = "0"
 				}
-				console.log('in .then()')
-				return DBSubmitTools.newmonitor(formname, result)//.then ((result) => {return resolve()})
+				return DBSubmitTools.newmonitor(formname, result)
 			}).then ((result) => {
 				return	DBSubmitTools.clearfields(result)
-				 //	ReloadInit.init()
-			})
-			.then ((result) => {
+			}).then ((result) => {
 				return ReloadInit.init()
 			})
-			
-			
-		//}).catch((err) => console.log(err))
+		}).catch((err) => console.log(err))	
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -1537,162 +1446,43 @@ var FormSubmitTools = {
  */
 $(window).on('load', function () {
 	setDate()
-	//DBSubmitTools.post('claimedDb', {"date": new Date(), "agentabbv":"bourayx", "leadabbv":"cleggt"}, {agent: 1})
-	//DBSubmitTools.post('monitors', {"date": new Date(), "agent":"bourayx", "lead":"cleggt", score:"91.11", "fail": true}, {agent: 1})
+
 	// Build the Dom for the first time
-
-	/*const firstLoad = async () => {
-		let query = {'$and': [ {date: { '$gte': startOfMonth }},{date: { '$lte': endOfMonth }} ]},
-			sort = {'agent': 1, 'date': 1}
-		let monitors = await pull('monitors', query, sort)
-		let loaded = await load(monitors)
-
-//		throw new Error('oops')
-	}
-	
-	firstLoad().catch(err => {console.log(err)})
-*/
-
-	
 	return new Promise((resolve, reject) => {
 		return BuildStaffDom.init().then((result)=>{
-			//return LoadMonitors.init()
 			return LoadStaffEdit.init()
 		}).then((result) => {
-			//return LoadStaffEdit.init()
 			return LoadMonitors.init()
 		}).catch((err) => console.log(err))
 	}).catch((err) => console.log(err))
 	
-	/*
-	Promise.all([getAgents, getLeads]).then(results => {
-		console.log('done')
-		BuildDom.needed()
-		BuildDom.agentSelect()
-		BuildDom.leadSelect()
-	})
-*/
-	//importLeads()
-	// to resolve the crazy timing issue with the agent and lead agentLeadObject
-	// importAgents is called within importLeads()
-	// pullThisMonth is called within the importAgents() function
-	// Edit/Add buttons for managing leads can be found in the event listeners function
-
-	/*$('#form-monitors').submit(function (e) {
-		// Gets the values of the form and sends two objects to 
-		// validation.formValidation.newMonitor(), inputVals and inputElems
-		// converts array of elements into an object to be used in error handling
-		e.preventDefault();
-		var inputElems = document.querySelectorAll('#form-monitors [name]')//$(this).find('[name]'),
-			inputVals = {},
-			fields = {}
-
-		for (i of inputElems){
-			if (i.type == "date") {
-				inputVals[i.name.charAt(0)] = new Date(i.value.replace(/-/g, '\/'))
-			} else if (i.type == "checkbox") {
-				inputVals[i.name.charAt(0)] = i.checked
-			} else {//everything else
-				inputVals[i.name.charAt(0)] = i.value
-			}
-			fields[i.name.charAt(0)] = i
-		}
-		var validate = validation.formValidation.newMonitor(inputVals, fields);
-		if (validate) {
-			DBSubmitTools.newMonitor('monitors', inputVals)
-		}
-	})
-	*/
-/*
-	$('.modal-submit').click(function (e) {
-		//delete modalArgs;
-		let parentModal = $(this).parent().parent().parent().parent(),
-			type = $(parentModal).attr('id'),
-			form = $(type+'-form'),
-			fields = $(this).parents('.modal-content').find('[name]'),
-			modalArgs = {'type': type},
-			errorFieldName = type.toString() + '-success';
-		console.log(form)
-		$(fields).each(function (k, v) {
-			modalArgs[$(v).attr('id')] = $(v).val();
-		})
-		
-		if (type == 'edit-monitor-modal') {
-			let tmpArgs = {
-				'type': type
-			}
-			let aField = document.getElementById('edit-monitor-modal-select-agent'),
-				lField = document.getElementById('edit-monitor-modal-select-lead'),
-				fField = document.getElementById('edit-monitor-modal-check-fail'),
-				dField = document.getElementById('edit-monitor-modal-input-date'),
-				sField = document.getElementById('edit-monitor-modal-score'),
-				iField = document.getElementById('edit-monitor-modal-id'),
-				eField = document.getElementById(errorFieldName);
-
-			let a = aField.value,
-				l = lField.value,
-				f = fField.checked,
-				d = new Date(dField.value.replace(/-/g, '\/')),
-				s = sField.value,
-				i = iField.value;
-
-			let fields = {
-				'a': aField,
-				'l': lField,
-				'f': fField,
-				'd': dField,
-				's': sField,
-				'i': iField
-			}
-			validateEditModal(d, a, f, l, s, i, fields, eField)
-		} else {
-			validateModal(type, modalArgs, eField = document.getElementById(errorFieldName));
-		}
-	})
-*/
-	
-	/*
-	$('#select-lead-search').on('change', function () {
-		var lead = $(this).val(),
-			month = $('#input-date-search').val();
-		pullLeadMonth(lead, month);
-	})
-	$('#monitors-search-date').change(function () {
-
-		let month = $(this).val().replace(/-/g, '\/'),
-			tmpDate = new Date(month),
-			clearTbody = document.getElementById('agent-accordion-tbody')
-
-		clearTbody.innerHTML = '';
-		completedPerAgent(tmpDate)
-
-	})*/
-
-	$(window).on('click', function (e) {
-		
-		if (e.target.dataset.section != $('.navbar-collapse') && $('.navbar-collapse').hasClass('in')) {
-			$('.navbar-collapse').removeClass('in')
-		}
-	})
+	// Set version number in the BODY footer
 	$('.app-version').html(`v${app.getVersion()}`)
+	
+	// Turn on Bootstrap Tooltips because they look much better than default
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
+
+	// Catch errors that got missed
 	window.addEventListener('unhandledrejection', function(event) {
 		// the event object has two special properties:
 		console.log(event.promise); // [object Promise] - the promise that generated the error
 		console.log(event.reason); // Error: Whoops! - the unhandled error object
 	});
-	
-	
 })
 
+// Close NavBar
+$(window).on('click', function (e) {
+	if (e.target.dataset.section != $('.navbar-collapse') && $('.navbar-collapse').hasClass('in')) {
+		$('.navbar-collapse').removeClass('in')
+	}
+})
 
+//Claimed button toggle
 $(document).on('click', '.claimed', function (e) {
 	e.preventDefault()
-	console.log('claimed clicked at 1690')
 	$(function () {
-		console.log('fire 1320')
 		$('[data-toggle="tooltip"]').tooltip('fixTitle')
 	})
 	let agent = $(this).data('agent'),
@@ -1710,54 +1500,54 @@ $(document).on('click', '.claimed', function (e) {
 		})
 	}
 })
+
+//Modals
 $(document).on('click','.add-agent', function (e) {
-	//$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('addAgent', $(this))
 })
 $(document).on('click', '.edit-agent', function (e){
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('editAgent', $(this))
 })
 $(document).on('click', '.remove-agent', function (e) {
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('removeAgent', $(this))
 })
 $(document).on('click', '.add-lead', function (e) {
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('addLead', $(this))
 })
 $(document).on('click', '.edit-lead', function (e) {
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('editLead', $(this))
 })
 $(document).on('click', '.remove-lead', function (e) {
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('removeLead', $(this))
 })
 $(document).on('click', '.edit-monitor', function (e) {
-//	$(this).off('click')
 	e.preventDefault()
 	FormSubmitTools.initModal('editMonitor', $(this))
 })
 $(document).on('click', '.remove-monitor', function (e) {
-//	$(this).off('click')
+	e.preventDefault()
 	FormSubmitTools.initModal('removeMonitor', $(this))
 })
-
-$(document).on('change', '#select-lead-search', function () {
-//	$(this).off('change')
+$(document).on('change', '#select-lead-search', function (e) {
+	e.preventDefault()
 	var lead = $(this).val(),
 		month = $('#input-date-search').val().replace(/-/g, '\/');
 	LoadMonitors.completedByLead(lead, month)
 })
-$(document).on('change', '#input-date-search', function () {
-//	$(this).off('change')
+$(document).on('change', '#input-date-search', function (e) {
+	e.preventDefault()
 	let month = $(this).val().replace(/-/g, '\/')
 		lead = $('#select-lead-search').val()
 	LoadMonitors.completedByLead(lead, month)
 })
-$(document).on('change', '#monitors-search-date', function () {
-	//$(this).off('change')
+$(document).on('change', '#monitors-search-date', function (e) {
+	e.preventDefault()
 	let month = $(this).val().replace(/-/g, '\/'),
 		tmpDate = new Date(month),
 		clearTbody = document.getElementById('agent-accordion-tbody')
@@ -1767,28 +1557,26 @@ $(document).on('change', '#monitors-search-date', function () {
 
 })
 
+// Form Submit (modal and main form)
 $(document).on('submit', '#form-monitors', function (e){
 	e.preventDefault()
-	//$(this).off('submit')
-		console.log('here')
-		let form = $(this),
-			agent = $(form).find('#select-agent').val(),
-			claimedField = $('#'+agent+'-claimed')
-		if ($(claimedField).data('claimed') === 'claimed'){
-			FormSubmitTools.removeClaimed(agent)
-		}
-		FormSubmitTools.submit(form)
-		return true
-	
-	console.log(x)
-	
-
+	let form = $(this),
+		agent = $(form).find('#select-agent').val(),
+		claimedField = $('#'+agent+'-claimed')
+	if ($(claimedField).data('claimed') === 'claimed'){
+		FormSubmitTools.removeClaimed(agent)
+	}
+	FormSubmitTools.submit(form)
+	return true
 })
 $(document).on('click', '.modal-submit', function (e){
-	$(this).off('click')
+	e.preventDefault()
 	let form = $(this).parent().parent().find('form')
+	
 	FormSubmitTools.modalSubmit(form)
 })
+
+//Move focus
 $(document).on('shown.bs.modal', '.modal', function () {
 	$('.modal').focus()
 })
