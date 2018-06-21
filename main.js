@@ -5,43 +5,46 @@ if (setupEvents.handleSquirrelEvent()) {
   return;
 }
 
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-const {ipcMain} = require('electron')
-var path = require('path')
-const nedb = require('nedb')
-var dbtest = new nedb({filename: path.resolve(__dirname, '../../db/agents.db'), autoload: true})
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-//Adds the main Menu to our app
+const electron = require('electron'), // Main ElectronJS Object
+      isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false, // Check for Dev variable
+      app = electron.app, // Module to control application life.
+      {ipcMain} = require('electron'), // Communicate between windows
+      path = require('path'), // Parse the file path
+      BrowserWindow = electron.BrowserWindow // Module to create native browser window.
 
+console.log(`DEV ENVIRONMENT = ${isDev}`);
+
+
+// Adds the main Menu to our app
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let secondWindow
-let helpWindow
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({titleBarStyle: 'hidden',
-    width: 1281,
+  // MainWindow Options
+  let opts = {titleBarStyle: 'hidden',
     height: 800,
     minWidth: 1281,
     minHeight: 800,
     backgroundColor: '#8c0c03',
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
-  })
+  }
+  opts.width = (isDev) ? 1920 : 1281
+  // Create the browser window.
+  mainWindow = new BrowserWindow(opts)
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-	var isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false;
-	console.log(process.env.TODO_DEV);
-	if (process.env.TODO_DEV){
-		console.log('in conditional');
+
+	
+  
+	if (isDev){
+    console.log('in conditional');
+    
 		// Open the DevTools.
-		mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 	}
 
 	//mainWindow.webContents.send('ipc-message', testArgs)
