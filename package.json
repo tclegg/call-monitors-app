@@ -2,7 +2,7 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "main": "main.js",
   "license": "MIT",
   "author": "Nex-Tech Help Desk",
@@ -14,10 +14,14 @@
       ],
       "icon": "icon.png"
     },
-    "publish": [{
-      "provider": "github",
-      "url": "https://github.com/tclegg/call-monitors-app/"
-      }]
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
+    "asarUnpack": [
+      "**/log.txt"
+    ]
   },
   "devDependencies": {
     "electron": "^2.0.2",

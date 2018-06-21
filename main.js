@@ -36,6 +36,11 @@ const electron = require('electron'), // Main ElectronJS Object
 //-------------------------------------------------------------------
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
+log.transports.file.maxSize = 5*1024*1024;
+log.transports.file.file = path.join(__dirname, 'log.txt');
+log.transports.file.appName = app.getName()
+
 log.info('App starting...');
 log.info(`DEV ENVIRONMENT = ${isDev}`);
 
@@ -129,6 +134,7 @@ function sendStatusToWindow(text) {
   mainWindow.webContents.send('message', text);
 }
 app.on('ready', function () {
+  log.info('app ready and should be checking for updates')
   autoUpdater.checkForUpdatesAndNotify()
 })
 
@@ -153,6 +159,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
 })
 autoUpdater.on('checking-for-update', () => {
+  log.info('---checking for update---')
   sendStatusToWindow('Checking for update...');
 })
 
