@@ -4,7 +4,6 @@ node_modules
 release-builds
 dist/*
 !dist/.gitkeep
-!dist/Nex-Tech*.exe
 db/*
 !db/.gitkeep
 package-lock\.json
