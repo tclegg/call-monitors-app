@@ -43,3 +43,7 @@ From previous event:
     at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
     at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
 14:12:12:942 Error in auto-updater.
+16:49:01:952 App starting...
+16:49:01:959 DEV ENVIRONMENT = true
+17:00:09:811 App starting...
+17:00:09:815 DEV ENVIRONMENT = undefined

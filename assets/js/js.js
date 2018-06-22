@@ -1165,11 +1165,11 @@ var LoadMonitors = {
 		 * @param {Date} month OPTIONAL - Month to search
 		 */
 
-		let leadName = loggedOnUser, sort = {'date': 1}
+		let leadName = (!lead) ? loggedOnUser : lead, 
+			sort = {'date': 1}
 			start = new Date(year, date.getMonth(), 1),
-			end = new Date(year, date.getMonth() + 1, 1),
-			lead = (lead) ? leadName : null
-		
+			end = new Date(year, date.getMonth() + 1, 1)
+
 		// Rewrite start and end if the month is supplied
 		if (month) {
 			tmpStart = new Date(month)
@@ -1271,7 +1271,7 @@ var LoadMonitors = {
 		 * @param {String} lead - REQUIRED - Name of the lead to use in the query
 		 * @param {String} month - REQUIRED - Date from the HTML Date <input>
 		 */
-		 
+
 		return new Promise((resolve, reject) => {
 			return this.pullLeadMonitors(lead, month).then((result) => {
 				return this.leadMonitors(result)
@@ -1543,6 +1543,7 @@ $(document).on('change', '#select-lead-search', function (e) {
 	var lead = $(this).val(),
 		month = $('#input-date-search').val().replace(/-/g, '\/');
 	LoadMonitors.completedByLead(lead, month)
+	
 })
 $(document).on('change', '#input-date-search', function (e) {
 	e.preventDefault()
@@ -1843,9 +1844,7 @@ domTools.domMethods = {
 		let count = 1
 		return new Promise ((resolve, reject) => {
 			if (Object.keys(claimedMonitors).length > 0){
-				console.log(248, claimedMonitors, leadsObj)
 				for (x of claimedMonitors) {
-					console.log(x)
 					let elem = document.querySelector('#'+x.agentabbv+'-claimed')
 					if (elem) {
 						elem.setAttribute('title', leadsObj[x.leadabbv].name)
