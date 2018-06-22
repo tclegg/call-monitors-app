@@ -2,7 +2,7 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "1.4.9",
+  "version": "2.1.10",
   "main": "main.js",
   "license": "MIT",
   "author": "Nex-Tech Help Desk",
@@ -10,31 +10,45 @@
     "appId": "com.electron.callmonitortracking",
     "win": {
       "target": [
-        "portable",
         "nsis"
       ],
       "icon": "icon.png"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
+    "asarUnpack": [
+      "**/log.txt"
+    ]
   },
   "devDependencies": {
-    "electron": "^1.7.8",
-    "electron-builder": "^20.2.0",
-    "less": "^3.0.1"
+    "electron": "^2.0.2",
+    "electron-builder": "^20.15.3",
+    "less": "^3.0.4"
   },
   "dependencies": {
+    "ajv": "^6.5.1",
     "bootstrap3": "^3.3.5",
+    "dotenv": "^6.0.0",
+    "dotenv-expand": "^4.2.0",
+    "electron-log": "^2.2.15",
+    "electron-updater": "^2.21.10",
     "jquery": "^3.3.1",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "update-electron-app": "^1.3.0"
   },
   "repository": {
     "type": "git",
-    "url": "localhost"
+    "url": "https://github.com/tclegg/call-monitors-app/"
   },
   "scripts": {
     "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
     "dev": "SET TODO_DEV=true&& npm install && electron .",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "release": "build --p always"
   }
 }

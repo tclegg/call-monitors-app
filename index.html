@@ -69,22 +69,22 @@
 						<h4 class="modal-title" id="add-agent-modal-title">Add an Agent</h4>
 					</div>
 					<div class="modal-body">
-						<form class="" id="add-agent-modal-form" action="#" method="get">
+						<form class="" id="add-agent-modal-form" action="#" method="get" name="addagent">
 							<div class="form-group">
 								<label for="abbv" class="control-label">Abbreviation</label>
 								<input type="text" name="abbv" id="add-agent-modal-abbv" value="" class="form-control" required>
 								<span id="add-agent-modal-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
-								<label for="full-name" class="control-label">Full Name</label>
-								<input type="text" name="fullname" id="add-agent-modal-name" value="" class="form-control" required>
+								<label for="name" class="control-label">Full Name</label>
+								<input type="text" name="name" id="add-agent-modal-name" value="" class="form-control" required>
 								<span id="add-agent-modal-name-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label for="add-agent-modal-monitors" class="control-label"># of Monitors</label>
 								<input type="number" name="monitors" id="add-agent-modal-monitors" value="" class="form-control" required>
 								<span id="add-agent-modal-monitors-help" class="help-block"></span>
-								<input type="hidden" name="" value="0" id="add-agent-modal-inactive">
+								<input type="hidden" name="inactive" value="0" id="add-agent-modal-inactive">
 							</div>
 							<div class="form-group">
 								<label for="add-agent-modal-agent-id">Agent ID</label>
@@ -110,23 +110,23 @@
 						<h4 class="modal-title" id="edit-agent-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
 					</div>
 					<div class="modal-body">
-						<form class="" id="edit-agent-modal-form" action="#" method="get">
+						<form class="" id="edit-agent-modal-form" action="#" method="get" name="editagent">
 							<div class="form-group">
 								<label for="abbv" class="control-label">Abbreviation</label>
 								<input type="text" name="abbv" id="edit-agent-modal-abbv" value="" class="form-control" required>
 								<span id="edit-agent-modal-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
-								<label for="full-name" class="control-label">Full Name</label>
-								<input type="text" name="fullname" id="edit-agent-modal-name" value="" class="form-control" required>
+								<label for="name" class="control-label">Full Name</label>
+								<input type="text" name="name" id="edit-agent-modal-name" value="" class="form-control" required>
 								<span id="edit-agent-modal-name-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
 								<label for="edit-agent-modal-monitors" class="control-label"># of Monitors</label>
 								<input type="number" name="monitors" id="edit-agent-modal-monitors" value="" class="form-control" required>
 								<span id="edit-agent-modal-monitors-help" class="help-block"></span>
-								<input type="hidden" name="" value="" id="edit-agent-modal-id">
-								<input type="hidden" name="" value="" id="edit-agent-modal-inactive">
+								<input type="hidden" name="_id" value="" id="edit-agent-modal-id">
+								<input type="hidden" name="inactive" value="" id="edit-agent-modal-inactive">
 							</div>
 							<div class="form-group">
 								<label for="edit-agent-modal-agent-id">Agent ID</label>
@@ -152,18 +152,18 @@
 						<h4 class="modal-title" id="add-lead-modal-title">Add a Lead</h4>
 					</div>
 					<div class="modal-body">
-						<form class="" id="add-lead-modal-form" action="#" method="get">
+						<form class="" id="add-lead-modal-form" action="#" method="get" name="addlead">
 							<div class="form-group">
 								<label for="abbv" class="control-label">Abbreviation</label>
 								<input type="text" name="abbv" id="add-lead-modal-abbv" value="" class="form-control" required>
 								<span id="add-lead-modal-abbv-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
-								<label for="full-name" class="control-label">Full Name</label>
-								<input type="text" name="fullname" id="add-lead-modal-name" value="" class="form-control" required>
+								<label for="name" class="control-label">Full Name</label>
+								<input type="text" name="name" id="add-lead-modal-name" value="" class="form-control" required>
 								<span id="add-lead-modal-name-help" class="help-block"></span>
 							</div>
-							<input type="hidden" name="" value="0" id="add-lead-modal-inactive">
+							<input type="hidden" name="inactive" value="0" id="add-lead-modal-inactive">
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -182,19 +182,19 @@
 						<h4 class="modal-title" id="edit-lead-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
 					</div>
 					<div class="modal-body">
-						<form class="" id="edit-lead-modal-form" action="#" method="get">
+						<form class="" id="edit-lead-modal-form" action="#" method="get" name="editlead">
 							<div class="form-group">
 								<label for="abbv" class="control-label">Abbreviation</label>
 								<input type="text" name="abbv" id="edit-lead-modal-abbv" value="" class="form-control" required>
 								<span id="edit-lead-modal-abbv-help" class="help-block"></span>
 							</div>
 							<div class="form-group">
-								<label for="full-name" class="control-label">Full Name</label>
-								<input type="text" name="fullname" id="edit-lead-modal-name" value="" class="form-control" required>
+								<label for="name" class="control-label">Full Name</label>
+								<input type="text" name="name" id="edit-lead-modal-name" value="" class="form-control" required>
 								<span id="edit-lead-modal-name-help" class="help-block"></span>
 							</div>
-							<input type="hidden" name="" value="" id="edit-lead-modal-id">
-							<input type="hidden" name="" value="" id="edit-lead-modal-inactive">
+							<input type="hidden" name="_id" value="" id="edit-lead-modal-id">
+							<input type="hidden" name="inactive" value="" id="edit-lead-modal-inactive">
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -206,7 +206,7 @@
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
-		<div class="modal fade" id="remove-agent-modal" tabindex="-1" role="dialog">
+		<div class="modal fade remove" id="remove-agent-modal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -214,11 +214,15 @@
 						<h4 class="modal-title" id="remove-agent-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
 					</div>
 					<div class="modal-body">
-						<p><strong><span id="remove-agent-modal-type">Remove</span> <span id="remove-agent-modal-name">?</span></strong></p>
+						<p><strong><span id="remove-agent-modal-type" class="add-remove">Remove</span> <span id="remove-agent-modal-name" class="remove-name">?</span></strong></p>
 						<span id="check-fail-help" class="help-block"></span>
-						<form class="" action="#" method="get" id="remove-agent-modal-form">
-							<input type="hidden" name="" value="" id="remove-agent-modal-id">
-							<input type="hidden" name="" value="" id="remove-agent-modal-inactive">
+						<form class="" action="#" method="get" id="remove-agent-modal-form" name="removeagent">
+							<input type="hidden" name="_id" value="" id="remove-agent-modal-id">
+							<input type="hidden" name="inactive" value="" id="remove-agent-modal-inactive">
+							<input type="hidden" name="abbv" value="" id="remove-agent-modal-abbv">
+							<input type="hidden" name="name" value="" id="remove-agent-modal-name">
+							<input type="hidden" name="agentid" value="" id="remove-agent-modal-agentid">
+							<input type="hidden" name="monitors" value="" id="remove-agent-modal-monitors">
 							<span id="remove-agent-modal-id-help" class="help-block"></span>
 						</form>
 					</div>
@@ -231,7 +235,7 @@
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
-		<div class="modal fade" id="remove-lead-modal" tabindex="-1" role="dialog">
+		<div class="modal fade remove" id="remove-lead-modal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -239,11 +243,13 @@
 						<h4 class="modal-title" id="remove-lead-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
 					</div>
 					<div class="modal-body">
-						<p><strong><span id="remove-lead-modal-type">Remove</span> <span id="remove-lead-modal-name"></span>?</strong></p>
+						<p><strong><span id="remove-lead-modal-type" class=add-remove>Remove</span> <span id="remove-lead-modal-name" class="remove-name"></span>?</strong></p>
 						<span id="check-fail-help" class="help-block"></span>
-						<form class="" action="#" method="get" id="remove-lead-modal-form">
-							<input type="hidden" name="" value="" id="remove-lead-modal-id">
-							<input type="hidden" name="" value="" id="remove-lead-modal-inactive">
+						<form class="" action="#" method="get" id="remove-lead-modal-form" name="removelead">
+							<input type="hidden" name="_id" value="" id="remove-lead-modal-id">
+							<input type="hidden" name="inactive" value="" id="remove-lead-modal-inactive">
+							<input type="hidden" name="name" value="" id="remove-lead-modal-name">
+							<input type="hidden" name="abbv" value="" id="remove-lead-modal-abbv">
 							<span id="remove-lead-modal-id-help" class="help-block"></span>
 						</form>
 					</div>
@@ -263,12 +269,13 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="edit-monitor-modal-title">Edit monitor for <span></span></h4>
 					</div><!-- /.modal-header -->
+					
 					<div class="modal-body">
-						<form class="" id="edit-monitor-modal-form" action="#" method="get">
+						<form class="" id="edit-monitor-modal-form" action="#" method="get" name="editmonitor">
 							<div class="form-group">
 								<label for="edit-monitor-modal-select-agent" class="control-label">Monitored Agent</label>
 								<div class="">
-									<select class="form-control" name="edit-monitor-modal-agent" id="edit-monitor-modal-select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
+									<select class="form-control" name="agent" id="edit-monitor-modal-select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
 										<option selected disabled value="0">Select The Agent You Monitored</option>
 									</select>
 									<span id="edit-monitor-modal-select-agents-help" class="help-block"></span>
@@ -277,7 +284,7 @@
 							<div class="form-group">
 								<label for="edit-monitor-modal-date" class="control-label">Monitor Date</label>
 								<div class="">
-										<input type="date" class="form-control" name="edit-monitor-modal-date" id="edit-monitor-modal-input-date" value="">
+										<input type="date" class="form-control" name="date" id="edit-monitor-modal-input-date" value="">
 										<span id="edit-monitor-modal-date-help" class="help-block"></span>
 								</div>
 							</div>
@@ -285,7 +292,7 @@
 								<label for="edit-monitor-modal-score" class="control-label">Score</label>
 								<div class="">
 									<div class="input-group">
-										<input type="number" class="form-control" name="edit-monitor-modal-score" id="edit-monitor-modal-score" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
+										<input type="number" class="form-control" name="score" id="edit-monitor-modal-score" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
 										<span class="input-group-addon">%</span>
 									</div>
 									<span id="edit-monitor-modal-score-help" class="help-block"></span>
@@ -295,7 +302,7 @@
 								<div class="">
 										<div class="checkbox" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
 											<label class="control-label" >
-													<input type="checkbox" class="custom-control-input" name="edit-monitor-modal-fail" id="edit-monitor-modal-check-fail"><strong> Auto Fail</strong>
+													<input type="checkbox" class="custom-control-input" name="fail" id="edit-monitor-modal-check-fail"><strong> Auto Fail</strong>
 											</label>
 											<span id="edit-monitor-modal-check-fail-help" class="help-block"></span>
 										</div>
@@ -304,25 +311,55 @@
 							<div class="form-group">
 								<label for="edit-monitor-modal-select-lead" class="control-label">Lead</label>
 								<div class="">
-									<select class="form-control" name="edit-monitor-modal-select-lead" id="edit-monitor-modal-select-lead" required data-toggle="tooltip" title="Select your name from the list.">
+									<select class="form-control" name="lead" id="edit-monitor-modal-select-lead" required data-toggle="tooltip" title="Select your name from the list.">
 										<option selected disabled value="0">Select Your Name</option>
 									</select>
 									<span id="edit-monitor-modal-select-lead-help" class="help-block"></span>
 								</div>
 							</div>
-
-							<input type="hidden" name="" value="" id="edit-monitor-modal-id">
+						
+							<input type="hidden" name="_id" value="" id="edit-monitor-modal-id">
 						</form>
 					</div><!-- /.modal-body-->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="edit-monitor-modal-submit">Save changes</button>
+						<button type="submit" class="btn btn-danger modal-submit" id="edit-monitor-modal-submit">Save changes</button>
 						<span id="edit-monitor-modal-success" class="help-block"></span>
 					</div>
+				</form>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
+		<div class="modal fade remove" id="remove-monitor-modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="remove-monitor-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
+					</div>
+					<div class="modal-body">
+						<p><strong><span id="remove-monitor-modal-type">Remove</span> the monitor for  <span id="remove-monitor-modal-name-span" class="remove-name"></span> on <span id="remove-monitor-modal-date-span" class="remove-date"></span>?</strong></p>
+						<span id="check-fail-help" class="help-block"></span>
+						<form class="" action="#" method="get" id="remove-monitor-modal-form" name="removemonitor">
+							<input type="hidden" name="_id" value="" id="remove-monitor-modal-id">
+							<input type="hidden" name="inactive" value="" id="remove-monitor-modal-inactive">
+							<input type="date" name="date" value="" id="remove-monitor-modal-date" style="display: none">
+							<input type="hidden" name="agent" value="" id="remove-monitor-modal-agent">
+							<input type="hidden" name="score" value="" id="remove-monitor-modal-score">
+							<input type="hidden" name="fail" value="" id="remove-monitor-modal-fail">
+							<input type="hidden" name="lead" value="" id="remove-monitor-modal-lead">
+							<span id="remove-monitor-modal-id-help" class="help-block"></span>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit" id="remove-monitor-modal-submit">Save changes</button>
+						<span id="remove-monitor-modal-success" class="help-block"></span>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
 		
 

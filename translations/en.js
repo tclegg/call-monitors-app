@@ -35,5 +35,6 @@
 	"Get in touch": "Get in touch",
 	"Learn more": "Learn more",
 	"Toggle Developer Tools": "Toggle Developer Tools",
-	"Reload": "Reload"
+	"Reload": "Reload",
+	"Check for updates": "Check for updates"
 }
