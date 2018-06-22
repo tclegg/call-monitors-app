@@ -134,14 +134,13 @@ function sendStatusToWindow(text) {
   mainWindow.webContents.send('message', text);
 }
 app.on('ready', function () {
-  log.info('app ready and should be checking for updates')
   autoUpdater.checkForUpdatesAndNotify()
 })
 
 autoUpdater.on('update-downloaded', (ev, info) => {
   setTimeout(function() {
     autoUpdater.quitAndInstall();
-  }, 5000)
+  }, 10000)
 })
 autoUpdater.on('update-available', (ev, info) => {
   sendStatusToWindow('Update available.');
@@ -159,7 +158,6 @@ autoUpdater.on('update-downloaded', (ev, info) => {
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
 })
 autoUpdater.on('checking-for-update', () => {
-  log.info('---checking for update---')
   sendStatusToWindow('Checking for update...');
 })
 
