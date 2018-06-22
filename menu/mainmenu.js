@@ -1,7 +1,8 @@
 const {Menu} = require('electron')
 const electron = require('electron')
 const app = electron.app
-const {ipcRenderer} = require('electron')
+const {autoUpdater} = require('electron-updater')
+const {dialog} = require('electron')
 var i18n = new(require('../translations/i18n'))
 
 const template = [
@@ -85,8 +86,18 @@ const template = [
     role: 'help', label: i18n.__('Help'),
     submenu: [
       {
-        label: i18n.__('Learn more'),
-        click () { require('electron').shell.openExternal('https://electronjs.org') }
+        label: i18n.__('Check for updates'),
+        click () { 
+          autoUpdater.checkForUpdates()
+          dialog.showMessageBox({
+            type: 'question',
+            buttons: [],
+            defaultId: 0,
+            message: 'Checking for updates.',
+            detail: 'You will be notified if updates are available.'
+          });
+          
+        }
       }
     ]
   }

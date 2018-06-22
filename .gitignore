@@ -8,3 +8,4 @@ db/*
 !db/.gitkeep
 package-lock\.json
 *.env
+*log.txt

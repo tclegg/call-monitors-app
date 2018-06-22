@@ -35,5 +35,6 @@
 	"Get in touch": "Kontakta oss",
 	"Learn more": "Läs mer",
 	"Toggle Developer Tools": "Byt ut utvecklingsverktyg",
-	"Reload": "Ladda om"
+	"Reload": "Ladda om",
+	"Check for updates": "Sök efter uppdateringar"
 }

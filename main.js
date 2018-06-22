@@ -16,15 +16,12 @@ if (setupEvents.handleSquirrelEvent()) {
 }
 
 const electron = require('electron'), // Main ElectronJS Object
-      isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false, // Check for Dev variable
+      {dialog} = require('electron')
       app = electron.app, // Module to control application life.
       {ipcMain} = require('electron'), // Communicate between windows
       path = require('path'), // Parse the file path
       BrowserWindow = electron.BrowserWindow // Module to create native browser window.
 
-
-
-//const autoUpdater = require("electron-updater").autoUpdater
 
 //-------------------------------------------------------------------
 // Logging
@@ -40,9 +37,8 @@ log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
 log.transports.file.maxSize = 5*1024*1024;
 log.transports.file.file = path.join(__dirname, 'log.txt');
 log.transports.file.appName = app.getName()
-
 log.info('App starting...');
-log.info(`DEV ENVIRONMENT = ${isDev}`);
+log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}`);
 
 
 // Adds the main Menu to our app
@@ -61,7 +57,7 @@ function createWindow () {
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
   }
-  opts.width = (isDev) ? 1920 : 1281
+  opts.width = (process.env.TODO_DEV) ? 1920 : 1281
   // Create the browser window.
   mainWindow = new BrowserWindow(opts)
 
@@ -70,7 +66,7 @@ function createWindow () {
 
 	
   
-	if (isDev){
+	if (process.env.TODO_DEV){
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 	}
@@ -134,13 +130,24 @@ function sendStatusToWindow(text) {
   mainWindow.webContents.send('message', text);
 }
 app.on('ready', function () {
+  
   autoUpdater.checkForUpdatesAndNotify()
+  
 })
 
 autoUpdater.on('update-downloaded', (ev, info) => {
-  setTimeout(function() {
-    autoUpdater.quitAndInstall();
-  }, 10000)
+  // Ask user to update the app
+  dialog.showMessageBox({
+    type: 'question',
+    buttons: [],
+    defaultId: 0,
+    message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
+    detail: info
+  }, response => {
+    if (response === 0) {
+      setTimeout(() => autoUpdater.quitAndInstall(), 1);
+    }
+  });
 })
 autoUpdater.on('update-available', (ev, info) => {
   sendStatusToWindow('Update available.');
@@ -152,12 +159,12 @@ autoUpdater.on('error', (ev, err) => {
   sendStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (ev, progressObj) => {
-  sendStatusToWindow('Download progress...');
+  sendStatusToWindow('Download in progress...');
 })
 autoUpdater.on('update-downloaded', (ev, info) => {
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
 })
-autoUpdater.on('checking-for-update', () => {
+autoUpdater.on('checking-for-update', (ev, info) => {
   sendStatusToWindow('Checking for update...');
 })
 
@@ -170,6 +177,11 @@ ipcMain.on('open-second-window', (event, arg)=> {
 ipcMain.on('close-second-window', (event, arg)=> {
     secondWindow.hide()
 })
+
+exports.checkingUpdates = (event, arg) => {
+  
+  
+}
 
 
 // This method will be called when Electron has finished
