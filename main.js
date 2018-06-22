@@ -1,3 +1,13 @@
+// Grab environment variables from .env file right away
+
+const dotenv = require('dotenv'),
+      dotenvExpand = require('dotenv-expand'),
+      myEnv = dotenv.config(),
+      log = require('electron-log'),
+      {autoUpdater} = require('electron-updater');
+
+dotenvExpand(myEnv)
+
 //handle setupevents as quickly as possible
 const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
@@ -5,46 +15,62 @@ if (setupEvents.handleSquirrelEvent()) {
   return;
 }
 
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-const {ipcMain} = require('electron')
-var path = require('path')
-const nedb = require('nedb')
-var dbtest = new nedb({filename: path.resolve(__dirname, '../../db/agents.db'), autoload: true})
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-//Adds the main Menu to our app
+const electron = require('electron'), // Main ElectronJS Object
+      {dialog} = require('electron')
+      app = electron.app, // Module to control application life.
+      {ipcMain} = require('electron'), // Communicate between windows
+      path = require('path'), // Parse the file path
+      BrowserWindow = electron.BrowserWindow // Module to create native browser window.
 
+
+//-------------------------------------------------------------------
+// Logging
+//
+// THIS SECTION IS NOT REQUIRED
+//
+// This logging setup is not required for auto-updates to work,
+// but it sure makes debugging easier :)
+//-------------------------------------------------------------------
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
+log.transports.file.maxSize = 5*1024*1024;
+log.transports.file.file = path.join(__dirname, 'log.txt');
+log.transports.file.appName = app.getName()
+log.info('App starting...');
+log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}`);
+
+
+// Adds the main Menu to our app
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let secondWindow
-let helpWindow
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({titleBarStyle: 'hidden',
-    width: 1281,
+  // MainWindow Options
+  let opts = {titleBarStyle: 'hidden',
     height: 800,
     minWidth: 1281,
     minHeight: 800,
     backgroundColor: '#8c0c03',
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
-  })
+  }
+  opts.width = (process.env.TODO_DEV) ? 1920 : 1281
+  // Create the browser window.
+  mainWindow = new BrowserWindow(opts)
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-	var isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false;
-	console.log(process.env.TODO_DEV);
+
+	
+  
 	if (process.env.TODO_DEV){
-		console.log('in conditional');
-		// Open the DevTools.
-		mainWindow.webContents.openDevTools()
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools()
 	}
 
-	//mainWindow.webContents.send('ipc-message', testArgs)
   // Show the mainwindow when it is loaded and ready to show
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
@@ -72,10 +98,78 @@ function createWindow () {
 	// secondWindow.webContents.openDevTools()
   secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
 
-
+  // Load the menu
   require('./menu/mainmenu')
 }
 
+
+//-------------------------------------------------------------------
+// Auto updates
+//
+// For details about these events, see the Wiki:
+// https://github.com/electron-userland/electron-builder/wiki/Auto-Update#events
+//
+// The app doesn't need to listen to any events except `update-downloaded`
+//
+// Uncomment any of the below events to listen for them.  Also,
+// look in the previous section to see them being used.
+//-------------------------------------------------------------------
+// autoUpdater.on('checking-for-update', () => {
+// })
+// autoUpdater.on('update-available', (ev, info) => {
+// })
+// autoUpdater.on('update-not-available', (ev, info) => {
+// })
+// autoUpdater.on('error', (ev, err) => {
+// })
+// autoUpdater.on('download-progress', (ev, progressObj) => {
+// })
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  mainWindow.webContents.send('message', text);
+}
+app.on('ready', function () {
+  
+  autoUpdater.checkForUpdatesAndNotify()
+  
+})
+
+autoUpdater.on('update-downloaded', (ev, info) => {
+  // Ask user to update the app
+  dialog.showMessageBox({
+    type: 'question',
+    buttons: [],
+    defaultId: 0,
+    message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
+    detail: info
+  }, response => {
+    if (response === 0) {
+      setTimeout(() => autoUpdater.quitAndInstall(), 1);
+    }
+  });
+})
+autoUpdater.on('update-available', (ev, info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (ev, info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (ev, err) => {
+  sendStatusToWindow('Error in auto-updater.');
+})
+autoUpdater.on('download-progress', (ev, progressObj) => {
+  sendStatusToWindow('Download in progress...');
+})
+autoUpdater.on('update-downloaded', (ev, info) => {
+  sendStatusToWindow('Update downloaded; will install in 5 seconds');
+})
+autoUpdater.on('checking-for-update', (ev, info) => {
+  sendStatusToWindow('Checking for update...');
+})
+
+
+// Second window Event Listeners
 ipcMain.on('open-second-window', (event, arg)=> {
     secondWindow.show()
 })
@@ -83,6 +177,11 @@ ipcMain.on('open-second-window', (event, arg)=> {
 ipcMain.on('close-second-window', (event, arg)=> {
     secondWindow.hide()
 })
+
+exports.checkingUpdates = (event, arg) => {
+  
+  
+}
 
 
 // This method will be called when Electron has finished
@@ -106,6 +205,9 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

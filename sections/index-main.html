@@ -5,7 +5,7 @@
 	<h1 id="title">HD Call Monitors</h1>
 	<p class="">Select the agent you have monitored and fill out the following form to record the call monitor.</p>
 	<div class="form well">
-		<form id="form-monitors" class="form-horizontal">
+		<form id="form-monitors" class="form-horizontal" name=newmonitor>
 			<div class="form-group">
 				<label for="select-agent" class="col-sm-2 control-label">Monitored Agent</label>
 				<div class="col-sm-10">
@@ -13,21 +13,25 @@
 						<option selected disabled value="0">Select The Agent You Monitored</option>
 					</select>
 					<span id="select-agents-help" class="help-block"></span>
-					<input type="date" class="form-control" name="date" id="input-date" value="" style="display:none">
+					
 				</div>
 			</div>
+			<!--
+				Comment this section for manual insertions. Also set the input to display: none;
+			-->
 			<!--<div class="form-group">
-				<label for="date-agents" class="col-sm-2 control-label">Monitor Date</label>
-				<div class="col-sm-10">
-
-						<span id="date-agents-help" class="help-block"></span>
+				<label for="input-date" class="col-sm-2 control-label">Monitor Date</label>
+				<div class="col-sm-10"> -->
+						<input type="date" class="form-control" name="date" id="input-date" value="" style="display:none;">
+				<!--		<span id="input-date-help" class="help-block"></span>
 				</div>
 			</div>-->
+			<!-- /dev section -->
 			<div class="form-group">
 				<label for="score-agents" class="col-sm-2 control-label">Score</label>
 				<div class="col-sm-10">
 					<div class="input-group">
-						<input type="number" class="form-control" name="score-agents" id="score-agents" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
+						<input type="number" class="form-control" name="score" id="score-agents" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
 						<span class="input-group-addon">%</span>
 					</div>
 					<span id="score-agents-help" class="help-block"></span>
@@ -54,7 +58,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default" name="submit" id="btn-submit">Submit</button>
+					<button type="submit" class="btn btn-default" id="btn-submit">Submit</button>
 				</div>
 			</div>
 		</form>
@@ -71,7 +75,7 @@
 				<table class="table table-striped" id="needed-monitors-table">
 					<thead class="thead">
 						<tr class="tr">
-							<th class="th">Date</th><th class="th">Name</th><th class="th">Agent ID</th><th class="th">Last Monitor</th><th class="th"># Left <span id="num-left" class="badge"></span></th>
+							<th class="th">Date</th><th class="th">Name</th><th class="th">Agent ID</th><th class="th">Last Monitor</th><th class="th"># Left <span id="num-left" class="badge"></span></th><th class="th" data-toggle="tooltip" title="Click to claim the monitor.">Claimed</th>
 						</tr>
 					</thead>
 					<tbody class="tbody" id="needed-monitors-tbody">

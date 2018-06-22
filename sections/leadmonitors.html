@@ -1,11 +1,11 @@
 <template class="section-template" data-target="">
 <section id="leadmonitors" class="wrapper well">
-  <div class="inner">
+	<div class="inner">
 		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
-    <h2>Monitors By Lead</h2>
-    <p class="">Choose the lead and the month to display the completed monitors.</p>
+		<h2>Monitors By Lead</h2>
+		<p class="">Choose the lead and the month to display the completed monitors.</p>
 		<div class="form well">
-			<form id="form-monitors" class="form-horizontal">
+			<form id="lead-monitors" class="form-horizontal">
 				<div class="form-group">
 					<label for="input-date-search" class="col-sm-2 control-label">Monitor Date</label>
 					<div class="col-sm-10">
@@ -30,7 +30,7 @@
 				<table class="table table-striped" id="leadmonitors-table">
 					<thead class="thead">
 						<tr class="tr">
-							<th class="th">Date</th><th class="th">Full Name</th><th>Score</th><th>Auto-Fail</th>
+							<th class="th">Date</th><th class="th">Full Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th><th>Edit</th><th>Remove</th>
 						</tr>
 					</thead>
 					<tbody class="tbody" id="leadmonitors-tbody">

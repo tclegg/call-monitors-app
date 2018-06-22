@@ -1,0 +1,49 @@
+12:45:49:307 C:\Users\cleggt\Documents\Dev\call-monitors-app\log.txt
+12:45:49:315 App starting...
+12:45:49:316 DEV ENVIRONMENT = true
+14:01:03:366 App starting...
+14:01:03:372 DEV ENVIRONMENT = true
+14:01:43:149 App starting...
+14:01:43:152 DEV ENVIRONMENT = true
+14:08:18:932 App starting...
+14:08:18:935 DEV ENVIRONMENT = true
+14:09:03:809 App starting...
+14:09:03:815 DEV ENVIRONMENT = true
+14:12:05:515 App starting...
+14:12:05:519 DEV ENVIRONMENT = true
+14:12:12:699 Checking for update
+14:12:12:700 Checking for update...
+14:12:12:939 Error: Error: ENOENT: no such file or directory, open 'C:\Users\cleggt\Documents\Dev\call-monitors-app\dev-app-update.yml'
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:391:27
+    at Generator.next (<anonymous>)
+From previous event:
+    at NsisUpdater.loadUpdateConfig (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\out\AppUpdater.js:555:7)
+    at Lazy.AppUpdater.configOnDisk (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:134:43)
+    at Lazy.get value [as value] (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\lazy-val\src\main.ts:18:23)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:298:46
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+From previous event:
+    at NsisUpdater.getUpdateInfo (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\out\AppUpdater.js:460:7)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:308:35
+    at Generator.next (<anonymous>)
+From previous event:
+    at NsisUpdater.doCheckForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\out\AppUpdater.js:502:7)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:279:25
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+From previous event:
+    at NsisUpdater._checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\out\AppUpdater.js:433:7)
+    at NsisUpdater.checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:217:35)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:90:23)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+    at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
+14:12:12:942 Error in auto-updater.
+16:49:01:952 App starting...
+16:49:01:959 DEV ENVIRONMENT = true
+17:00:09:811 App starting...
+17:00:09:815 DEV ENVIRONMENT = undefined

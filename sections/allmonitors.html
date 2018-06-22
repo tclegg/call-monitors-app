@@ -3,14 +3,14 @@
 
 	<div>
 		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
-	  <!-- Nav tabs -->
-	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" class="active"><a href="#by-agent" aria-controls="home" role="tab" data-toggle="tab">By Agent</a></li>
-	    <li role="presentation"><a href="#all-monitors" aria-controls="profile" role="tab" data-toggle="tab">This Month</a></li>
-	  </ul>
+	<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#by-agent" aria-controls="home" role="tab" data-toggle="tab">By Agent</a></li>
+			<li role="presentation"><a href="#all-monitors" aria-controls="profile" role="tab" data-toggle="tab">This Month</a></li>
+		</ul>
 
-	  <!-- Tab panes -->
-	  <div class="tab-content">
+		<!-- Tab panes -->
+		<div class="tab-content">
 			<!--Accordion Tables-->
 			<div role="tabpanel" class="tab-pane active" id="by-agent">
 				<ul class="list-inline">
@@ -30,7 +30,7 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Agent</th><th># Completed</th><th>Month Avg</th><th>Quarter Avg</th>
+								<th>Agent</th><th># Completed</th><th>Month Avg <span id="mAvg-badge" class="badge"></span></th><th>Quarter Avg <span id="qAvg-badge" class="badge"></span></th><th>Year Avg <span id="yAvg-badge" class="badge"></span></th>
 							</tr>
 						</thead>
 						<tbody class="tbody" id="agent-accordion-tbody">
@@ -67,7 +67,7 @@
 						<table class="table table-striped" id="completed-monitors">
 							<thead class="thead">
 								<tr class="tr">
-									<th>Date</th><th>Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th>
+									<th>Date</th><th>Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th><th>Edit</th><th>Remove</th>
 								</tr>
 							</thead>
 							<tbody class="tbody" id="completed-monitors-tbody">
@@ -81,9 +81,8 @@
 						</table>
 					</div>
 				</div>
-	      </section>
-	    </div>
+			</div>
 		</div>
-  </div>
+	</div>
 </section>
 </template>
