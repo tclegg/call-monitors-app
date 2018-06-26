@@ -1,27 +1,23 @@
-// Grab environment variables from .env file right away
-
-const dotenv = require('dotenv'),
-      dotenvExpand = require('dotenv-expand'),
-      myEnv = dotenv.config(),
-      log = require('electron-log'),
-      {autoUpdater} = require('electron-updater');
-
-dotenvExpand(myEnv)
-
 //handle setupevents as quickly as possible
-const setupEvents = require('./installers/setupEvents')
+/*const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
-}
+}*/
 
 const electron = require('electron'), // Main ElectronJS Object
       {dialog} = require('electron')
       app = electron.app, // Module to control application life.
       {ipcMain} = require('electron'), // Communicate between windows
       path = require('path'), // Parse the file path
-      BrowserWindow = electron.BrowserWindow // Module to create native browser window.
+      BrowserWindow = electron.BrowserWindow, // Module to create native browser window.
+      dotenv = require('dotenv'),// Grab environment variables from .env file right away
+      dotenvExpand = require('dotenv-expand'),
+      myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
+      log = require('electron-log'),
+      {autoUpdater} = require('electron-updater');
 
+dotenvExpand(myEnv)
 
 //-------------------------------------------------------------------
 // Logging
@@ -51,13 +47,14 @@ function createWindow () {
   // MainWindow Options
   let opts = {titleBarStyle: 'hidden',
     height: 800,
+    width: (process.env.TODO_DEV) ? 1920 : 1281,
     minWidth: 1281,
     minHeight: 800,
     backgroundColor: '#8c0c03',
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
   }
-  opts.width = (process.env.TODO_DEV) ? 1920 : 1281
+
   // Create the browser window.
   mainWindow = new BrowserWindow(opts)
 
@@ -98,7 +95,7 @@ function createWindow () {
 	// secondWindow.webContents.openDevTools()
   secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
 
-  // Load the menu
+  // Load a custom menu
   require('./menu/mainmenu')
 }
 
@@ -129,9 +126,11 @@ function sendStatusToWindow(text) {
   log.info(text);
   mainWindow.webContents.send('message', text);
 }
+
 app.on('ready', function () {
-  
   autoUpdater.checkForUpdatesAndNotify()
+  let interval = setInterval(() => {autoUpdater.checkForUpdatesAndNotify()},3600000)
+  app.on('window-all-closed', () => {clearInterval(interval)})
   
 })
 
@@ -139,13 +138,26 @@ autoUpdater.on('update-downloaded', (ev, info) => {
   // Ask user to update the app
   dialog.showMessageBox({
     type: 'question',
-    buttons: [],
+    buttons: ['Restart', 'Later'],
     defaultId: 0,
     message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
     detail: info
   }, response => {
     if (response === 0) {
       setTimeout(() => autoUpdater.quitAndInstall(), 1);
+    } else {
+      dialog.showMessageBox({
+        type: 'info',
+        button: [],
+        defaultId: 0,
+        message: 'The update will apply the next time you restart.',
+        detail: info
+      }, response2 => {
+        if (response2 === 0) {
+          return
+        }
+      })
+      return
     }
   });
 })
@@ -178,11 +190,6 @@ ipcMain.on('close-second-window', (event, arg)=> {
     secondWindow.hide()
 })
 
-exports.checkingUpdates = (event, arg) => {
-  
-  
-}
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -205,9 +212,6 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
-
-
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

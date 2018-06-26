@@ -9,11 +9,9 @@ const {app} = require('electron').remote, // electron.app,
 	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2];
 
 	// check for dev and set the database location if dev === true
-const xDrive = 'X:/helpdesk/Tech Leads/Call Monitors/monitor-database', // Production Database
-	devPath = path.resolve(__dirname, '../../db/'), //Dev Database.
-	isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false,
-	datastorePath = (!isDev) ? path.resolve(xDrive) : path.resolve(devPath)
-	// Had to create these because electron couldn't access the files using require()
+const isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false,
+	datastorePath = (!isDev) ? path.resolve(process.env['prodPath']) : path.resolve(__dirname, process.env['devPath'])
+	
 let validation = {},
 	domTools = {}
 	// variables for date and database creation/selection

@@ -36,5 +36,6 @@
 	"Learn more": "Learn more",
 	"Toggle Developer Tools": "Toggle Developer Tools",
 	"Reload": "Reload",
-	"Check for updates": "Check for updates"
+	"Check for updates": "Check for updates",
+	"About ElectronJS": "About ElectronJS"
 }

@@ -21,7 +21,7 @@ function(n) {
 				$('.close-me-button').click( function (e) {
           ipc.messaging.sendCloseSecondWindowEvent()
         })
-
+        
       }
     };
 
