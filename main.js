@@ -9,11 +9,11 @@ const dotenv = require('dotenv'),
 dotenvExpand(myEnv)
 
 //handle setupevents as quickly as possible
-const setupEvents = require('./installers/setupEvents')
+/*const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
-}
+}*/
 
 const electron = require('electron'), // Main ElectronJS Object
       {dialog} = require('electron')
@@ -51,13 +51,14 @@ function createWindow () {
   // MainWindow Options
   let opts = {titleBarStyle: 'hidden',
     height: 800,
+    width: (process.env.TODO_DEV) ? 1920 : 1281,
     minWidth: 1281,
     minHeight: 800,
     backgroundColor: '#8c0c03',
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
   }
-  opts.width = (process.env.TODO_DEV) ? 1920 : 1281
+
   // Create the browser window.
   mainWindow = new BrowserWindow(opts)
 
@@ -98,8 +99,8 @@ function createWindow () {
 	// secondWindow.webContents.openDevTools()
   secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
 
-  // Load the menu
-  require('./menu/mainmenu')
+  // Load a custom menu
+  //require('./menu/mainmenu')
 }
 
 
@@ -129,23 +130,28 @@ function sendStatusToWindow(text) {
   log.info(text);
   mainWindow.webContents.send('message', text);
 }
+
 app.on('ready', function () {
   
   autoUpdater.checkForUpdatesAndNotify()
+  let interval = setInterval(() => {autoUpdater.checkForUpdatesAndNotify()},3600000)
+  app.on('window-all-closed', () => {clearInterval(interval)})
   
 })
 
 autoUpdater.on('update-downloaded', (ev, info) => {
   // Ask user to update the app
   dialog.showMessageBox({
-    type: 'question',
-    buttons: [],
+    type: 'info',
+    buttons: ['Restart', 'Later'],
     defaultId: 0,
     message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
     detail: info
   }, response => {
     if (response === 0) {
       setTimeout(() => autoUpdater.quitAndInstall(), 1);
+    } else {
+      return
     }
   });
 })

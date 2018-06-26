@@ -36,5 +36,6 @@
 	"Learn more": "Läs mer",
 	"Toggle Developer Tools": "Byt ut utvecklingsverktyg",
 	"Reload": "Ladda om",
-	"Check for updates": "Sök efter uppdateringar"
+	"Check for updates": "Sök efter uppdateringar",
+	"About ElectronJS": "Om ElectronJS"
 }

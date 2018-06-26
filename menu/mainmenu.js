@@ -88,17 +88,17 @@ const template = [
       {
         label: i18n.__('Check for updates'),
         click () { 
-          autoUpdater.checkForUpdates()
-          dialog.showMessageBox({
-            type: 'question',
-            buttons: [],
-            defaultId: 0,
-            message: 'Checking for updates.',
-            detail: 'You will be notified if updates are available.'
-          });
-          
-        }
-      }
+			autoUpdater.checkForUpdates()
+			dialog.showMessageBox({
+			  type: 'info',
+			  buttons: [],
+			  defaultId: 0,
+			  message: 'Checking for updates.',
+			  detail: 'You will be notified if updates are available.'
+			});
+			
+		  }
+	  }
     ]
   }
 ]
