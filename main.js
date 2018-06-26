@@ -1,13 +1,3 @@
-// Grab environment variables from .env file right away
-
-const dotenv = require('dotenv'),
-      dotenvExpand = require('dotenv-expand'),
-      myEnv = dotenv.config(),
-      log = require('electron-log'),
-      {autoUpdater} = require('electron-updater');
-
-dotenvExpand(myEnv)
-
 //handle setupevents as quickly as possible
 /*const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
@@ -20,8 +10,14 @@ const electron = require('electron'), // Main ElectronJS Object
       app = electron.app, // Module to control application life.
       {ipcMain} = require('electron'), // Communicate between windows
       path = require('path'), // Parse the file path
-      BrowserWindow = electron.BrowserWindow // Module to create native browser window.
+      BrowserWindow = electron.BrowserWindow, // Module to create native browser window.
+      dotenv = require('dotenv'),// Grab environment variables from .env file right away
+      dotenvExpand = require('dotenv-expand'),
+      myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
+      log = require('electron-log'),
+      {autoUpdater} = require('electron-updater');
 
+dotenvExpand(myEnv)
 
 //-------------------------------------------------------------------
 // Logging
@@ -100,7 +96,7 @@ function createWindow () {
   secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
 
   // Load a custom menu
-  //require('./menu/mainmenu')
+  require('./menu/mainmenu')
 }
 
 
@@ -132,7 +128,6 @@ function sendStatusToWindow(text) {
 }
 
 app.on('ready', function () {
-  
   autoUpdater.checkForUpdatesAndNotify()
   let interval = setInterval(() => {autoUpdater.checkForUpdatesAndNotify()},3600000)
   app.on('window-all-closed', () => {clearInterval(interval)})
@@ -142,7 +137,7 @@ app.on('ready', function () {
 autoUpdater.on('update-downloaded', (ev, info) => {
   // Ask user to update the app
   dialog.showMessageBox({
-    type: 'info',
+    type: 'question',
     buttons: ['Restart', 'Later'],
     defaultId: 0,
     message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
@@ -151,6 +146,17 @@ autoUpdater.on('update-downloaded', (ev, info) => {
     if (response === 0) {
       setTimeout(() => autoUpdater.quitAndInstall(), 1);
     } else {
+      dialog.showMessageBox({
+        type: 'info',
+        button: [],
+        defaultId: 0,
+        message: 'The update will apply the next time you restart.',
+        detail: info
+      }, response2 => {
+        if (response2 === 0) {
+          return
+        }
+      })
       return
     }
   });
@@ -184,11 +190,6 @@ ipcMain.on('close-second-window', (event, arg)=> {
     secondWindow.hide()
 })
 
-exports.checkingUpdates = (event, arg) => {
-  
-  
-}
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -211,9 +212,6 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
-
-
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
