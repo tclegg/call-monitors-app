@@ -37,5 +37,7 @@
 	"Toggle Developer Tools": "Toggle Developer Tools",
 	"Reload": "Reload",
 	"Check for updates": "Check for updates",
-	"About ElectronJS": "About ElectronJS"
+	"About ElectronJS": "About ElectronJS",
+	"Paste and Match Style": "Paste and Match Style",
+	"Hard Refresh": "Hard Refresh"
 }

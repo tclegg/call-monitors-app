@@ -1,26 +1,36 @@
 <template class="section-template" data-target="">
 <section id="leadmonitors" class="wrapper well">
-	<div class="inner">
-		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
+	<div class="container bg-light pt-3">
+		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
 		<h2>Monitors By Lead</h2>
 		<p class="">Choose the lead and the month to display the completed monitors.</p>
 		<div class="form well">
 			<form id="lead-monitors" class="form-horizontal">
 				<div class="form-group">
-					<label for="input-date-search" class="col-sm-2 control-label">Monitor Date</label>
 					<div class="col-sm-10">
-						<input type="date"class="form-control" name="date-search" id="input-date-search" value="" required data-toggle="tooltip" title="Choose the date to search (this will pull the whole month).">
+						<label for="input-date-search" class="sr-only">Monitor Date</label>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><strong>Date</strong></span>
+							</div>
+							<input type="month"class="form-control" name="date-search" id="input-date-search" value="" required data-toggle="tooltip" title="Choose the date to search (this will pull the whole month).">
+						</div>
+						<span id="date-search-help" class="form-text"></span>
 					</div>
-					<span id="date-search-help" class="help-block"></span>
 				</div>
 				<div class="form-group">
-					<label for="select-leads" class="col-sm-2 control-label">Lead</label>
 					<div class="col-sm-10">
-						<select class="form-control" name="lead-search" id="select-lead-search" required data-toggle="tooltip" title="Choose the lead from the list.">
-							<option selected disabled value="0">Select Your Name</option>
-						</select>
+						<label for="select-leads" class="sr-only">Lead</label>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><strong>Lead</strong></span>
+							</div>
+							<select class="form-control" name="lead-search" id="select-lead-search" required data-toggle="tooltip" title="Choose the lead from the list.">
+								<option selected disabled value="0">Select Your Name</option>
+							</select>
+						</div>
+						<span id="select-leads-search-help" class="form-text"></span>
 					</div>
-					<span id="select-leads-search-help" class="help-block"></span>
 				</div>
 			</form>
 		</div>
@@ -33,7 +43,7 @@
 							<th class="th">Date</th><th class="th">Full Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th><th>Edit</th><th>Remove</th>
 						</tr>
 					</thead>
-					<tbody class="tbody" id="leadmonitors-tbody">
+					<tbody class="tbody all-monitors-tbody" id="leadmonitors-tbody">
 						<!--placeholder-->
 					</tbody>
 				</table>

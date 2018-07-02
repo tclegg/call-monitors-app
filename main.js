@@ -15,7 +15,14 @@ const electron = require('electron'), // Main ElectronJS Object
       dotenvExpand = require('dotenv-expand'),
       myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
       log = require('electron-log'),
-      {autoUpdater} = require('electron-updater');
+      {autoUpdater} = require('electron-updater'),
+      isDev = require('electron-is-dev');
+
+      if (isDev) {
+        log.info('Running in development');
+      } else {
+        log.info('Running in production');
+      }
 
 dotenvExpand(myEnv)
 
@@ -41,7 +48,8 @@ log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}`);
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let secondWindow
+let helpWindow
+let manualUpdate = false
 
 function createWindow () {
   // MainWindow Options
@@ -50,14 +58,14 @@ function createWindow () {
     width: (process.env.TODO_DEV) ? 1920 : 1281,
     minWidth: 1281,
     minHeight: 800,
-    backgroundColor: '#8c0c03',
+    backgroundColor: '#f8f9fa',
     show: false,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+
   }
 
   // Create the browser window.
   mainWindow = new BrowserWindow(opts)
-
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
@@ -70,6 +78,9 @@ function createWindow () {
 
   // Show the mainwindow when it is loaded and ready to show
   mainWindow.once('ready-to-show', () => {
+    // Load a custom menu
+    require('./menu/mainmenu', mainWindow)
+    // Load main window
     mainWindow.show()
   })
 
@@ -81,7 +92,7 @@ function createWindow () {
     mainWindow = null
   })
 
-  secondWindow = new BrowserWindow({frame: false,
+  helpWindow = new BrowserWindow({frame: false,
     width: 1024,
     height: 768,
     minWidth: 800,
@@ -92,11 +103,10 @@ function createWindow () {
     parent: mainWindow
   })
 	// Open the DevTools.
-	// secondWindow.webContents.openDevTools()
-  secondWindow.loadURL(`file://${__dirname}/windows/ipcwindow.html`)
+	// helpWindow.webContents.openDevTools()
+  helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
 
-  // Load a custom menu
-  require('./menu/mainmenu')
+ 
 }
 
 
@@ -124,6 +134,7 @@ function createWindow () {
 
 function sendStatusToWindow(text) {
   log.info(text);
+  log.info('sending to window')
   mainWindow.webContents.send('message', text);
 }
 
@@ -141,16 +152,16 @@ autoUpdater.on('update-downloaded', (ev, info) => {
     buttons: ['Restart', 'Later'],
     defaultId: 0,
     message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
-    detail: info
+    detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
   }, response => {
-    if (response === 0) {
+    if (response === 0 && !process.env.TODO_DEV) {
       setTimeout(() => autoUpdater.quitAndInstall(), 1);
     } else {
       dialog.showMessageBox({
         type: 'info',
         button: [],
         defaultId: 0,
-        message: 'The update will apply the next time you restart.',
+        message: `The ${ev.version} update will apply the next time you restart.`,
         detail: info
       }, response2 => {
         if (response2 === 0) {
@@ -165,29 +176,50 @@ autoUpdater.on('update-available', (ev, info) => {
   sendStatusToWindow('Update available.');
 })
 autoUpdater.on('update-not-available', (ev, info) => {
-  sendStatusToWindow('Update not available.');
+  if (!manualUpdate) {
+    sendStatusToWindow('Up to date');
+  } else {
+    dialog.showMessageBox({
+      type: 'info',
+      buttons: [],
+      defaultId: 0,
+      message: `No update is available at this time.`,
+      detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
+    }, () => {
+      sendStatusToWindow('Up to date')
+      manualUpdate = false
+    })
+    
+  }
+  
 })
 autoUpdater.on('error', (ev, err) => {
-  sendStatusToWindow('Error in auto-updater.');
+    sendStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (ev, progressObj) => {
-  sendStatusToWindow('Download in progress...');
+    sendStatusToWindow('Download in progress...');
 })
 autoUpdater.on('update-downloaded', (ev, info) => {
-  sendStatusToWindow('Update downloaded; will install in 5 seconds');
+    sendStatusToWindow('Update downloaded');
 })
 autoUpdater.on('checking-for-update', (ev, info) => {
-  sendStatusToWindow('Checking for update...');
+    sendStatusToWindow('Checking for updates...');
 })
 
 
 // Second window Event Listeners
 ipcMain.on('open-second-window', (event, arg)=> {
-    secondWindow.show()
+    helpWindow.show()
 })
 
 ipcMain.on('close-second-window', (event, arg)=> {
-    secondWindow.hide()
+    helpWindow.hide()
+})
+
+ipcMain.on('checkUpdatesNow', (event, arg) => {
+  console.log('checking for updates in main.js')
+  manualUpdate = true
+  autoUpdater.checkForUpdates()
 })
 
 

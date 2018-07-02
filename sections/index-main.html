@@ -1,90 +1,113 @@
 <template class="section-template" data-target="">
 <section id="main" class="wrapper well">
-<div class="inner">
-	<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
-	<h1 id="title">HD Call Monitors</h1>
-	<p class="">Select the agent you have monitored and fill out the following form to record the call monitor.</p>
-	<div class="form well">
-		<form id="form-monitors" class="form-horizontal" name=newmonitor>
-			<div class="form-group">
-				<label for="select-agent" class="col-sm-2 control-label">Monitored Agent</label>
-				<div class="col-sm-10">
-					<select class="form-control" name="agent" id="select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
-						<option selected disabled value="0">Select The Agent You Monitored</option>
-					</select>
-					<span id="select-agents-help" class="help-block"></span>
-					
-				</div>
-			</div>
-			<!--
-				Comment this section for manual insertions. Also set the input to display: none;
-			-->
-			<!--<div class="form-group">
-				<label for="input-date" class="col-sm-2 control-label">Monitor Date</label>
-				<div class="col-sm-10"> -->
-						<input type="date" class="form-control" name="date" id="input-date" value="" style="display:none;">
-				<!--		<span id="input-date-help" class="help-block"></span>
-				</div>
-			</div>-->
-			<!-- /dev section -->
-			<div class="form-group">
-				<label for="score-agents" class="col-sm-2 control-label">Score</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<input type="number" class="form-control" name="score" id="score-agents" value="" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
-						<span class="input-group-addon">%</span>
-					</div>
-					<span id="score-agents-help" class="help-block"></span>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-						<div class="checkbox" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
-							<label class="control-label" >
-									<input type="checkbox" class="custom-control-input" name="fail" id="check-fail"><strong> Auto Fail</strong>
-							</label>
-							<span id="check-fail-help" class="help-block"></span>
+	<div class="container bg-light pt-3">
+		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+		<h1 id="title">HD Call Monitors  </h1>
+		<p class="">Select the agent you have monitored and fill out the following form to record the call monitor.</p>
+		<div class="form well">
+			<form id="form-monitors" class="form-horizontal" name="newmonitor" novalidate>
+				<!-- Select Agent -->
+				<div class="form-group">
+					<label for="select-agent" class="sr-only">Monitored Agent</label>
+					<div class="col-sm-10">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><strong>Agent</strong></span>
+							</div>
+							<select class="form-control" name="agent" id="select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
+								<option selected disabled value="0">Select The Agent You Monitored</option>
+							</select>
+							<div id="select-agents-help" class="helper text-center"></div>
 						</div>
+						
+						
+						
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="select-lead" class="col-sm-2 control-label">Lead</label>
-				<div class="col-sm-10">
-					<select class="form-control" name="lead" id="select-lead" required data-toggle="tooltip" title="Select your name from the list.">
-						<option selected disabled value="0">Select Your Name</option>
-					</select>
-					<span id="select-leads-help" class="help-block"></span>
+				<!--
+					Comment this section for manual insertions. Also set the input to display: none;
+				-->
+				<!--<div class="form-group">
+					<label for="input-date" class="col-sm-2 control-label">Monitor Date</label>
+					<div class="col-sm-10"> -->
+							<input type="date" class="form-control" name="date" id="input-date" value="" style="display:none;">
+					<!--		<div id="input-date-help" class="helper text-center"></div>
+					</div>
+				</div>-->
+				<!-- /dev section -->
+
+				<!-- Score -->
+				<div class="form-group">
+					<label for="score-agents" class="sr-only">Score</label>
+					<div class="col-sm-10">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><strong>Score</strong></span>
+							</div>
+							<input type="number" class="form-control" name="score" id="score-agents" value="" min="0" max="110" step=".01" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
+							<div class="input-group-append">
+								<span class="input-group-text"><strong>%</strong></span>
+							</div>
+							<div id="score-agents-help" class="helper text-center"></div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default" id="btn-submit">Submit</button>
+
+				<!-- Auto-Fail -->
+				<div class="form-group col-sm-offset-2 col-sm-10 ">
+					<div class="form-check" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
+						
+						<input class="form-check-input" type="checkbox" name="fail" id="check-fail" value="false">
+						<label class="form-check-label" for="check-fail">
+							<strong>Auto Fail</strong>
+						</label>
+						<div id="check-fail-help" class="helper text-center"></div>
+					</div>
 				</div>
-			</div>
-		</form>
+				<!-- Select Lead -->
+				<div class="form-group">
+					<label for="select-lead" class="sr-only">Lead</label>
+					<div class="col-sm-10">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><strong>Lead</strong></span>
+							</div>
+							<select class="form-control" name="lead" id="select-lead" required data-toggle="tooltip" title="Select your name from the list.">
+								<option selected disabled value="0">Select Your Name</option>
+							</select>
+							<div id="select-leads-help" class="helper text-center"></div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default" id="btn-submit"><strong>Submit</strong></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	<hr>
+		<div class="hidden" id=error-text>
+			<p class="bg-danger" id="error-p"></p>
+		</div>
+		<div class="need-monitors" id="div-need-monitors">
+			<h2>Upcoming Monitors</h2>
+			<p class="p-need" id="p-need-monitors">The following agents need monitors completed. Please monitor one of the following agents and enter the monitor using the form above.</p>
+			<div class="well">
+				<div class="table-responsive">
+					<table class="table table-striped" id="needed-monitors-table">
+						<thead class="thead">
+							<tr class="tr">
+								<th class="th">Date</th><th class="th">Name</th><th class="th">Agent ID</th><th class="th">Last Monitor</th><th class="th"># Left <span id="num-left" class="badge badge-pill badge-info"></span></th><th class="th" data-toggle="tooltip" title="Click to claim the monitor.">Claimed</th>
+							</tr>
+						</thead>
+						<tbody class="tbody" id="needed-monitors-tbody">
+							<!--placeholder-->
+						</tbody>
+					</table>
+				</div>
+		</div>
+		</div>
 	</div>
-<hr>
-	<div class="hidden" id=error-text>
-		<p class="bg-danger" id="error-p"></p>
-	</div>
-	<div class="need-monitors" id="div-need-monitors">
-		<h2>Upcoming Monitors</h2>
-		<p class="p-need" id="p-need-monitors">The following agents need monitors completed. Please monitor one of the following agents and enter the monitor using the form above.</p>
-		<div class="well">
-			<div class="table-responsive">
-				<table class="table table-striped" id="needed-monitors-table">
-					<thead class="thead">
-						<tr class="tr">
-							<th class="th">Date</th><th class="th">Name</th><th class="th">Agent ID</th><th class="th">Last Monitor</th><th class="th"># Left <span id="num-left" class="badge"></span></th><th class="th" data-toggle="tooltip" title="Click to claim the monitor.">Claimed</th>
-						</tr>
-					</thead>
-					<tbody class="tbody" id="needed-monitors-tbody">
-						<!--placeholder-->
-					</tbody>
-				</table>
-			</div>
-	</div>
-	</div>
-</div>
 </section>
 </template>
