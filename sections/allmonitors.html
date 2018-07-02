@@ -1,39 +1,40 @@
 <template class="section-template" data-target="">
 <section id="allmonitors" class="wrapper well">
-
-	<div>
-		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
+	<div class="container bg-light pt-3">
+		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
 	<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#by-agent" aria-controls="home" role="tab" data-toggle="tab">By Agent</a></li>
-			<li role="presentation"><a href="#all-monitors" aria-controls="profile" role="tab" data-toggle="tab">This Month</a></li>
+			<li role="presentation" class="nav-item"><a class="nav-link active" href="#by-agent" aria-controls="home" role="tab" data-toggle="tab">By Agent</a></li>
+			<li role="presentation" class="nav-item"><a class="nav-link" href="#all-monitors" aria-controls="profile" role="tab" data-toggle="tab">This Month</a></li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<!--Accordion Tables-->
-			<div role="tabpanel" class="tab-pane active" id="by-agent">
+			<div role="tabpanel" class="tab-pane active pt-3" id="by-agent">
 				<ul class="list-inline">
-					<li><h3 id="monitors-by-agent-h3">Monitors By Agent</h3></li>
-					<li>
-						<h3> | </h3>
-					</li>
-					<li>
+					<li class="list-inline-item float-left"><h3 id="monitors-by-agent-h3">Monitors By Agent</h3></li>
+					<li class="list-inline-item float-right">
 						<form class="form-inline" title="Change to a different month." data-tooltip="tooltip">
-							<label for="monitors-search-date" class="control-label">Change Month: </label>
-							<input type="date" id="monitors-search-date" class="form-control">
+							<label for="monitors-search-date" class="sr-only">Change Month</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Change Month</span>
+								</div>
+								<input type="month" id="monitors-search-date" class="form-control">
+							</div>
 						</form>
 					</li>
 				</ul>
 
 				<div class="table-responsive">
-					<table class="table table-striped">
+					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Agent</th><th># Completed</th><th>Month Avg <span id="mAvg-badge" class="badge"></span></th><th>Quarter Avg <span id="qAvg-badge" class="badge"></span></th><th>Year Avg <span id="yAvg-badge" class="badge"></span></th>
+								<th>Agent</th><th># Completed</th><th>Month Avg <span id="mAvg-badge" class="badge badge-pill badge-info"></span></th><th>Quarter Avg <span id="qAvg-badge" class="badge badge-pill badge-info"></span></th><th>Year Avg <span id="yAvg-badge" class="badge badge-pill badge-info"></span></th>
 							</tr>
 						</thead>
-						<tbody class="tbody" id="agent-accordion-tbody">
+						<tbody class="tbody all-monitors-tbody" id="agent-accordion-tbody">
 						<!-- EXAMPLE ACCORDION TABLE	
 							<tr class="accordion-toggle" data-toggle="collapse" data-target="#vetterpTable" style="cursor: pointer;">
 								<td>Vetter</td><td>2</td><td>90%</td><td>85%</td>
@@ -59,9 +60,25 @@
 				</div>
 			</div>
 
-			<div  role="tabpanel" class="tab-pane" id="all-monitors">
-				<h3 id="monitorsH2">Montitors for </h3>
-				<p class="p-completed " id="p-completed-monitors">The following call monitors have been completed this month.</p>
+			<div role="tabpanel" class="tab-pane pt-3" id="all-monitors">
+				<ul class="list-inline">
+					<li class="list-inline-item float-left">
+						<h3 id="all-monitors-date-1">All Monitors For <span id="all-monitors-date-2"></span></h3>
+					</li>
+					<li class="list-inline-item float-right">
+						<form class="form-inline" title="Change to a different month." data-tooltip="tooltip">
+							<label for="monitors-search-date-2" class="sr-only">Change Month</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Change Month</span>
+								</div>
+								<input type="month" id="monitors-search-date-2" class="form-control">
+							</div>
+						</form>
+					</li>
+				</ul>
+				<!--<h3 id="monitorsH2">Montitors for </h3>
+				<p class="p-completed " id="p-completed-monitors">The following call monitors have been completed this month.</p>-->
 				<div class="well" id="div-completed">
 					<div class="table-responsive">
 						<table class="table table-striped" id="completed-monitors">
@@ -70,7 +87,7 @@
 									<th>Date</th><th>Name</th><th>Score</th><th>Auto-Fail</th><th>Lead</th><th>Edit</th><th>Remove</th>
 								</tr>
 							</thead>
-							<tbody class="tbody" id="completed-monitors-tbody">
+							<tbody class="tbody all-monitors-tbody" id="completed-monitors-tbody">
 								<!--<tr>
 									<td>2018-02-01</td><td>Campbell, Ryan</td><td></td><td>Clegg, Thomas</td>
 								</tr>

@@ -37,5 +37,8 @@
 	"Toggle Developer Tools": "Byt ut utvecklingsverktyg",
 	"Reload": "Ladda om",
 	"Check for updates": "Sök efter uppdateringar",
-	"About ElectronJS": "Om ElectronJS"
+	"About ElectronJS": "Om ElectronJS",
+	"Paste and Match Style": "Klistra in och matcha stil"
+	"Hard Refresh": "Hård uppdatering"
+
 }

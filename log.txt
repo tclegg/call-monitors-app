@@ -1,2 +1,803 @@
 10:32:49:874 App starting...
 10:32:49:878 DEV ENVIRONMENT = true
+12:26:29:959 App starting...
+12:26:29:963 DEV ENVIRONMENT = true
+12:26:44:550 Checking for update
+12:26:44:554 Checking for update...
+12:26:44:824 Error: Error: ENOENT: no such file or directory, open 'C:\Users\cleggt\Documents\Dev\call-monitors-app\dev-app-update.yml'
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:277:20)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:92:18)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+    at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
+From previous event:
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:391:27
+    at Generator.next (<anonymous>)
+From previous event:
+    at NsisUpdater.loadUpdateConfig (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:387:33)
+    at Lazy.AppUpdater.configOnDisk (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:134:43)
+    at Lazy.get value [as value] (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\lazy-val\src\main.ts:18:23)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:298:46
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:277:20)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:92:18)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+From previous event:
+    at NsisUpdater.getUpdateInfo (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:294:32)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:308:35
+    at Generator.next (<anonymous>)
+From previous event:
+    at NsisUpdater.doCheckForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:307:34)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:279:25
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:277:20)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:92:18)
+From previous event:
+    at NsisUpdater._checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:274:33)
+    at NsisUpdater.checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:217:35)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:91:23)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+    at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
+12:26:44:827 Error in auto-updater.
+12:42:16:130 App starting...
+12:42:16:134 DEV ENVIRONMENT = true
+12:42:58:259 App starting...
+12:42:58:266 DEV ENVIRONMENT = true
+12:50:43:792 App starting...
+12:50:43:795 DEV ENVIRONMENT = true
+12:50:56:785 Checking for update
+12:50:56:794 Checking for update...
+12:51:00:781 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+12:51:00:782 Update not available.
+12:54:46:944 App starting...
+12:54:46:950 DEV ENVIRONMENT = true
+12:56:01:469 Checking for update
+12:56:01:475 Checking for update...
+12:56:05:313 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+12:56:05:314 Update not available.
+12:56:05:318 Error: TypeError: Message must be a string
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:239:13)
+    at NsisUpdater.autoUpdater.on (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:100:20)
+    at emitOne (events.js:121:20)
+    at NsisUpdater.emit (events.js:211:7)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:319:12
+From previous event:
+    at NsisUpdater.doCheckForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:307:34)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:279:25
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:277:20)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:92:18)
+From previous event:
+    at NsisUpdater._checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:274:33)
+    at NsisUpdater.checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:217:35)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:91:23)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+    at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
+12:56:05:319 Error in auto-updater.
+12:57:11:301 App starting...
+12:57:11:304 DEV ENVIRONMENT = true
+12:57:17:178 Checking for update
+12:57:17:182 Checking for update...
+12:57:21:161 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+12:57:21:162 Update not available.
+12:57:21:165 Error: TypeError: Message must be a string
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:239:13)
+    at NsisUpdater.autoUpdater.on (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:101:20)
+    at emitOne (events.js:121:20)
+    at NsisUpdater.emit (events.js:211:7)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:319:12
+From previous event:
+    at NsisUpdater.doCheckForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:307:34)
+    at C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:279:25
+    at Generator.next (<anonymous>)
+    at runCallback (timers.js:789:20)
+    at tryOnImmediate (timers.js:751:5)
+    at processImmediate [as _immediateCallback] (timers.js:722:5)
+    at Object.showMessageBox (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\dialog.js:277:20)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:93:18)
+From previous event:
+    at NsisUpdater._checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:274:33)
+    at NsisUpdater.checkForUpdates (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron-updater\src\AppUpdater.ts:217:35)
+    at click (C:\Users\cleggt\Documents\Dev\call-monitors-app\menu\mainmenu.js:91:31)
+    at MenuItem.click (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu-item.js:55:9)
+    at Function.executeCommand (C:\Users\cleggt\Documents\Dev\call-monitors-app\node_modules\electron\dist\resources\electron.asar\browser\api\menu.js:29:13)
+12:57:21:167 Error in auto-updater.
+12:58:07:509 App starting...
+12:58:07:513 DEV ENVIRONMENT = true
+12:58:12:736 Checking for update
+12:58:12:760 Checking for update...
+12:58:16:538 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+12:58:16:539 Update not available.
+12:58:56:187 App starting...
+12:58:56:191 DEV ENVIRONMENT = true
+12:59:18:827 Checking for update
+12:59:18:833 Checking for update...
+12:59:22:716 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+12:59:22:717 Update not available.
+13:00:26:804 App starting...
+13:00:26:807 DEV ENVIRONMENT = true
+13:00:33:678 Checking for update
+13:00:33:692 Checking for update...
+13:00:38:461 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:00:38:462 Update not available.
+13:04:31:962 App starting...
+13:04:31:966 DEV ENVIRONMENT = true
+13:04:42:754 Checking for update
+13:04:42:756 Checking for update...
+13:04:46:630 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:04:46:668 Update not available.
+13:07:12:082 App starting...
+13:07:12:087 DEV ENVIRONMENT = true
+13:07:27:471 Checking for update
+13:07:27:479 Checking for update...
+13:07:31:676 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:07:31:677 Update not available.
+13:12:51:727 App starting...
+13:12:51:730 DEV ENVIRONMENT = true
+13:13:01:476 Checking for update
+13:13:01:477 Checking for update...
+13:13:05:229 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:13:05:229 Update not available.
+13:13:40:088 App starting...
+13:13:40:091 DEV ENVIRONMENT = true
+13:13:49:876 Checking for update
+13:13:49:877 Checking for update...
+13:13:53:601 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:13:53:601 Update not available.
+13:14:38:614 App starting...
+13:14:38:619 DEV ENVIRONMENT = true
+13:14:45:494 Checking for update
+13:14:45:494 Checking for update...
+13:14:51:778 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:14:51:779 Update not available.
+13:16:05:203 App starting...
+13:16:05:209 DEV ENVIRONMENT = true
+13:16:11:135 Checking for update
+13:16:11:137 Checking for update...
+13:16:14:939 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:16:14:939 Update not available.
+13:16:40:924 App starting...
+13:16:40:928 DEV ENVIRONMENT = true
+13:16:48:402 Checking for update
+13:16:48:403 Checking for update...
+13:16:52:212 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:16:52:213 Update not available.
+13:18:41:573 App starting...
+13:18:41:578 DEV ENVIRONMENT = true
+13:19:02:312 Checking for update
+13:19:02:313 Checking for update...
+13:19:06:112 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+13:19:06:113 Update not available.
+14:30:57:617 App starting...
+14:30:57:628 DEV ENVIRONMENT = true
+14:31:40:662 Checking for update
+14:31:40:663 Checking for update...
+14:31:44:372 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:31:44:373 Update not available.
+14:35:15:754 Checking for update
+14:35:15:769 Checking for update...
+14:35:17:078 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:35:17:081 Update not available.
+14:35:36:447 Checking for update
+14:35:36:459 Checking for update...
+14:35:37:674 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:35:37:675 Update not available.
+14:38:39:918 App starting...
+14:38:39:923 DEV ENVIRONMENT = true
+14:38:48:958 Checking for update
+14:38:48:959 Checking for update...
+14:38:52:768 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:38:52:769 Update not available.
+14:38:59:750 Checking for update
+14:38:59:751 Checking for update...
+14:39:00:545 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:39:00:546 Update not available.
+14:40:42:689 App starting...
+14:40:42:693 DEV ENVIRONMENT = true
+14:52:55:640 App starting...
+14:52:55:645 DEV ENVIRONMENT = true
+14:53:15:571 Checking for update
+14:53:15:579 Checking for update...
+14:56:12:153 App starting...
+14:56:12:158 DEV ENVIRONMENT = true
+14:57:07:232 Checking for update
+14:57:07:273 Checking for update...
+14:57:11:389 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+14:57:11:390 Update not available.
+15:12:46:447 App starting...
+15:12:46:451 DEV ENVIRONMENT = true
+15:15:18:419 App starting...
+15:15:18:424 DEV ENVIRONMENT = true
+15:16:13:064 App starting...
+15:16:13:068 DEV ENVIRONMENT = true
+15:21:20:178 App starting...
+15:21:20:182 DEV ENVIRONMENT = true
+15:22:27:055 App starting...
+15:22:27:059 DEV ENVIRONMENT = true
+15:24:38:857 App starting...
+15:24:38:861 DEV ENVIRONMENT = true
+15:26:27:996 App starting...
+15:26:27:999 DEV ENVIRONMENT = true
+15:27:57:955 App starting...
+15:27:57:959 DEV ENVIRONMENT = true
+15:29:58:113 App starting...
+15:29:58:117 DEV ENVIRONMENT = true
+15:37:52:774 App starting...
+15:37:52:782 DEV ENVIRONMENT = true
+15:39:02:345 App starting...
+15:39:02:350 DEV ENVIRONMENT = true
+15:48:23:537 App starting...
+15:48:23:540 DEV ENVIRONMENT = true
+15:50:31:049 App starting...
+15:50:31:055 DEV ENVIRONMENT = true
+15:51:22:522 App starting...
+15:51:22:528 DEV ENVIRONMENT = true
+15:52:10:783 App starting...
+15:52:10:787 DEV ENVIRONMENT = true
+15:53:33:815 App starting...
+15:53:33:819 DEV ENVIRONMENT = true
+15:54:22:673 App starting...
+15:54:22:677 DEV ENVIRONMENT = true
+15:56:07:760 App starting...
+15:56:07:765 DEV ENVIRONMENT = true
+15:57:15:229 App starting...
+15:57:15:236 DEV ENVIRONMENT = true
+15:58:37:686 App starting...
+15:58:37:690 DEV ENVIRONMENT = true
+16:06:09:413 App starting...
+16:06:09:417 DEV ENVIRONMENT = true
+16:06:26:930 Checking for update
+16:06:30:877 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:06:30:878 Update not available.
+16:07:43:769 Checking for update
+16:07:45:005 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:07:45:006 Update not available.
+16:08:14:826 Checking for update
+16:08:15:710 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:08:15:711 Update not available.
+16:10:25:011 App starting...
+16:10:25:027 DEV ENVIRONMENT = true
+17:34:28:130 Checking for update
+17:34:31:815 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:34:53:843 Checking for update
+17:34:54:671 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:36:23:990 Checking for update
+17:36:25:124 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:36:55:201 Checking for update
+17:36:56:045 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:37:43:775 App starting...
+17:37:43:783 DEV ENVIRONMENT = true
+17:37:50:838 Checking for update
+17:37:54:456 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:38:34:386 App starting...
+17:38:34:390 DEV ENVIRONMENT = true
+17:39:51:314 App starting...
+17:39:51:318 DEV ENVIRONMENT = true
+17:40:06:112 Checking for update
+17:40:06:113 Checking for update...
+17:40:06:122 sending to window
+17:40:09:767 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:40:09:769 Update not available
+17:40:09:770 sending to window
+17:41:33:492 App starting...
+17:41:33:498 DEV ENVIRONMENT = true
+17:41:43:461 Checking for update
+17:41:43:462 Checking for update...
+17:41:43:462 sending to window
+17:41:47:213 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:41:47:214 Up to date
+17:41:47:215 sending to window
+17:42:50:836 Checking for update
+17:42:50:837 Checking for update...
+17:42:50:837 sending to window
+17:42:52:136 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:42:52:139 Up to date
+17:42:52:140 sending to window
+17:43:27:788 Checking for update
+17:43:27:788 Checking for update...
+17:43:27:789 sending to window
+17:43:28:623 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:43:28:623 Up to date
+17:43:28:624 sending to window
+17:43:58:540 Checking for update
+17:43:58:541 Checking for update...
+17:43:58:542 sending to window
+17:43:59:489 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:43:59:491 Up to date
+17:43:59:497 sending to window
+17:44:16:314 Checking for update
+17:44:16:315 Checking for update...
+17:44:16:315 sending to window
+17:44:17:179 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:44:17:179 Up to date
+17:44:17:180 sending to window
+17:44:37:787 Checking for update
+17:44:37:788 Checking for update...
+17:44:37:788 sending to window
+17:44:38:656 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:44:38:657 Up to date
+17:44:38:658 sending to window
+17:48:08:830 Checking for update
+17:48:08:831 Checking for update...
+17:48:08:831 sending to window
+17:48:10:045 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:48:10:046 Up to date
+17:48:10:047 sending to window
+17:48:23:094 Checking for update
+17:48:23:095 Checking for update...
+17:48:23:095 sending to window
+17:48:24:088 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:48:24:088 Up to date
+17:48:24:088 sending to window
+17:48:57:816 Checking for update
+17:48:57:816 Checking for update...
+17:48:57:816 sending to window
+17:48:58:721 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:48:58:722 Up to date
+17:48:58:722 sending to window
+17:50:18:805 Checking for update
+17:50:18:805 Checking for update...
+17:50:18:805 sending to window
+17:50:20:104 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:50:20:105 Up to date
+17:50:20:106 sending to window
+17:52:26:618 Checking for update
+17:52:26:618 Checking for update...
+17:52:26:619 sending to window
+17:52:28:519 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:52:28:520 Up to date
+17:52:28:520 sending to window
+17:54:12:541 Checking for update
+17:54:12:541 Checking for update...
+17:54:12:542 sending to window
+17:54:13:765 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:54:13:766 Up to date
+17:54:13:766 sending to window
+17:55:33:119 Checking for update
+17:55:33:120 Checking for update...
+17:55:33:120 sending to window
+17:55:34:330 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:55:34:331 Up to date
+17:55:34:331 sending to window
+17:56:13:874 Checking for update
+17:56:13:875 Checking for update...
+17:56:13:875 sending to window
+17:56:14:957 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:56:14:957 Up to date
+17:56:14:958 sending to window
+17:59:45:342 Checking for update
+17:59:45:343 Checking for update...
+17:59:45:343 sending to window
+17:59:46:432 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:59:46:432 Up to date
+17:59:46:434 sending to window
+18:00:26:799 Checking for update
+18:00:26:799 Checking for update...
+18:00:26:800 sending to window
+18:00:27:700 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+18:00:27:700 Up to date
+18:00:27:700 sending to window
+18:03:19:056 Checking for update
+18:03:19:057 Checking for update...
+18:03:19:057 sending to window
+18:03:20:192 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+18:03:20:193 Up to date
+18:03:20:194 sending to window
+08:44:52:806 App starting...
+08:44:52:812 DEV ENVIRONMENT = true
+08:45:16:794 Checking for update
+08:45:16:796 Checking for update...
+08:45:16:796 sending to window
+08:45:20:963 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:45:20:964 Up to date
+08:45:20:964 sending to window
+08:46:17:821 Checking for update
+08:46:17:822 Checking for update...
+08:46:17:823 sending to window
+08:46:18:705 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:46:18:709 Up to date
+08:46:18:709 sending to window
+08:47:18:447 Checking for update
+08:47:18:461 Checking for update...
+08:47:18:461 sending to window
+08:47:19:756 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:47:19:757 Up to date
+08:47:19:757 sending to window
+08:48:15:368 Checking for update
+08:48:15:368 Checking for update...
+08:48:15:368 sending to window
+08:48:16:345 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:48:16:346 Up to date
+08:48:16:347 sending to window
+08:48:37:611 Checking for update
+08:48:37:612 Checking for update...
+08:48:37:612 sending to window
+08:48:38:675 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:48:38:676 Up to date
+08:48:38:676 sending to window
+08:49:23:724 Checking for update
+08:49:23:724 Checking for update...
+08:49:23:724 sending to window
+08:49:24:794 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:49:24:795 Up to date
+08:49:24:796 sending to window
+08:50:26:115 Checking for update
+08:50:26:115 Checking for update...
+08:50:26:115 sending to window
+08:50:27:601 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:50:27:602 Up to date
+08:50:27:602 sending to window
+08:50:51:904 Checking for update
+08:50:51:904 Checking for update...
+08:50:51:904 sending to window
+08:50:52:781 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:50:52:781 Up to date
+08:50:52:781 sending to window
+08:51:26:544 Checking for update
+08:51:26:544 Checking for update...
+08:51:26:545 sending to window
+08:51:27:410 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:51:27:411 Up to date
+08:51:27:411 sending to window
+08:52:09:449 Checking for update
+08:52:09:450 Checking for update...
+08:52:09:450 sending to window
+08:52:10:420 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:52:10:420 Up to date
+08:52:10:421 sending to window
+08:52:42:840 Checking for update
+08:52:42:840 Checking for update...
+08:52:42:841 sending to window
+08:52:43:858 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:52:43:858 Up to date
+08:52:43:858 sending to window
+08:53:07:201 Checking for update
+08:53:07:202 Checking for update...
+08:53:07:202 sending to window
+08:53:08:194 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+08:53:08:195 Up to date
+08:53:08:196 sending to window
+09:08:52:435 App starting...
+09:08:52:438 DEV ENVIRONMENT = true
+09:23:51:209 App starting...
+09:23:51:213 DEV ENVIRONMENT = true
+09:51:03:265 Checking for update
+09:51:03:266 Checking for update...
+09:51:03:268 sending to window
+09:51:07:034 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+09:51:07:035 Up to date
+09:51:07:036 sending to window
+09:51:48:511 Checking for update
+09:51:48:512 Checking for update...
+09:51:48:512 sending to window
+09:51:49:799 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+09:51:49:800 Up to date
+09:51:49:801 sending to window
+10:07:01:424 Checking for update
+10:07:01:425 Checking for update...
+10:07:01:427 sending to window
+10:07:02:955 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+10:07:02:957 Up to date
+10:07:02:959 sending to window
+10:48:33:400 App starting...
+10:48:33:405 DEV ENVIRONMENT = true
+10:51:02:951 App starting...
+10:51:02:955 DEV ENVIRONMENT = true
+10:52:27:095 App starting...
+10:52:27:099 DEV ENVIRONMENT = true
+10:54:48:781 App starting...
+10:54:48:785 DEV ENVIRONMENT = true
+10:56:52:998 App starting...
+10:56:53:001 DEV ENVIRONMENT = true
+10:59:34:807 App starting...
+10:59:34:811 DEV ENVIRONMENT = true
+11:00:26:156 App starting...
+11:00:26:159 DEV ENVIRONMENT = true
+11:01:09:932 App starting...
+11:01:09:935 DEV ENVIRONMENT = true
+16:16:47:987 Checking for update
+16:16:47:988 Checking for update...
+16:16:47:989 sending to window
+16:16:50:877 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:16:50:881 Up to date
+16:16:50:883 sending to window
+16:17:11:728 Checking for update
+16:17:11:729 Checking for update...
+16:17:11:736 sending to window
+16:17:12:878 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:17:12:879 Up to date
+16:17:12:880 sending to window
+16:40:16:055 Checking for update
+16:40:16:055 Checking for update...
+16:40:16:056 sending to window
+16:40:17:265 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:40:17:265 Up to date
+16:40:17:266 sending to window
+16:40:38:509 Checking for update
+16:40:38:510 Checking for update...
+16:40:38:511 sending to window
+16:40:39:355 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:40:39:357 Up to date
+16:40:39:358 sending to window
+16:40:46:826 Checking for update
+16:40:46:826 Checking for update...
+16:40:46:827 sending to window
+16:40:47:682 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:40:47:683 Up to date
+16:40:47:684 sending to window
+16:46:12:331 Checking for update
+16:46:12:332 Checking for update...
+16:46:12:335 sending to window
+16:46:13:577 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:46:13:578 Up to date
+16:46:13:578 sending to window
+16:48:04:003 Checking for update
+16:48:04:012 Checking for update...
+16:48:04:013 sending to window
+16:48:05:193 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+16:48:05:210 Up to date
+16:48:05:218 sending to window
+17:08:25:396 Checking for update
+17:08:25:397 Checking for update...
+17:08:25:399 sending to window
+17:08:26:697 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:08:26:698 Up to date
+17:08:26:699 sending to window
+17:09:50:045 Checking for update
+17:09:50:046 Checking for update...
+17:09:50:047 sending to window
+17:09:51:372 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:09:51:372 Up to date
+17:09:51:374 sending to window
+17:10:33:819 Checking for update
+17:10:33:819 Checking for update...
+17:10:33:820 sending to window
+17:10:34:764 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:10:34:765 Up to date
+17:10:34:766 sending to window
+17:11:47:067 Checking for update
+17:11:47:068 Checking for update...
+17:11:47:068 sending to window
+17:11:48:278 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:11:48:281 Up to date
+17:11:48:283 sending to window
+17:14:36:604 Checking for update
+17:14:36:605 Checking for update...
+17:14:36:606 sending to window
+17:14:37:851 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:14:37:852 Up to date
+17:14:37:852 sending to window
+17:15:54:925 Checking for update
+17:15:54:926 Checking for update...
+17:15:54:927 sending to window
+17:15:56:183 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:15:56:184 Up to date
+17:15:56:184 sending to window
+17:16:07:466 Checking for update
+17:16:07:467 Checking for update...
+17:16:07:468 sending to window
+17:16:08:330 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:16:08:331 Up to date
+17:16:08:332 sending to window
+17:17:16:732 App starting...
+17:17:16:737 DEV ENVIRONMENT = true
+17:17:23:726 Checking for update
+17:17:23:733 Checking for updates...
+17:17:23:734 sending to window
+17:17:27:524 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:17:27:526 Up to date
+17:17:27:527 sending to window
+17:17:32:149 Checking for update
+17:17:32:150 Checking for updates...
+17:17:32:151 sending to window
+17:17:32:816 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:17:32:817 Up to date
+17:17:32:818 sending to window
+17:20:03:360 App starting...
+17:20:03:364 DEV ENVIRONMENT = true
+17:20:19:366 Checking for update
+17:20:19:367 Checking for updates...
+17:20:19:368 sending to window
+17:20:23:371 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:20:23:373 Up to date
+17:20:23:373 sending to window
+17:20:23:374 Up to date
+17:20:23:374 sending to window
+17:20:57:264 App starting...
+17:20:57:279 DEV ENVIRONMENT = true
+17:21:06:582 Checking for update
+17:21:06:583 Checking for updates...
+17:21:06:584 sending to window
+17:21:10:591 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:21:10:592 Up to date
+17:21:10:593 sending to window
+17:21:10:593 Up to date
+17:21:10:594 sending to window
+17:22:41:302 App starting...
+17:22:41:305 DEV ENVIRONMENT = true
+17:22:51:450 Checking for update
+17:22:51:451 Checking for updates...
+17:22:51:453 sending to window
+17:22:55:001 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:22:55:005 Up to date
+17:22:55:005 sending to window
+17:22:55:006 Up to date
+17:22:55:006 sending to window
+17:24:19:317 App starting...
+17:24:19:319 DEV ENVIRONMENT = true
+17:24:30:477 Checking for update
+17:24:30:478 Checking for updates...
+17:24:30:479 sending to window
+17:24:34:024 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:24:37:264 Up to date
+17:24:37:286 sending to window
+17:26:50:848 Checking for update
+17:26:50:851 Checking for updates...
+17:26:50:852 sending to window
+17:26:52:002 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:26:54:411 Up to date
+17:26:54:431 sending to window
+17:27:01:031 Checking for update
+17:27:01:031 Checking for updates...
+17:27:01:032 sending to window
+17:27:01:952 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:27:03:143 Up to date
+17:27:03:184 sending to window
+17:29:07:829 Checking for update
+17:29:07:832 Checking for updates...
+17:29:07:832 sending to window
+17:29:08:884 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:29:17:054 Up to date
+17:29:17:054 sending to window
+17:29:31:874 Checking for update
+17:29:31:874 Checking for updates...
+17:29:31:874 sending to window
+17:29:32:714 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:29:34:580 Up to date
+17:29:34:581 sending to window
+17:29:43:605 Checking for update
+17:29:43:605 Checking for updates...
+17:29:43:606 sending to window
+17:29:44:416 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:29:46:457 Up to date
+17:29:46:458 sending to window
+17:29:56:762 Checking for update
+17:29:56:762 Checking for updates...
+17:29:56:762 sending to window
+17:29:57:538 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:29:58:779 Up to date
+17:29:58:779 sending to window
+17:32:28:087 App starting...
+17:32:28:091 DEV ENVIRONMENT = true
+17:32:42:679 Checking for update
+17:32:42:680  Checking for updates...
+17:32:42:682 sending to window
+17:32:46:413 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:32:47:556 Up to date
+17:32:47:569 sending to window
+17:35:28:759 Checking for update
+17:35:28:760  Checking for updates...
+17:35:28:761 sending to window
+17:35:30:170 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:35:32:126 Up to date
+17:35:32:146 sending to window
+17:35:56:014 Checking for update
+17:35:56:014  Checking for updates...
+17:35:56:015 sending to window
+17:35:56:863 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:35:58:133 Up to date
+17:35:58:147 sending to window
+17:36:33:760 Checking for update
+17:36:33:761  Checking for updates...
+17:36:33:762 sending to window
+17:36:35:074 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:36:36:330 Up to date
+17:36:36:348 sending to window
+17:36:39:892 Checking for update
+17:36:39:892  Checking for updates...
+17:36:39:893 sending to window
+17:36:40:553 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:36:42:083 Up to date
+17:36:42:097 sending to window
+17:37:26:954 App starting...
+17:37:26:957 DEV ENVIRONMENT = true
+17:37:36:221 Checking for update
+17:37:36:222   Checking for updates...
+17:37:36:224 sending to window
+17:37:39:961 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:37:41:293 Up to date
+17:37:41:308 sending to window
+17:37:44:133 Checking for update
+17:37:44:133   Checking for updates...
+17:37:44:134 sending to window
+17:37:44:869 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:37:46:050 Up to date
+17:37:46:095 sending to window
+17:39:04:960 Checking for update
+17:39:04:961   Checking for updates...
+17:39:04:962 sending to window
+17:39:06:118 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:39:07:406 Up to date
+17:39:07:425 sending to window
+17:39:23:732 App starting...
+17:39:23:735 DEV ENVIRONMENT = true
+17:39:52:807 Checking for update
+17:39:52:808 Checking for updates...
+17:39:52:808 sending to window
+17:39:56:494 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:39:58:839 Up to date
+17:39:58:850 sending to window
+17:40:16:194 Checking for update
+17:40:16:195 Checking for updates...
+17:40:16:195 sending to window
+17:40:17:115 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:40:19:513 Up to date
+17:40:19:539 sending to window
+17:43:37:058 Checking for update
+17:43:37:059 Checking for updates...
+17:43:37:060 sending to window
+17:43:38:268 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:43:39:603 Up to date
+17:43:39:624 sending to window
+17:43:57:846 Checking for update
+17:43:57:846 Checking for updates...
+17:43:57:847 sending to window
+17:43:58:728 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:44:01:445 Up to date
+17:44:01:473 sending to window
+17:44:15:152 Checking for update
+17:44:15:152 Checking for updates...
+17:44:15:153 sending to window
+17:44:16:046 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:44:17:868 Up to date
+17:44:17:883 sending to window
+17:44:52:776 Checking for update
+17:44:52:777 Checking for updates...
+17:44:52:777 sending to window
+17:44:53:759 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:44:56:437 Up to date
+17:44:56:467 sending to window
+17:46:11:039 Checking for update
+17:46:11:040 Checking for updates...
+17:46:11:043 sending to window
+17:46:12:241 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:46:13:438 Up to date
+17:46:13:465 sending to window
+17:46:23:558 Checking for update
+17:46:23:561 Checking for updates...
+17:46:23:563 sending to window
+17:46:24:471 Update for version 2.1.12 is not available (latest version: 2.1.12, downgrade is disallowed).
+17:46:25:599 Up to date
+17:46:25:617 sending to window
+10:10:16:749 App starting...
+10:10:16:752 DEV ENVIRONMENT = true
+11:10:22:454 App starting...
+11:10:22:458 DEV ENVIRONMENT = true
+15:36:23:778 App starting...
+15:36:23:783 DEV ENVIRONMENT = true
+15:38:02:559 App starting...
+15:38:02:561 DEV ENVIRONMENT = true
+15:39:22:361 App starting...
+15:39:22:367 DEV ENVIRONMENT = true
+15:40:19:874 App starting...
+15:40:19:876 DEV ENVIRONMENT = true
+16:46:26:715 App starting...
+16:46:26:718 DEV ENVIRONMENT = true
+16:50:36:101 App starting...
+16:50:36:103 DEV ENVIRONMENT = true
+18:42:46:916 App starting...
+18:42:46:921 DEV ENVIRONMENT = true
+18:43:40:728 App starting...
+18:43:40:731 DEV ENVIRONMENT = true
+11:37:05:435 App starting...
+11:37:05:439 DEV ENVIRONMENT = true
+13:19:44:722 App starting...
+13:19:44:725 DEV ENVIRONMENT = true

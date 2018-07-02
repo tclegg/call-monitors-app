@@ -1,9 +1,12 @@
 const {Menu} = require('electron')
 const electron = require('electron')
+const window = electron.BrowserWindow
 const app = electron.app
 const {autoUpdater} = require('electron-updater')
 const {dialog} = require('electron')
 var i18n = new(require('../translations/i18n'))
+
+
 
 const template = [
   {
@@ -28,6 +31,9 @@ const template = [
         role: 'paste', label: i18n.__('Paste')
       },
       {
+        role: 'pasteandmatchstyle', label: i18n.__('Paste and Match Style')
+      },
+      {
         role: 'delete', label: i18n.__('Delete')
       },
       {
@@ -38,14 +44,16 @@ const template = [
   {
     label: i18n.__('View'),
     submenu: [
-			{
-				role: 'reload',
-				label: i18n.__('Reload'),
-				accelerator: 'CmdOrCtrl+R',
-				click (item, focusedWindow) {
-					if (focusedWindow) focusedWindow.reload()
-				}
-			},
+      {
+        role: 'reload',
+        label: i18n.__('Reload'),
+        accelerator: 'CmdOrCtrl+R'
+      },
+      {
+        role: 'forcereload',
+        label: i18n.__('Hard Refresh'),
+        accelerator: 'CmdOrCtrl+Shift+R'
+      },
       {
         role: 'resetzoom', label: i18n.__('Actual size')
       },
@@ -75,10 +83,7 @@ const template = [
       {
         role: 'toggledevtools',
         label: i18n.__('Toggle Developer Tools'),
-        accelerator: 'CmdOrCtrl+Shift+I',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.webContents.openDevTools()
-        }
+        accelerator: 'CmdOrCtrl+Shift+I'
       }
     ]
   },
@@ -87,18 +92,10 @@ const template = [
     submenu: [
       {
         label: i18n.__('Check for updates'),
-        click () { 
-			autoUpdater.checkForUpdates()
-			dialog.showMessageBox({
-			  type: 'info',
-			  buttons: [],
-			  defaultId: 0,
-			  message: 'Checking for updates.',
-			  detail: 'You will be notified if updates are available.'
-			});
-			
-		  }
-	  }
+        click (item, focusedWindow) { 
+          focusedWindow.webContents.send('updateClicked', focusedWindow)
+        }
+      }
     ]
   }
 ]
@@ -175,6 +172,14 @@ if (process.platform === 'darwin') {
     {
       label: i18n.__('Bring all to front'),
       role: 'front'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'toggledevtools',
+      label: i18n.__('Toggle Developer Tools'),
+      accelerator: 'CmdOrCtrl+Shift+I'
     }
   ]
 }

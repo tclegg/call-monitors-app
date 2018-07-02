@@ -1,12 +1,12 @@
 <template class="section-template">
 <section id="leads" class="wrapper well">
-  <div class="inner">
-		<span class="pull-right glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Help!"></span>
-		<h2>Modify Leads <button class="btn btn-default add-lead" data-toggle="tooltip" title="Add a Lead"><span class="glyphicon glyphicon-plus"></span></button></h2>
+	<div class="container bg-light pt-3">
+		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+		<h2>Modify Leads <button class="btn btn-default add-lead" data-toggle="tooltip" title="Add a Lead"><span class=""><i class="fas fa-user-plus" aria-hidden="true"></i></span></button></h2>
 		<p class="">This page will modify leads</p>
-		<div class="div-edit well">
+		<div class="well" id="div-edit-leads">
 			<div class="p-edit table-responsive" id="p-edit-leads">
-				<table class="table" id="edit-leads-table">
+				<table class="table table-striped" id="edit-leads-table">
 					<thead class="thead">
 						<tr class="tr">
 							<th class="th" id="lead-name">Full Name</th><th class="th" id="lead-abbv">Abbreviation</th><th id="lead-edit">Edit</th><th id="lead-remove">Activate/Deactivate</th>

@@ -8,6 +8,8 @@ const {app} = require('electron').remote, // electron.app,
 	date = new Date(),
 	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2];
 
+	
+
 	// check for dev and set the database location if dev === true
 const isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false,
 	datastorePath = (!isDev) ? path.resolve(process.env['prodPath']) : path.resolve(__dirname, process.env['devPath'])
@@ -100,19 +102,20 @@ function setDate() {
 	// Sets the date index-main.html, allmonitors.html, and leadsmonitors.html
 	// today = new Date(date.getFullYear(), date.getMonth(), date.getDate())
 	let inputdate = document.getElementById('input-date'),
-		monitorsH2 = document.getElementById('monitorsH2'),
+		monitorsMonth = document.getElementById('all-monitors-date-2'),
 		leadsSearchDate = document.getElementById('input-date-search'),
 		monitorsByAgentDate = document.getElementById('monitors-search-date'),
+		monitorsByAgentDate2 = document.getElementById('monitors-search-date-2'),
 		startOfMonth = new Date(year, date.getMonth(), 1)
-
 	// Set the main form
 	inputdate.valueAsDate = today;
 	// Set the Lead Search
 	leadsSearchDate.valueAsDate = startOfMonth;
 	// Set All Monitors by Month
-	monitorsH2.innerHTML = 'Monitors for ' + monthName;
+	monitorsMonth.innerHTML = monthName;
 	// Set All Monitors by Agent
 	monitorsByAgentDate.valueAsDate = startOfMonth;
+	monitorsByAgentDate2.valueAsDate = startOfMonth;
 }
 
 /**
@@ -124,7 +127,6 @@ var ReloadInit = {
 			return BuildStaffDom.init().then((result) => {
 				return LoadStaffEdit.init()
 			}).then((result) => {
-				console.log(activeAgentsObj)
 				return LoadMonitors.init()
 			})
 		}).catch(err => console.log(err))
@@ -463,6 +465,9 @@ var DBSubmitTools = {
 	}
 }
 
+/**
+ * Import agents and leads from the databases, then throw into global objects of all and active agents/leads.
+ */
 var BuildStaffDom = {
 	//uses DBSubmitTools on each "import..." function
 	init: function(){
@@ -492,7 +497,7 @@ var BuildStaffDom = {
 	},
 	importAllAgents: function (DBquery = null) {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
-			sort = {'agent': 1}
+			sort = {'abbv': 1}
 		return new Promise ((resolve, reject) => {
 			return db.agentsDb.find(query).sort(sort).exec(function(err, result){
 				if (err) {
@@ -520,7 +525,7 @@ var BuildStaffDom = {
 	},
 	importActiveAgents: function (DBquery = null) {
 		let query = {inactive: "0"},
-			sort = {'agent': 1}
+			sort = {'abbv': 1}
 		return new Promise ((resolve, reject) => {
 			return db.agentsDb.find(query).sort(sort).exec((err, result) => {
 				if (err) {
@@ -547,7 +552,7 @@ var BuildStaffDom = {
 	},
 	importAllLeads: function () {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
-			sort = {'agent': 1}
+			sort = {'abbv': 1}
 
 		return new Promise ((resolve, reject) => {
 			return db.leadsDb.find(query).sort(sort).exec(function(err, result){
@@ -576,7 +581,7 @@ var BuildStaffDom = {
 	},
 	importActiveLeads: function () {
 		let query = {inactive: "0"},
-			sort = {'agent': 1}
+			sort = {'abbv': 1}
 
 		return new Promise ((resolve, reject) => {
 			return db.leadsDb.find(query).sort(sort).exec(function(err, result){
@@ -712,7 +717,7 @@ var LoadMonitors = {
 			}).then ((result) => {
 				return this.fillYear(result)
 			}).then ((result) => {
-				return this.pullCompleted()
+				return this.pullCompleted(null, sort = {'date': 1})
 			}).then ((result) => {
 				return this.buildCompletedThisMonth(result)
 			}).then ((result) => {
@@ -876,7 +881,6 @@ var LoadMonitors = {
 			end = new Date(tmpDate.getFullYear(), tmpDate.getMonth() + 1, 1)
 		}
 		let query = {'$and': [ {date: { '$gte': start }},{date: { '$lte': end }} ]}
-			
 		return new Promise ((resolve, reject) => {
 			return DBSubmitTools.pull('monitors', query, sort).then(function (result) {
 				if (result) {
@@ -1254,8 +1258,7 @@ var LoadMonitors = {
 				let result2 = this.fillYear(result)
 				return result2
 			}).then ((result) => {
-				let lastMonth = new Date(tmpMonth.getFullYear(), tmpMonth.getMonth()-1, 1)
-				let result2 = this.pullCompleted(lastMonth)
+				let result2 = this.pullCompleted(month, sort = {'date': 1})
 				return result2
 			}).then ((result) => {
 				let result2 = this.buildCompletedThisMonth(result)
@@ -1263,12 +1266,16 @@ var LoadMonitors = {
 			})
 		}).catch((err) => console.log(err))
 	},
-	completedByLead: function (lead, month) {
+	completedByLead: function (lead = null, month) {
 		/**
 		 * Rebuilds the Monitors By Lead table when the agent or date is changed.
 		 * @param {String} lead - REQUIRED - Name of the lead to use in the query
 		 * @param {String} month - REQUIRED - Date from the HTML Date <input>
 		 */
+
+		 if (!lead){
+			 lead = loggedOnUser
+		 }
 
 		return new Promise((resolve, reject) => {
 			return this.pullLeadMonitors(lead, month).then((result) => {
@@ -1280,6 +1287,9 @@ var LoadMonitors = {
 	}
 }
 
+/**
+ * Build the Agent Maintenance and Lead Maintenance pages
+ */
 var LoadStaffEdit = {
 	init: function(){
 		return new Promise ((resolve, reject) => {
@@ -1442,169 +1452,94 @@ var FormSubmitTools = {
 	}
 }
 
-
 /**
- *	Global Event Listeners
+ * Load DOM sections
  */
-$(window).on('load', function () {
-	setDate()
 
-	// Build the Dom for the first time
-	return new Promise((resolve, reject) => {
-		return BuildStaffDom.init().then((result)=>{
-			return LoadStaffEdit.init()
-		}).then((result) => {
-			return LoadMonitors.init()
-		}).catch((err) => console.log(err))
-	}).catch((err) => console.log(err))
-	
-	// Set version number in the BODY footer
-	$('.app-version').html(`v${app.getVersion()}`)
-	
-	// Turn on Bootstrap Tooltips because they look much better than default
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+let navigation =  {
+	constants: {
+		sectionTemplate: '.section-template',
+		contentContainer: '#wrapper',
+		startSectionMenuItem: '#main-menu',
+		startSection: '#main',
+		footerContainer: '#footer',
+		footerVersion: '.app-version'
+	},
 
-	// Catch errors that got missed
-	window.addEventListener('unhandledrejection', function(event) {
-		// the event object has two special properties:
-		console.log(event.promise); // [object Promise] - the promise that generated the error
-		console.log(event.reason); // Error: Whoops! - the unhandled error object
-	});
-})
+	importSectionsToDOM: function() {
+		const links = document.querySelectorAll('link[rel="import"]')
+		Array.prototype.forEach.call(links, function (link) {
+			let template = link.import.querySelector(navigation.constants.sectionTemplate)
+			let clone = document.importNode(template.content, true)
+			if ($(link).hasClass('footer-link')){
+			document.querySelector(navigation.constants.footerContainer).appendChild(clone)
+			document.querySelector(navigation.constants.footerVersion).innerHTML = 'v'+app.getVersion()
+			} else {
+			document.querySelector(navigation.constants.contentContainer).appendChild(clone)
+			}
+		})
+	},
 
-// Close NavBar
-$(window).on('click', function (e) {
-	if (e.target.dataset.section != $('.navbar-collapse') && $('.navbar-collapse').hasClass('in')) {
-		$('.navbar-collapse').removeClass('in')
-	}
-})
+	setMenuOnClickEvent: function () {
+		document.body.addEventListener('click', function (event) {
+			if (event.target.dataset.section) {
+			navigation.hideAllSections()
+			navigation.showSection(event)
+			}
+		})
+	},
 
-//Claimed button toggle
-$(document).on('click', '.claimed', function (e) {
-	e.preventDefault()
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip('fixTitle')
-	})
-	let agent = $(this).data('agent'),
-		claimed = ($(this).data('claimed') === 'unclaimed') ? 'unclaimed' : 'remove'
-	if ($(this).data('claimed') === 'unclaimed') {
-		FormSubmitTools.setClaimed(agent, loggedOnUser, claimed)
+	showSection: function(event) {
+		const sectionId = event.target.dataset.section
+		$('#' + sectionId).show()
+		$('#' + sectionId + ' section').show()
+	},
+
+	showStartSection: function() {
+		$(this.constants.startSectionMenuItem).click()
+		$(this.constants.startSection).show()
+		$(this.constants.startSection + ' section').show()
+	},
+
+	hideAllSections: function() {
+		$(this.constants.contentContainer + ' section').hide()
+	},
+
+	init: function() {
+		return new Promise ((resolve, reject) => {
+			this.importSectionsToDOM()
+			this.hideAllSections()
+			this.setMenuOnClickEvent()
+			this.showStartSection()
+			setDate()
+			$('ul.navbar-nav > li > a').click(function(){
+				$('ul.navbar-nav > li').removeClass('active');
+				//console.log($(this));
+				$(this).parent().addClass('active');
+			})
+			return resolve()
+		})
 		
-		.then((result) => {
-			return domTools.domMethods.changeClaimed(agent, loggedOnUserFullname, loggedOnUser, claimed)
-		})
-	} else {
-			FormSubmitTools.removeClaimed(agent, loggedOnUser)
-			.then((result) => {
-			return domTools.domMethods.changeClaimed(agent, loggedOnUserFullname, loggedOnUser, claimed)
-		})
 	}
-})
-
-//Modals
-$(document).on('click','.add-agent', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('addAgent', $(this))
-})
-$(document).on('click', '.edit-agent', function (e){
-	e.preventDefault()
-	FormSubmitTools.initModal('editAgent', $(this))
-})
-$(document).on('click', '.remove-agent', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('removeAgent', $(this))
-})
-$(document).on('click', '.add-lead', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('addLead', $(this))
-})
-$(document).on('click', '.edit-lead', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('editLead', $(this))
-})
-$(document).on('click', '.remove-lead', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('removeLead', $(this))
-})
-$(document).on('click', '.edit-monitor', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('editMonitor', $(this))
-})
-$(document).on('click', '.remove-monitor', function (e) {
-	e.preventDefault()
-	FormSubmitTools.initModal('removeMonitor', $(this))
-})
-$(document).on('change', '#select-lead-search', function (e) {
-	e.preventDefault()
-	var lead = $(this).val(),
-		month = $('#input-date-search').val().replace(/-/g, '\/');
-	LoadMonitors.completedByLead(lead, month)
-	
-})
-$(document).on('change', '#input-date-search', function (e) {
-	e.preventDefault()
-	let month = $(this).val().replace(/-/g, '\/')
-		lead = $('#select-lead-search').val()
-	LoadMonitors.completedByLead(lead, month)
-})
-$(document).on('change', '#monitors-search-date', function (e) {
-	e.preventDefault()
-	let month = $(this).val().replace(/-/g, '\/'),
-		tmpDate = new Date(month),
-		clearTbody = document.getElementById('agent-accordion-tbody')
-	clearTbody.innerHTML = '';
-	LoadMonitors.completedPerAgentSearch(tmpDate)
-	
-
-})
-
-// Form Submit (modal and main form)
-$(document).on('submit', '#form-monitors', function (e){
-	e.preventDefault()
-	let form = $(this),
-		agent = $(form).find('#select-agent').val(),
-		claimedField = $('#'+agent+'-claimed')
-	if ($(claimedField).data('claimed') === 'claimed'){
-		FormSubmitTools.removeClaimed(agent)
-	}
-	FormSubmitTools.submit(form)
-	return true
-})
-$(document).on('click', '.modal-submit', function (e){
-	e.preventDefault()
-	let form = $(this).parent().parent().find('form')
-	
-	FormSubmitTools.modalSubmit(form)
-})
-
-//Move focus
-$(document).on('shown.bs.modal', '.modal', function () {
-	$('.modal').focus()
-})
-
-
-
-
-
-
-
+}
 
 
 /**
  * HELPERS
  */
 
-
-
 // Building the DOM
 domTools.domMethods = {
 	constants: {
-		pencil:   '<span class="glyphicon glyphicon-pencil"></span>',
-		Xicon:  '<span class="glyphicon glyphicon-remove"></span>',
-		cog: '<span class="glyphicon glyphicon-cog"></span>',
-		checkmark: '<span class="glyphicon glyphicon-ok"></span>'
+		pencil:   '<i class="fas fa-edit" aria-hidden="true"></i>',
+		Xicon:  '<i class="fas fa-times" aria-hidden="true"></i>',
+		cog: '<i class="fas fa-cog" aria-hidden="true"></i>',
+		checkmark: '<i class="fas fa-check" aria-hidden="true"></i>',
+		removeAgent: '<i class="fas fa-user-times" aria-hidden="true"></i>',
+		addUser: '<i class="fas fa-user-plus" aria-hidden="true"></i>',
+		checkSquare: '<i class="far fa-check-square" aria-hidden="true"></i>',
+		uncheckedSquare: '<i class="far fa-square" aria-hidden="true"></i>'
+
 	},
 	buildTable: function (container, result, type) {
 		/**
@@ -1824,15 +1759,17 @@ domTools.domMethods = {
 		let argsDate = new Date(thisMonth)
 		let tmpDate = new Date(argsDate.getFullYear(), argsDate.getMonth(), argsDate.getDate(), 12)
 		let claimedSpan = document.createElement('span'),
-			icon = 'glyphicon glyphicon-unchecked',
+			icon = 'fa fa-check-square-o',
 			claimedTd = row.querySelector('#'+agent.abbv+'-claimed')
 		
 		$(row).find('#'+agent.abbv+'-date').html(`${argsDate.getFullYear()}-${("0"+(date.getMonth() + 1)).slice(-2)}`)
 		$(row).find('#'+agent.abbv+'-name').html(agent.name)
 		$(row).find('#'+agent.abbv+'-agentid').html(agent.agentid)
 		$(row).find('#'+agent.abbv+'-num-left').html(`<span id="${agent.abbv}-num-left-span">${numleft}</span> / <span id="${agent.abbv}-total-span">${agent.monitors}</span>`)
+		$(claimedSpan).append(this.constants.uncheckedSquare)
 		$(claimedTd).addClass('claimed').data('claimed', 'unclaimed').data('agent', agent.abbv)//.attr('title', 'Unclaimed')
-				.append(claimedSpan).find('span').addClass(icon)
+				.append(claimedSpan)
+				
 		claimedTd.setAttribute('title', 'Unclaimed')
 		claimedTd.setAttribute('data-toggle', 'tooltip')
 	},
@@ -1845,9 +1782,11 @@ domTools.domMethods = {
 				for (x of claimedMonitors) {
 					let elem = document.querySelector('#'+x.agentabbv+'-claimed')
 					if (elem) {
+
 						elem.setAttribute('title', leadsObj[x.leadabbv].name)
+						elem.setAttribute('data-original-title', leadsObj[x.leadabbv].name)
 						$(elem).data('claimed', 'claimed').data('lead', leadsObj[x.leadabbv].abbv).data('_id', x._id)
-						.find('span').removeClass('glyphicon-unchecked').addClass('glyphicon-ok')
+						.find('span').empty().append(this.constants.checkSquare)
 					}
 					
 					if (count == Object.keys(claimedMonitors).length) {
@@ -1867,12 +1806,14 @@ domTools.domMethods = {
 			let elem = document.querySelector('#'+agentabbv+'-claimed')
 			if (type == 'unclaimed') {
 				elem.setAttribute('title', leadfullname)
-				$(elem).data('claimed', 'claimed').data('leadabbv', leadabbv).tooltip('fixTitle')
-					.find('span').removeClass('glyphicon-unchecked').addClass('glyphicon-ok')
+				elem.setAttribute('data-original-title', leadfullname)
+				$(elem).data('claimed', 'claimed').data('leadabbv', leadabbv)
+					.find('span').empty().append(this.constants.checkSquare)
 			} else {
 				elem.setAttribute('title', 'Unclaimed')
-				$(elem).data('claimed', 'unclaimed').data('leadabbv', leadabbv).tooltip('fixTitle')
-					.find('span').removeClass('glyphicon-ok').addClass('glyphicon-unchecked')
+				elem.setAttribute('data-original-title', 'Unclaimed')
+				$(elem).data('claimed', 'unclaimed').data('leadabbv', leadabbv)
+					.find('span').empty().append(this.constants.uncheckedSquare)
 			}
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip()
@@ -1890,16 +1831,7 @@ domTools.domMethods = {
 		 */
 		let count = 0, autofail = false, localMonitorCount = 0, lastmonitor = {}, monitorsLeft
 		
-		/*if (Object.keys(monitors).length > 0){
-			let last = Object.keys(monitors).length
-			for (i in monitors) {
-				if (localMonitorCount == last) {
-					lastmonitor = monitors[i]
-				}
-				localMonitorCount ++
-			}
-			
-		}*/
+		
 
 		for (i in monitors) {
 			count ++
@@ -1910,12 +1842,7 @@ domTools.domMethods = {
 			lastmonitor = monitors[i]
 		}
 		monitorsLeft = required - count
-		/*
-		if (lastmonitor.fail) {
-			autofail = true
-		} else {
-			autofail = false
-		}*/
+		
 		return {left: monitorsLeft, completed: count, fail: autofail, lastmonitor: lastmonitor}
 	},
 	checkAutoFail: function (cell, fail) {
@@ -2040,7 +1967,7 @@ domTools.domMethods = {
 						case 'fail':
 							if (monitors[i].fail == true){
 								let span = document.createElement('span')
-								$(span).addClass('glyphicon glyphicon-ok')
+								$(span).append(this.constants.checkmark)
 								td.appendChild(span)
 							}
 						break;
@@ -2102,7 +2029,7 @@ domTools.domMethods = {
 				case 'fail':
 					if (monitor.fail){
 						let span = document.createElement('span')
-						$(span).addClass('glyphicon glyphicon-ok')
+						$(span).append(this.constants.checkmark)
 						$(row).addClass('bg-danger')
 						td.appendChild(span)
 					}
@@ -2168,7 +2095,7 @@ domTools.domMethods = {
 				case 'fail':
 					if (monitor.fail){
 						let span = document.createElement('span')
-						$(span).addClass('glyphicon glyphicon-ok')
+						$(span).append(this.constants.checkmark)
 						$(row).addClass('bg-danger')
 						td.appendChild(span)
 					}
@@ -2250,7 +2177,7 @@ domTools.buildModal = {
 	},
 	clearFields: function (modal, lead){
 		return new Promise ((resolve, reject) => {
-			$(modal).find('.modal-title').text('')
+			$(modal).find('.modal-title > span').text('')
 			$(modal).find('[name]').each(function(k,v){
 				if (v.name === 'fail') {
 					$(v).prop('checked', false)
@@ -2279,9 +2206,10 @@ domTools.buildModal = {
 			let inputElems = document.querySelectorAll('#' + modal.id + ' [name]')//$(modal).find('[name]'),
 				count = 0
 			if (agent) {
-				$('.modal-title').text(agent)
+				$('.modal-title > span').text(agent)
 			} else {
-				$('.modal-title').text($(inputData).data('name'))
+				
+				$('.modal-title > span').text($(inputData).data('name'))
 				
 			}
 			
@@ -2339,7 +2267,7 @@ validation.formValidation = {
 			}).catch((err) => {
 				//handle errors by sending to the DOM
 				if (Object.keys(err).length == 2){
-					exports.errorHandling.errorHandling(err)
+					validation.errorHandling(err)
 				} else {
 					return reject (err)
 				}
@@ -2457,7 +2385,6 @@ validation.formValidation = {
 			try{
 				$(fields).each((k,v) => {
 					let value = this.fieldValidation[v.name](v)
-					console.log(k,v)
 					formVals[`${v.name}`] = value
 				})
 				if (formVals.fail === true) {
@@ -2468,7 +2395,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	removemonitor: function (type, form) {
 		/**
@@ -2487,7 +2414,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 
 
@@ -2510,7 +2437,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	editagent: function (type, form) {
 		/**
@@ -2530,7 +2457,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	removeagent: function (type, form) {
 		/**
@@ -2549,7 +2476,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 
 
@@ -2572,7 +2499,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	editlead: function (type, form) {
 		/**
@@ -2591,7 +2518,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	removelead: function (type, form) {
 		/**
@@ -2610,7 +2537,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	},
 	newmonitor: function (type, form) {
 		/**
@@ -2630,27 +2557,218 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		}).catch((err) => console.log(err))
+		})//.catch((err) => console.log(err))
 	}
 }
 
-validation.errorHandling = {
+validation.errorHandling = 
 	/**
 	 * Handle errors and send to the help-block field
 	 * @param Object HTML input element
 	 */
-	errorHandling: (error) => {
+	 (error) => {
 		if (error.field === "post") {
 			alert(error.message)
 		} else {
+			$(error.field).addClass('is-invalid')
 			var findInput = $(error.field).parents('.form-group')
-			var findLabel = $(findInput).find('.help-block')
-			$(findInput).addClass('has-error')
-			$(findLabel).addClass('has-error').html(error.message)
+			var findLabel = $(findInput).find('.helper')
+			//$(findInput).addClass('is-invalid')
+			$(findLabel).addClass('invalid-feedback').html(error.message)
 			var timeout = setTimeout(function() {
-				$(findInput).toggleClass('has-error')
-				$(findLabel).toggleClass('has-error').html('')
+				$(error.field).removeClass('is-invalid')
+				//$(findInput).removeClass('is-invalid')
+				$(findLabel).removeClass('invalid-feedback').html('')
 			}, 4000);
 		}
-	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ *	Global Event Listeners
+ */
+$(window).on('load', function () {
+	// Build the Dom for the first time
+	return new Promise((resolve, reject) => {
+		// Initialize section navigation
+		return navigation.init().then ((result) => {
+			// Pull agents and leads from the databases then load them into global objects
+			return BuildStaffDom.init()
+		}).then((result)=>{
+			// Build the Agent and Lead Maintenance pages
+			return LoadStaffEdit.init()
+		}).then((result) => {
+			// Pull monitors from the database and load to the pages
+			return LoadMonitors.init()
+		}).catch((err) => console.log(err))
+	}).catch((err) => console.log(err))
+	
+	// Turn on Bootstrap Tooltips because they look much better than default
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+	// Catch errors that got missed
+	window.addEventListener('unhandledrejection', function(event) {
+		// the event object has two special properties:
+		console.log(event.promise); // [object Promise] - the promise that generated the error
+		console.log(event.reason); // Error: Whoops! - the unhandled error object
+	});
+})
+
+// Close NavBar
+$(window).on('click', function (e) {
+	if (e.target.dataset.section != $('.navbar-collapse') && $('.navbar-collapse').hasClass('in')) {
+		$('.navbar-collapse').removeClass('in')
+	}
+})
+
+//Claimed button toggle
+$(document).on('click', '.claimed', function (e) {
+	e.preventDefault()
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+	let agent = $(this).data('agent'),
+		claimed = ($(this).data('claimed') === 'unclaimed') ? 'unclaimed' : 'remove'
+	if ($(this).data('claimed') === 'unclaimed') {
+		FormSubmitTools.setClaimed(agent, loggedOnUser, claimed)
+		
+		.then((result) => {
+			return domTools.domMethods.changeClaimed(agent, loggedOnUserFullname, loggedOnUser, claimed)
+		})
+	} else {
+			FormSubmitTools.removeClaimed(agent, loggedOnUser)
+			.then((result) => {
+			return domTools.domMethods.changeClaimed(agent, loggedOnUserFullname, loggedOnUser, claimed)
+		})
+	}
+})
+
+//Modals
+$(document).on('click','.add-agent', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('addAgent', $(this))
+})
+$(document).on('click', '.edit-agent', function (e){
+	e.preventDefault()
+	FormSubmitTools.initModal('editAgent', $(this))
+})
+$(document).on('click', '.remove-agent', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('removeAgent', $(this))
+})
+$(document).on('click', '.add-lead', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('addLead', $(this))
+})
+$(document).on('click', '.edit-lead', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('editLead', $(this))
+})
+$(document).on('click', '.remove-lead', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('removeLead', $(this))
+})
+$(document).on('click', '.edit-monitor', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('editMonitor', $(this))
+})
+$(document).on('click', '.remove-monitor', function (e) {
+	e.preventDefault()
+	FormSubmitTools.initModal('removeMonitor', $(this))
+})
+$(document).on('change', '#select-lead-search', function (e) {
+	e.preventDefault()
+	var lead = $(this).val(),
+		month = $('#input-date-search').val().replace(/-/g, '\/'),
+		tmpDate = new Date(month),
+		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
+		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
+	
+	clearTbody.innerHTML = '';
+	LoadMonitors.completedByLead(lead, month)
+	LoadMonitors.completedPerAgentSearch(tmpDate)
+	document.getElementById('monitors-search-date-2').valueAsDate = tmpDate
+	document.getElementById('input-date-search').valueAsDate - tmpDate
+	document.getElementById('all-monitors-date-2').innerHTML = monthName
+	
+})
+$(document).on('change', '#input-date-search', function (e) {
+	e.preventDefault()
+	let month = $(this).val().replace(/-/g, '\/'),
+		lead = $('#select-lead-search').val(),
+		tmpDate = new Date(month),
+		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
+		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
+
+	clearTbody.innerHTML = '';
+	LoadMonitors.completedByLead(lead, month)
+	LoadMonitors.completedPerAgentSearch(tmpDate)
+	document.getElementById('monitors-search-date').valueAsDate = tmpDate
+	document.getElementById('monitors-search-date-2').valueAsDate = tmpDate
+	document.getElementById('all-monitors-date-2').innerHTML = monthName
+})
+$(document).on('change', '#monitors-search-date', function (e) {
+	e.preventDefault()
+	let month = $(this).val().replace(/-/g, '\/'),
+		tmpDate = new Date(month),
+		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
+		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
+		
+	clearTbody.innerHTML = '';
+	LoadMonitors.completedByLead(null, month)
+	LoadMonitors.completedPerAgentSearch(tmpDate)
+	document.getElementById('monitors-search-date-2').valueAsDate = tmpDate
+	document.getElementById('input-date-search').valueAsDate = tmpDate
+	document.getElementById('all-monitors-date-2').innerHTML = monthName
+})
+$(document).on('change', '#monitors-search-date-2', function (e) {
+	e.preventDefault()
+	let month = $(this).val().replace(/-/g, '\/'),
+		tmpDate = new Date(month),
+		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
+		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
+		
+	clearTbody.innerHTML = '';
+	LoadMonitors.completedByLead(null, month)
+	LoadMonitors.completedPerAgentSearch(tmpDate)
+	document.getElementById('monitors-search-date').valueAsDate = tmpDate
+	document.getElementById('input-date-search').valueAsDate = tmpDate
+	document.getElementById('all-monitors-date-2').innerHTML = monthName
+})
+
+// Form Submit (modal and main form)
+$(document).on('submit', '#form-monitors', function (e){
+	e.preventDefault()
+	let form = $(this),
+		agent = $(form).find('#select-agent').val(),
+		claimedField = $('#'+agent+'-claimed')
+	if ($(claimedField).data('claimed') === 'claimed'){
+		FormSubmitTools.removeClaimed(agent)
+	}
+	FormSubmitTools.submit(form)
+	return true
+})
+$(document).on('click', '.modal-submit', function (e){
+	e.preventDefault()
+	let form = $(this).parent().parent().find('form')
+	
+	FormSubmitTools.modalSubmit(form)
+})
+
+//Move focus
+$(document).on('shown.bs.modal', '.modal', function () {
+	$('.modal').focus()
+})
