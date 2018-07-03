@@ -949,3 +949,5 @@ From previous event:
 11:38:21:339 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
 11:38:22:910 Up to date
 11:38:22:910 sending to window
+12:37:31:067 App starting...
+12:37:31:072 DEV ENVIRONMENT = true
