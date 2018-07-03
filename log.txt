@@ -801,3 +801,151 @@ From previous event:
 11:37:05:439 DEV ENVIRONMENT = true
 13:19:44:722 App starting...
 13:19:44:725 DEV ENVIRONMENT = true
+15:12:48:496 App starting...
+15:12:48:500 DEV ENVIRONMENT = true
+15:15:53:818 Checking for update
+15:15:53:819 Checking for updates...
+15:15:53:821 sending to window
+15:15:57:835 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:16:00:909 Up to date
+15:16:00:962 sending to window
+15:17:12:058 Checking for update
+15:17:12:061 Checking for updates...
+15:17:12:061 sending to window
+15:17:13:300 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:17:14:524 Up to date
+15:17:14:552 sending to window
+15:17:32:180 Checking for update
+15:17:32:180 Checking for updates...
+15:17:32:180 sending to window
+15:17:33:119 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:17:34:451 Up to date
+15:17:34:463 sending to window
+15:17:35:638 Checking for update
+15:17:35:639 Checking for updates...
+15:17:35:639 sending to window
+15:17:36:298 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:17:37:751 Up to date
+15:17:37:761 sending to window
+15:17:41:148 Checking for update
+15:17:41:150 Checking for updates...
+15:17:41:151 sending to window
+15:17:41:920 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:17:42:786 Up to date
+15:17:42:797 sending to window
+15:27:47:639 Checking for update
+15:27:47:640 Checking for updates...
+15:27:47:642 sending to window
+15:27:48:758 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:27:50:335 Up to date
+15:27:50:368 sending to window
+15:51:58:213 App starting...
+15:51:58:217 DEV ENVIRONMENT = true
+15:54:29:334 Checking for update
+15:54:29:335 Checking for updates...
+15:54:29:336 sending to window
+15:54:33:478 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+15:54:36:937 Up to date
+15:54:36:950 sending to window
+16:00:26:209 App starting...
+16:00:26:211 DEV ENVIRONMENT = true
+16:25:29:961 App starting...
+16:25:29:963 DEV ENVIRONMENT = true
+16:27:18:665 App starting...
+16:27:18:669 DEV ENVIRONMENT = true
+16:31:58:876 App starting...
+16:31:58:879 DEV ENVIRONMENT = true
+16:36:01:084 App starting...
+16:36:01:089 DEV ENVIRONMENT = true
+16:39:24:159 App starting...
+16:39:24:160 DEV ENVIRONMENT = true
+16:42:12:889 App starting...
+16:42:12:892 DEV ENVIRONMENT = true
+16:59:43:384 App starting...
+16:59:43:386 DEV ENVIRONMENT = true
+16:59:43:767 TypeError: Cannot read property 'on' of undefined
+    at App.createWindow (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:113:25)
+    at emitTwo (events.js:131:20)
+    at App.emit (events.js:214:7)
+
+17:01:45:482 App starting...
+17:01:45:486 DEV ENVIRONMENT = true
+17:01:45:849 TypeError: Cannot read property 'on' of undefined
+    at App.createWindow (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:113:25)
+    at emitTwo (events.js:131:20)
+    at App.emit (events.js:214:7)
+
+17:30:52:428 App starting...
+17:30:52:430 DEV ENVIRONMENT = true
+17:31:54:738 App starting...
+17:31:54:742 DEV ENVIRONMENT = true
+17:31:54:920 TypeError: Cannot read property 'webContents' of undefined
+    at App.<anonymous> (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:151:13)
+    at emitTwo (events.js:131:20)
+    at App.emit (events.js:214:7)
+
+17:32:52:523 App starting...
+17:32:52:525 DEV ENVIRONMENT = true
+17:32:52:806 TypeError: Cannot read property 'on' of undefined
+    at App.createWindow (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:113:25)
+    at emitTwo (events.js:131:20)
+    at App.emit (events.js:214:7)
+
+17:36:36:564 App starting...
+17:36:36:565 DEV ENVIRONMENT = true
+17:36:38:049 TypeError: Cannot read property 'on' of undefined
+    at BrowserWindow.helpWindow.once (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:115:26)
+    at Object.onceWrapper (events.js:315:30)
+    at emitOne (events.js:116:13)
+    at BrowserWindow.emit (events.js:211:7)
+
+17:41:02:235 App starting...
+17:41:02:237 DEV ENVIRONMENT = true
+17:41:03:682 TypeError: Cannot read property 'on' of undefined
+    at BrowserWindow.helpWindow.once (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:115:26)
+    at Object.onceWrapper (events.js:315:30)
+    at emitOne (events.js:116:13)
+    at BrowserWindow.emit (events.js:211:7)
+
+17:45:06:411 App starting...
+17:45:06:416 DEV ENVIRONMENT = true
+17:45:08:090 TypeError: Cannot read property 'on' of undefined
+    at BrowserWindow.helpWindow.once (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:115:26)
+    at Object.onceWrapper (events.js:315:30)
+    at emitOne (events.js:116:13)
+    at BrowserWindow.emit (events.js:211:7)
+
+17:48:00:522 App starting...
+17:48:00:526 DEV ENVIRONMENT = true
+17:48:02:171 TypeError: Cannot read property 'on' of undefined
+    at BrowserWindow.helpWindow.once (C:\Users\cleggt\Documents\Dev\call-monitors-app\main.js:115:26)
+    at Object.onceWrapper (events.js:315:30)
+    at emitOne (events.js:116:13)
+    at BrowserWindow.emit (events.js:211:7)
+
+17:48:50:176 App starting...
+17:48:50:180 DEV ENVIRONMENT = true
+17:56:24:132 App starting...
+17:56:24:134 DEV ENVIRONMENT = true
+18:02:58:698 App starting...
+18:02:58:700 DEV ENVIRONMENT = true
+09:31:42:514 App starting...
+09:31:42:521 DEV ENVIRONMENT = true
+11:16:04:914 Checking for update
+11:16:04:916 Checking for updates...
+11:16:04:916 sending to window
+11:16:07:893 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+11:16:08:923 Up to date
+11:16:08:924 sending to window
+11:16:10:287 Checking for update
+11:16:10:287 Checking for updates...
+11:16:10:287 sending to window
+11:16:11:075 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+11:16:13:189 Up to date
+11:16:13:190 sending to window
+11:38:19:912 Checking for update
+11:38:19:912 Checking for updates...
+11:38:19:913 sending to window
+11:38:21:339 Update for version 2.2.1 is not available (latest version: 2.2.1, downgrade is disallowed).
+11:38:22:910 Up to date
+11:38:22:910 sending to window

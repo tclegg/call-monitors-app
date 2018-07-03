@@ -2,10 +2,10 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "main": "main.js",
   "license": "MIT",
-  "author": "Nex-Tech Help Desk",
+  "author": "Thomas Clegg",
   "build": {
     "appId": "com.electron.callmonitortracking",
     "win": {
@@ -28,6 +28,7 @@
     ]
   },
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "^2.0.3",
     "electron-builder": "^20.16.4",
     "less": "^3.0.4"

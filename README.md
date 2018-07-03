@@ -32,3 +32,8 @@ Repository created to auto-update the call monitor tracking app.
 6. Update the version in `package.json`, commit and push to GitHub.
 7. Do steps 3 and 4 again.
 8. Open the installed version of the app and see that it updates itself.
+
+## Using Devtron Tools
+1. Devtron tools are included in the devDependencies. The tool has to be installed separately the first time, then it will automatically run when running the script "npm run dev"
+    * <https://github.com/electron/devtron>
+2. The process.env.DEVTRON_DEBUG_PATH must be set on main.js to run devtron in the dev environment.

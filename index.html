@@ -1,10 +1,5 @@
 <!DOCTYPE HTML>
-<!--
-	Hyperspace by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+<html lang="en-US">
 	<head>
 		<title>Nex-Tech Call Monitors</title>
 		<meta charset="utf-8" />
@@ -14,7 +9,6 @@
 		<link rel="stylesheet" href="assets/@fontawesome/fontawesome-free/css/all.css">
 		
 		<style media="screen">
-			
 			input[type="date"]::-webkit-inner-spin-button{
 				display: none;
 			}
@@ -26,12 +20,11 @@
 			require('@fortawesome/fontawesome-free')
 		</script>
 		<link rel="import" href="sections/index-main.html">
-    	<link rel="import" href="sections/allmonitors.html">
+		<link rel="import" href="sections/allmonitors.html">
 		<link rel="import" href="sections/leadmonitors.html">
-    	<link rel="import" href="sections/agents.html">
+		<link rel="import" href="sections/agents.html">
 		<link rel="import" href="sections/leads.html">
 		<link rel="import" href="sections/footer.html" class="footer-link">
-		<!--<link rel="import" href="sections/ipcremote.html">-->
 
 	</head>
 	<body style="padding-top:70px" class="bg-secondary">
@@ -79,7 +72,7 @@
 					<div class="modal-body">
 						<form class="" id="add-agent-modal-form" action="#" method="get" name="addagent">
 							<div class="form-group">
-								<label for="abbv" class="sr-only">Abbreviation</label>
+								<label for="add-agent-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Abbreviation</strong></span>
@@ -89,7 +82,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name" class="sr-only">Full Name</label>
+								<label for="add-agent-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Full Name</strong></span>
@@ -141,7 +134,7 @@
 					<div class="modal-body">
 						<form class="" id="edit-agent-modal-form" action="#" method="get" name="editagent">
 							<div class="form-group">
-								<label for="abbv" class="sr-only">Abbreviation</label>
+								<label for="edit-agent-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Abbreviation</strong></span>
@@ -151,7 +144,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name" class="sr-only">Full Name</label>
+								<label for="edit-agent-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Full Name</strong></span>
@@ -203,7 +196,7 @@
 					<div class="modal-body">
 						<form class="" id="add-lead-modal-form" action="#" method="get" name="addlead">
 							<div class="form-group">
-								<label for="abbv" class="sr-only">Abbreviation</label>
+								<label for="add-lead-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<div class="input-group-text"><strong>Abbreviation</strong></div>
@@ -213,7 +206,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name" class="sr-only">Full Name</label>
+								<label for="add-lead-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Full Name</strong></span>
@@ -243,7 +236,7 @@
 					<div class="modal-body">
 						<form class="" id="edit-lead-modal-form" action="#" method="get" name="editlead">
 							<div class="form-group">
-								<label for="abbv" class="sr-only">Abbreviation</label>
+								<label for="edit-lead-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Abbreviation</strong></span>
@@ -253,7 +246,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name" class="sr-only">Full Name</label>
+								<label for="edit-lead-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Full Name</strong></span>
@@ -354,7 +347,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="edit-monitor-modal-date" class="sr-only">Monitor Date</label>
+								<label for="edit-monitor-modal-input-date" class="sr-only">Monitor Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text"><strong>Monitor Date</strong></span>
@@ -414,7 +407,7 @@
 						<button type="submit" class="btn btn-danger modal-submit" id="edit-monitor-modal-submit">Save changes</button>
 						<span id="edit-monitor-modal-success" class="helper text-center"></span>
 					</div>
-				</form>
+				
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
