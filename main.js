@@ -1,28 +1,28 @@
 //handle setupevents as quickly as possible
 /*const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
-  // squirrel event handled and app will exit in 1000ms, so don't do anything else
-  return;
+	// squirrel event handled and app will exit in 1000ms, so don't do anything else
+	return;
 }*/
 
 const electron = require('electron'), // Main ElectronJS Object
-      {dialog} = require('electron')
-      app = electron.app, // Module to control application life.
-      {ipcMain} = require('electron'), // Communicate between windows
-      path = require('path'), // Parse the file path
-      BrowserWindow = electron.BrowserWindow, // Module to create native browser window.
-      dotenv = require('dotenv'),// Grab environment variables from .env file right away
-      dotenvExpand = require('dotenv-expand'),
-      myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
-      log = require('electron-log'),
-      {autoUpdater} = require('electron-updater'),
-      isDev = require('electron-is-dev');
+			{dialog} = require('electron')
+			app = electron.app, // Module to control application life.
+			{ipcMain} = require('electron'), // Communicate between windows
+			path = require('path'), // Parse the file path
+			BrowserWindow = electron.BrowserWindow, // Module to create native browser window.
+			dotenv = require('dotenv'),// Grab environment variables from .env file right away
+			dotenvExpand = require('dotenv-expand'),
+			myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
+			log = require('electron-log'),
+			{autoUpdater} = require('electron-updater'),
+			isDev = require('electron-is-dev');
 
-      if (isDev) {
-        log.info('Running in development');
-      } else {
-        log.info('Running in production');
-      }
+			if (isDev) {
+				log.info('Running in development');
+			} else {
+				log.info('Running in production');
+			}
 
 dotenvExpand(myEnv)
 
@@ -52,62 +52,68 @@ let helpWindow
 let manualUpdate = false
 
 function createWindow () {
-  // MainWindow Options
-  let opts = {titleBarStyle: 'hidden',
-    height: 800,
-    width: (process.env.TODO_DEV) ? 1920 : 1281,
-    minWidth: 1281,
-    minHeight: 800,
-    backgroundColor: '#f8f9fa',
-    show: false,
-    icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+	// MainWindow Options
+	let opts = {titleBarStyle: 'default',
+		height: 800,
+		width: (process.env.TODO_DEV) ? 1920 : 1281,
+		minWidth: 1281,
+		minHeight: 800,
+		backgroundColor: '#f8f9fa',
+		show: false,
+		icon: path.join(__dirname, 'assets/icons/png/64x64.png')
 
-  }
-
-  // Create the browser window.
-  mainWindow = new BrowserWindow(opts)
-  // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/index.html`)
-
-	
-  
-	if (process.env.TODO_DEV){
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
 	}
 
-  // Show the mainwindow when it is loaded and ready to show
-  mainWindow.once('ready-to-show', () => {
-    // Load a custom menu
-    require('./menu/mainmenu', mainWindow)
-    // Load main window
-    mainWindow.show()
-  })
+	// Create the browser window.
+	mainWindow = new BrowserWindow(opts)
+	// and load the index.html of the app.
+	mainWindow.loadURL(`file://${__dirname}/index.html`)
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
+	
+	
+	if (process.env.TODO_DEV){
+		// Open the DevTools.
+		process.env.NODE_ENV === 'development'
+		process.env.DEVTRON_DEBUG_PATH = `file://${__dirname}../../../devtron/static/index.html`
+		mainWindow.webContents.openDevTools()
+		
+	}
 
-  helpWindow = new BrowserWindow({frame: false,
-    width: 1024,
-    height: 768,
-    minWidth: 800,
-    minHeight: 600,
-    backgroundColor: '#8c0c03',
-    show: false,
-    icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
-    parent: mainWindow
-  })
+	// Show the mainwindow when it is loaded and ready to show
+	mainWindow.once('ready-to-show', () => {
+		// Load a custom menu
+		require('./menu/mainmenu', mainWindow)
+		mainWindow.webContents.on('crashed', (e) => { log.error(e) })
+		mainWindow.on('unresponsive', (e) => { console.error(e) })
+		// Load main window
+		mainWindow.show()
+	})
+
+	// Emitted when the window is closed.
+	mainWindow.on('closed', function () {
+		// Dereference the window object, usually you would store windows
+		// in an array if your app supports multi windows, this is the time
+		// when you should delete the corresponding element.
+		mainWindow = null
+	})
+
+	helpWindow = new BrowserWindow({frame: false,
+		width: 1024,
+		height: 768,
+		minWidth: 800,
+		minHeight: 600,
+		backgroundColor: '#8c0c03',
+		show: false,
+		icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+		parent: mainWindow,
+		modal: true
+	})
 	// Open the DevTools.
 	// helpWindow.webContents.openDevTools()
-  helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
+	helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
 
- 
 }
+
 
 
 //-------------------------------------------------------------------
@@ -133,93 +139,93 @@ function createWindow () {
 // })
 
 function sendStatusToWindow(text) {
-  log.info(text);
-  log.info('sending to window')
-  mainWindow.webContents.send('message', text);
+	log.info(text);
+	log.info('sending to window')
+	mainWindow.webContents.send('message', text);
 }
 
 app.on('ready', function () {
-  autoUpdater.checkForUpdatesAndNotify()
-  let interval = setInterval(() => {autoUpdater.checkForUpdatesAndNotify()},3600000)
-  app.on('window-all-closed', () => {clearInterval(interval)})
-  
+	if (process.env.TODO_DEV) {require('devtron').install()}
+	autoUpdater.checkForUpdatesAndNotify()
+	let interval = setInterval(() => {autoUpdater.checkForUpdatesAndNotify()},3600000)
+	app.on('window-all-closed', () => {clearInterval(interval)})
 })
 
 autoUpdater.on('update-downloaded', (ev, info) => {
-  // Ask user to update the app
-  dialog.showMessageBox({
-    type: 'question',
-    buttons: ['Restart', 'Later'],
-    defaultId: 0,
-    message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
-    detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
-  }, response => {
-    if (response === 0 && !process.env.TODO_DEV) {
-      setTimeout(() => autoUpdater.quitAndInstall(), 1);
-    } else {
-      dialog.showMessageBox({
-        type: 'info',
-        button: [],
-        defaultId: 0,
-        message: `The ${ev.version} update will apply the next time you restart.`,
-        detail: info
-      }, response2 => {
-        if (response2 === 0) {
-          return
-        }
-      })
-      return
-    }
-  });
+	// Ask user to update the app
+	dialog.showMessageBox({
+		type: 'question',
+		buttons: ['Restart', 'Later'],
+		defaultId: 0,
+		message: 'A new version has been downloaded. \n\n' + app.getName() +' will now update!',
+		detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
+	}, response => {
+		if (response === 0 && !process.env.TODO_DEV) {
+			setTimeout(() => autoUpdater.quitAndInstall(), 1);
+		} else {
+			dialog.showMessageBox({
+				type: 'info',
+				button: [],
+				defaultId: 0,
+				message: `The ${ev.version} update will apply the next time you restart.`,
+				detail: info
+			}, response2 => {
+				if (response2 === 0) {
+					return
+				}
+			})
+			return
+		}
+	});
 })
 autoUpdater.on('update-available', (ev, info) => {
-  sendStatusToWindow('Update available.');
+	sendStatusToWindow('Update available.');
 })
 autoUpdater.on('update-not-available', (ev, info) => {
-  if (!manualUpdate) {
-    sendStatusToWindow('Up to date');
-  } else {
-    dialog.showMessageBox({
-      type: 'info',
-      buttons: [],
-      defaultId: 0,
-      message: `No update is available at this time.`,
-      detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
-    }, () => {
-      sendStatusToWindow('Up to date')
-      manualUpdate = false
-    })
-    
-  }
-  
+	if (!manualUpdate) {
+		sendStatusToWindow('Up to date');
+	} else {
+		dialog.showMessageBox({
+			type: 'info',
+			buttons: [],
+			defaultId: 0,
+			message: `No update is available at this time.`,
+			detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
+		}, () => {
+			sendStatusToWindow('Up to date')
+			manualUpdate = false
+		})
+		
+	}
+	
 })
 autoUpdater.on('error', (ev, err) => {
-    sendStatusToWindow('Error in auto-updater.');
+		sendStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (ev, progressObj) => {
-    sendStatusToWindow('Download in progress...');
+		sendStatusToWindow('Download in progress...');
 })
 autoUpdater.on('update-downloaded', (ev, info) => {
-    sendStatusToWindow('Update downloaded');
+		sendStatusToWindow('Update downloaded');
 })
 autoUpdater.on('checking-for-update', (ev, info) => {
-    sendStatusToWindow('Checking for updates...');
+		sendStatusToWindow('Checking for updates...');
 })
 
 
 // Second window Event Listeners
 ipcMain.on('open-second-window', (event, arg)=> {
-    helpWindow.show()
+		helpWindow.show()
 })
 
 ipcMain.on('close-second-window', (event, arg)=> {
-    helpWindow.hide()
+		helpWindow.hide()
 })
 
 ipcMain.on('checkUpdatesNow', (event, arg) => {
-  console.log('checking for updates in main.js')
-  manualUpdate = true
-  autoUpdater.checkForUpdates()
+	console.log('Checking for updates manually')
+	manualUpdate = true
+	autoUpdater.checkForUpdates()
 })
 
 
@@ -230,20 +236,22 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+	// On OS X it is common for applications and their menu bar
+	// to stay active until the user quits explicitly with Cmd + Q
+	if (process.platform !== 'darwin') {
+		app.quit()
+	}
 })
 
 app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow()
-  }
+	// On OS X it's common to re-create a window in the app when the
+	// dock icon is clicked and there are no other windows open.
+	if (mainWindow === null) {
+		createWindow()
+	}
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+process.on('uncaughtException', (error) => {log.error(error)})

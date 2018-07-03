@@ -116,6 +116,7 @@ function setDate() {
 	// Set All Monitors by Agent
 	monitorsByAgentDate.valueAsDate = startOfMonth;
 	monitorsByAgentDate2.valueAsDate = startOfMonth;
+	
 }
 
 /**
@@ -186,9 +187,9 @@ var DBSubmitTools = {
 				query = values
 			return this.update('monitors', row, query).then((result) => {
 				if (result) {
-					return resolve()
+					return resolve(result)
 				} else {
-					return reject(err)
+					return reject()
 				}
 			}).then((result) => {
 				return resolve()
@@ -1066,6 +1067,7 @@ var LoadMonitors = {
 					wellTR = document.createElement('tr'),
 					subTable = document.createElement('table'),
 					subThead = document.createElement('thead'),
+					subTheadRow = document.createElement('tr'),
 					headArr = ['Date', 'Score', 'Auto-Fail', 'Lead', 'Edit', 'Remove'],
 					subTbody = document.createElement('tbody')
 				
@@ -1073,7 +1075,7 @@ var LoadMonitors = {
 				headArr.forEach(function (heading){
 					let th = document.createElement('th')
 					$(th).html(heading)
-					subThead.appendChild(th)
+					subTheadRow.appendChild(th)
 				})
 				$(subTbody).attr('id', i + 'tbody')
 				$(wellTR).attr('id',  i+'Table').addClass('accordion-body collapse').attr('aria-expanded', false)
@@ -1087,6 +1089,7 @@ var LoadMonitors = {
 					.attr('data-parent', '#agent-accordion-tbody')
 					.attr('data-target', `#${i}Table`)
 					.attr('area-expanded', false)
+					.attr('role', 'button')
 				
 				if (Object.keys(result).length > 0){
 					let monitors = result.filter(x => x.agent === i)
@@ -1103,6 +1106,7 @@ var LoadMonitors = {
 				$(agentRow).append(head)
 				$(row).attr('id', '')
 				$(subTbody).append(row)
+				$(subThead).append(subTheadRow)
 				$(subTable).append(subThead, subTbody)
 				$(well).append(subTable)
 				$(wellTD).append(well)
@@ -1481,10 +1485,14 @@ let navigation =  {
 	},
 
 	setMenuOnClickEvent: function () {
+		
 		document.body.addEventListener('click', function (event) {
 			if (event.target.dataset.section) {
-			navigation.hideAllSections()
-			navigation.showSection(event)
+				navigation.hideAllSections()
+				navigation.showSection(event)
+			}
+			if ($('div.navbar-collapse').hasClass('show')){
+				$('div.navbar-collapse').removeClass('show')
 			}
 		})
 	},
@@ -1514,7 +1522,6 @@ let navigation =  {
 			setDate()
 			$('ul.navbar-nav > li > a').click(function(){
 				$('ul.navbar-nav > li').removeClass('active');
-				//console.log($(this));
 				$(this).parent().addClass('active');
 			})
 			return resolve()
@@ -2390,7 +2397,6 @@ validation.formValidation = {
 				if (formVals.fail === true) {
 					formVals.score = "0"
 				}
-				
 				return resolve(formVals)
 			} catch (err){
 				return reject (err)
@@ -2444,7 +2450,6 @@ validation.formValidation = {
 		 * @param {Object} form Form values
 		 * @return {Object} formVals, formFields - {FieldName: Values, Field: FieldObject}
 		 */
-		console.log('editagent')
 		return new Promise ((resolve, reject) => {
 			let formVals = {},
 				fields = $(form).find('[name]')
@@ -2657,6 +2662,7 @@ $(document).on('click', '.claimed', function (e) {
 })
 
 //Modals
+
 $(document).on('click','.add-agent', function (e) {
 	e.preventDefault()
 	FormSubmitTools.initModal('addAgent', $(this))
@@ -2761,6 +2767,9 @@ $(document).on('submit', '#form-monitors', function (e){
 	FormSubmitTools.submit(form)
 	return true
 })
+$('form').on('submit', (e) => {
+	e.preventDefault()
+})
 $(document).on('click', '.modal-submit', function (e){
 	e.preventDefault()
 	let form = $(this).parent().parent().find('form')
@@ -2768,7 +2777,8 @@ $(document).on('click', '.modal-submit', function (e){
 	FormSubmitTools.modalSubmit(form)
 })
 
-//Move focus
+// Move focus
 $(document).on('shown.bs.modal', '.modal', function () {
 	$('.modal').focus()
 })
+
