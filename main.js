@@ -190,7 +190,7 @@ autoUpdater.on('update-not-available', (ev, info) => {
 			buttons: [],
 			defaultId: 0,
 			message: `No update is available at this time.`,
-			detail: `Current Version: ${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
+			detail: `Versions\n\nCurrent: v${app.getVersion()}\nUpdated: v${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
 		}, () => {
 			sendStatusToWindow('Up to date')
 			manualUpdate = false
