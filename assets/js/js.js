@@ -76,19 +76,20 @@ var months = {
 	qend = {},
 	qm = new Date()
 
-	if ($.inArray(qm.getMonth().toString(), q1)) {
+	if (q1.includes(qm.getMonth().toString()) ){
 		qstart = new Date(year, 0, 1)
-		qend = new Date(year, 2, 31)
-	} else if ($.inArray(qm.getMonth().toString(), q2)) {
+		qend = new Date(year, 3, 1)
+	} else if (q2.includes(qm.getMonth().toString()) ){
 		qstart = new Date(year, 3, 1)
-		qend = new Date(year, 5, 30)
-	} else if ($.inArray(qm.getMonth().toString(), q3)) {
+		qend = new Date(year, 6, 1)
+	} else if (q3.includes(qm.getMonth().toString()) ){
 		qstart = new Date(year, 6, 1)
-		qend = new Date(year, 8, 31)
+		qend = new Date(year, 9, 1)
 	} else {
 		qstart = new Date(year, 9, 1)
-		qend = new Date(year, 11, 31)
+		qend = new Date(year, 12, 1)
 	}
+	
 	// objects to store query data
 var	leadsObj = {},
 	activeLeadsObj = {},
@@ -240,9 +241,10 @@ var DBSubmitTools = {
 		 * TYPE=AGENT form fields: abbv (lastname with first initial), name (last, first), monitors, agentid
 		 */
 		return new Promise ((resolve, reject) => {
-			values.date = new Date()
+			values.date = (values.date) ? values.date : new Date()
 			let row = {'_id': values._id}, query = values
 			return this.update('agentsDb', row, query).then((result) => {
+				
 				if (result) {
 					return resolve(result)
 				} else {
@@ -902,18 +904,25 @@ var LoadMonitors = {
 			let tmpMonth = new Date(argMonth)
 			
 			// re-write the qstart/end variables declared at the beginning if month is supplied
-			if ($.inArray(tmpMonth.getMonth().toString(), q1)) {
-				quarterstart = new Date(year, 0, 1)
-				quarterend = new Date(year, 2, 31)
-			} else if ($.inArray(tmpMonth.getMonth().toString(), q2)) {
-				quarterstart = new Date(year, 3, 1)
-				quarterend = new Date(year, 5, 30)
-			} else if ($.inArray(tmpMonth.getMonth().toString(), q3)) {
-				quarterstart = new Date(year, 6, 1)
-				quarterend = new Date(year, 8, 31)
-			} else {
-				quarterstart = new Date(year, 9, 1)
-				quarterend = new Date(year, 11, 31)
+			if (q1.includes(tmpMonth.getMonth().toString()) )
+			{
+				quarterstart = new Date(tmpMonth.getFullYear(), 0, 1)
+				quarterend = new Date(tmpMonth.getFullYear(), 3, 1)
+			} 
+			else if (q2.includes(tmpMonth.getMonth().toString()) )
+			{
+				quarterstart = new Date(tmpMonth.getFullYear(), 3, 1)
+				quarterend = new Date(tmpMonth.getFullYear(), 6, 1)
+			} 
+			else if (q3.includes(tmpMonth.getMonth().toString()) )
+			{
+				quarterstart = new Date(tmpMonth.getFullYear(), 6, 1)
+				quarterend = new Date(tmpMonth.getFullYear(), 9, 1)
+			} 
+			else 
+			{
+				quarterstart = new Date(tmpMonth.getFullYear(), 9, 1)
+				quarterend = new Date(tmpMonth.getFullYear(), 12, 1)
 			}
 		}
 		let query = {'$and': [ {date: {'$gte': quarterstart}},{date: {'$lte': quarterend}} ]},
@@ -939,8 +948,11 @@ var LoadMonitors = {
 					let agentMonitors = monitors.filter(x => x.agent === abbv),
 						avg = 0 
 					let qAvg = (agentMonitors.length > 0) ? domTools.domMethods.calcAverage(agentMonitors) : ''
+
+					if (document.getElementById(abbv+'-qAvg')){
+						document.getElementById(abbv+'-qAvg').innerHTML = qAvg
+					}
 					
-					document.getElementById(abbv+'-qAvg').innerHTML = qAvg
 					count ++
 					if (count == Object.keys(agentsObj).length) {
 						return resolve(true)
@@ -983,11 +995,17 @@ var LoadMonitors = {
 					let agentMonitors = monitors.filter(x => x.agent === abbv),
 						avg = 0
 					let yAvg = (agentMonitors.length > 0) ? domTools.domMethods.calcAverage(agentMonitors) : ''
-					document.getElementById(abbv+'-yAvg').innerHTML = yAvg
+					if (document.getElementById(abbv+'-yAvg')){
+						document.getElementById(abbv+'-yAvg').innerHTML = yAvg
+					}
 
 					let averages = ['yAvg', 'qAvg', 'mAvg']
 					averages.forEach( i => {
-						let avg = document.getElementById(abbv + '-' + i).innerText.slice(0,-2)
+						let avgTd = document.getElementById(abbv + '-' + i),
+								// Agents who have been inactive that month will not be present.
+								// Check for the agent before trying to get text
+								avg = (avgTd) ? avgTd.innerText.slice(0,-2) : null
+						
 						if (avg && parseInt(avg) < 75) {
 							$('#'+abbv+'-'+i).addClass('bg-danger')
 						}
@@ -1048,14 +1066,19 @@ var LoadMonitors = {
 		}).catch((err) => console.log(err))
 		
 	},
-	buildCompleted: function(result) {
+	buildCompleted: function(result, queryMonth = null) {
 		/**
 		 * @param {Object} result Result of DB query for the specified month
 		 */
 		
 		let accordionContainer = document.getElementById('agent-accordion-tbody'),
 			count = 1,
-			head = [], cells = [] // Declared outisde of the IF to maintain scope
+			head = [], cells = [], // Declared outside of the IF to maintain scope
+			completedCount = 0, requiredCount = 0 // Used for the completed badge
+
+		let tmpDate = (queryMonth) ? new Date (queryMonth) : date,
+				resultDate = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), 1)
+
 		accordionContainer.innerHTML = ''
 
 		return new Promise ((resolve, reject) => {
@@ -1069,8 +1092,17 @@ var LoadMonitors = {
 					subThead = document.createElement('thead'),
 					subTheadRow = document.createElement('tr'),
 					headArr = ['Date', 'Score', 'Auto-Fail', 'Lead', 'Edit', 'Remove'],
-					subTbody = document.createElement('tbody')
+					subTbody = document.createElement('tbody'),
+					agentDate = new Date(agentsObj[i].date.getFullYear(), agentsObj[i].date.getMonth(), 1)
 				
+				if ((agentsObj[i].inactive === "1") && (new Date(agentDate.getFullYear(), agentDate.getMonth(), 1) < resultDate)){
+					// If they were inactive before the current month, skip building the row.
+					count++
+					continue
+				}
+				if (agentsObj[i].inactive === "1") {
+					$(agentRow).css('text-decoration', 'line-through')
+				}
 				// Create the subtable's TH elements
 				headArr.forEach(function (heading){
 					let th = document.createElement('th')
@@ -1094,12 +1126,20 @@ var LoadMonitors = {
 				if (Object.keys(result).length > 0){
 					let monitors = result.filter(x => x.agent === i)
 					//Create the content of the agent row (head)
-					head = domTools.domMethods.buildAccordionHead(agentsObj[i], monitors)
+					head = domTools.domMethods.buildAccordionHead(agentsObj[i], monitors, resultDate)
 					// Create the content of the sub table
 					row = domTools.domMethods.buildAccordionBody(row, agentsObj[i], leadsObj, monitors)
+					completedCount += Object.keys(monitors).length
+
+					requiredCount += (agentsObj[i].inactive === "0") ? parseInt(agentsObj[i].monitors) : 
+								((new Date(agentDate.getFullYear(), agentDate.getMonth(), 1) >= resultDate)) ? parseInt(agentsObj[i].monitors) : 0
+					
+
 				} else {
-					head = domTools.domMethods.buildAccordionHead(agentsObj[i])
+					head = domTools.domMethods.buildAccordionHead(agentsObj[i], null, resultDate)
 					row = domTools.domMethods.buildAccordionBody(row, agentsObj[i], leadsObj)
+					requiredCount += (agentsObj[i].inactive === "0") ? parseInt(agentsObj[i].monitors) : 
+								((new Date(agentDate.getFullYear(), agentDate.getMonth(), 1) >= resultDate)) ? parseInt(agentsObj[i].monitors) : 0
 				}
 
 				// Append the row to the container in order
@@ -1114,7 +1154,7 @@ var LoadMonitors = {
 				$(accordionContainer).append(agentRow)
 				$(accordionContainer).append(wellTR)
 				
-				
+				$('#total-badge').html(`${completedCount} / ${requiredCount}`)
 				if (count == Object.keys(agentsObj).length){
 					// Return to verify the loop is completed
 					return resolve()
@@ -1129,7 +1169,7 @@ var LoadMonitors = {
 		 * @param {Object} monitors Build's the accordion table for the month
 		 */
 		let count = 0,
-			elements = {}
+			elements = {},
 			container = document.getElementById('completed-monitors-tbody')
 		container.innerHTML = ''
 		return new Promise ((resolve, reject) => {
@@ -1154,6 +1194,7 @@ var LoadMonitors = {
 					rows.push(row)
 					
 					count ++
+					
 				}
 				$(container).append(rows)
 				if (count == Object.keys(monitors).length){
@@ -1247,10 +1288,10 @@ var LoadMonitors = {
 		let tmpMonth = new Date(month)
 		return new Promise((resolve, reject) => {
 			return this.pullCompleted(month).then((result) => {
-				let result2 = this.buildCompleted(result)
+				let result2 = this.buildCompleted(result, month)
 				return result2
 			}).then ((result) => {
-				let result2 = this.pullQuarter()
+				let result2 = this.pullQuarter(month)
 				return result2
 			}).then ((result) => {
 				let result2 = this.fillQuarter(result)
@@ -1261,6 +1302,8 @@ var LoadMonitors = {
 			}).then ((result) => {
 				let result2 = this.fillYear(result)
 				return result2
+			}).then ((result) => {
+				return this.averageBadges()
 			}).then ((result) => {
 				let result2 = this.pullCompleted(month, sort = {'date': 1})
 				return result2
@@ -1877,7 +1920,7 @@ domTools.domMethods = {
 		
 		//create the top of the panel
 		head.forEach((heading) => {
-			count ++		
+			count ++
 			let td = document.createElement('td')
 			td.setAttribute('id', agentData.abbv+'-'+heading)
 			td.classList.add(heading)
@@ -2169,6 +2212,7 @@ domTools.buildModal = {
 						let tmpAbbv = ($(inputElement).data('agent')) ? $(inputElement).data('agent') : $(inputElement).data('abbv'),
 							// Get the full name based onthe abbreviation sent from inputElement
 							abbv = (agentsObj[tmpAbbv]) ? agentsObj[tmpAbbv] : leadsObj[tmpAbbv]
+							
 						return this.fillFields(modal, inputElement, abbv.name)
 					} else {
 						return this.fillFields(modal, inputElement)
@@ -2189,7 +2233,7 @@ domTools.buildModal = {
 				if (v.name === 'fail') {
 					$(v).prop('checked', false)
 				} else if (v.name === 'date'){
-					v.valueAsdate = new Date()
+					v.valueAsDate = new Date()
 				} else if (v.name === 'lead'){
 					$(v).prop('value', 0)
 				} else if (v.name === 'agent'){
@@ -2227,13 +2271,18 @@ domTools.buildModal = {
 			for (i in inputElems){
 				count ++
 				if ($(inputElems[i]).attr('type') === 'checkbox' ){
-					$(inputElems[i]).prop('checked', $(inputData).data($(inputElems[i]).attr('name')))
+					$(inputElems[i]).prop('checked', $(inputData).data(inputElems[i].name))
 				} else if ($(inputElems[i]).attr('type') === 'select'){
-					$(inputElems[i]).prop('value', $(inputData).data($(inputElems[i]).attr('name')))
+					$(inputElems[i]).prop('value', $(inputData).data(inputElems[i].name))
 				} else if (inputElems[i].name == 'date'){
-					inputElems[i].valueAsDate = $(inputData).data($(inputElems[i]).attr('name'))
+					// Make sure a valid date object is being sent to the modal
+					let tmpDate = new Date($(inputData).data(inputElems[i].name))
+					inputElems[i].valueAsDate = tmpDate
+				} else if (inputElems[i].name == 'name'){
+					let tmpName = (agent) ? agent : $(inputData).data('name')
+					inputElems[i].value = tmpName
 				} else {
-					inputElems[i].value = $(inputData).data($(inputElems[i]).attr('name'))
+					inputElems[i].value = $(inputData).data(inputElems[i].name)
 				}
 				
 				if (count == Object.keys(inputElems).length){
@@ -2300,8 +2349,8 @@ validation.formValidation = {
 		},
 		date: (field) => {
 			let validationDate = new Date()
-			let tmpDate = new Date(field.value)
-			if ((!field.value) || !validationDate || (tmpDate > validationDate)) {
+			let tmpDate = new Date(field.valueAsDate)
+			if ((!field.valueAsDate) || !validationDate || (tmpDate > validationDate)) {
 				throw {message: 'You cannot enter a date in the future!', field: field}
 				return false
 			} else {
@@ -2453,8 +2502,10 @@ validation.formValidation = {
 		return new Promise ((resolve, reject) => {
 			let formVals = {},
 				fields = $(form).find('[name]')
+				//console.log(fields)
 			try{
 				$(fields).each((k,v) => {
+					//console.log(v.name, v)
 					let value = this.fieldValidation[v.name](v)
 					formVals[v.name] = value
 				})

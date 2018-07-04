@@ -58,7 +58,7 @@
 		
 
 		<!-- Footer -->
-		<footer id="footer" class="mt-5" style="">
+		<footer id="footer" class="mt-5">
 
 		</footer>
 		<!--MODAL-->
@@ -104,6 +104,16 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label for="add-agent-modal-date" class="sr-only">Hire Date</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><strong>Hire Date</strong></span>
+									</div>
+									<input type="date" name="date" id="add-agent-modal-date" class="form-control" required>
+									<div id="add-agent-modal-date-help" class="helper text-center"></div>
+								</div>
+							</div>
+							<div class="form-group">
 								<label for="add-agent-modal-agent-id" class="sr-only">Agent ID</label>
 								<div class="input-group mb3">
 									<div class="input-group-prepend">
@@ -128,7 +138,7 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="edit-agent-modal-title">If you're seeing this, something didn't work. Do not hit save!</h4>
+						<h4 class="modal-title" id="edit-agent-modal-title"><span>If you're seeing this, something didn't work. Do not hit save!</span></h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<div class="modal-body">
@@ -140,7 +150,7 @@
 										<span class="input-group-text"><strong>Abbreviation</strong></span>
 									</div>
 									<input type="text" name="abbv" id="edit-agent-modal-abbv" value="" class="form-control" required>
-									<span id="edit-agent-modal-help" class="helper text-center"></span>
+									<div id="edit-agent-modal-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -150,7 +160,7 @@
 										<span class="input-group-text"><strong>Full Name</strong></span>
 									</div>
 									<input type="text" name="name" id="edit-agent-modal-name" value="" class="form-control" required>
-									<span id="edit-agent-modal-name-help" class="helper text-center"></span>
+									<div id="edit-agent-modal-name-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -160,9 +170,19 @@
 										<span class="input-group-text"><strong># of Monitors</strong></span>
 									</div>
 									<input type="number" name="monitors" id="edit-agent-modal-monitors" value="" class="form-control" required>
-									<span id="edit-agent-modal-monitors-help" class="helper text-center"></span>
+									<div id="edit-agent-modal-monitors-help" class="helper text-center"></div>
 									<input type="hidden" name="_id" value="" id="edit-agent-modal-id">
 									<input type="hidden" name="inactive" value="" id="edit-agent-modal-inactive">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-agent-modal-date" class="sr-only">Hire Date</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><strong>Hire Date</strong></span>
+									</div>
+									<input type="date" name="date" value="" id="edit-agent-modal-date" class="form-control" required>
+									<div id="edit-agent-modal-date-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -172,7 +192,7 @@
 										<span class="input-group-text"><strong>Agent ID</strong></span>
 									</div>
 									<input type="number" name="agentid" id="edit-agent-modal-agent-id" value="" class="form-control" required>
-									<span id="edit-agent-modal-agent-id-help" class="helper text-center"></span>
+									<div id="edit-agent-modal-agent-id-help" class="helper text-center"></div>
 								</div>
 							</div>
 						</form>
@@ -202,7 +222,7 @@
 										<div class="input-group-text"><strong>Abbreviation</strong></div>
 									</div>
 									<input type="text" name="abbv" id="add-lead-modal-abbv" value="" class="form-control" required>
-									<span id="add-lead-modal-abbv-help" class="helper text-center"></span>
+									<div id="add-lead-modal-abbv-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -212,7 +232,17 @@
 										<span class="input-group-text"><strong>Full Name</strong></span>
 									</div>
 									<input type="text" name="name" id="add-lead-modal-name" value="" class="form-control" required>
-									<span id="add-lead-modal-name-help" class="helper text-center"></span>
+									<div id="add-lead-modal-name-help" class="helper text-center"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="add-lead-modal-date" class="sr-only">Hire Date</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><strong>Hire Date</strong></span>
+									</div>
+									<input type="date" name="date" id="add-lead-modal-date" value="" class="form-control" required>
+									<div is="add-lead-modal-date-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<input type="hidden" name="inactive" value="0" id="add-lead-modal-inactive">
@@ -242,7 +272,7 @@
 										<span class="input-group-text"><strong>Abbreviation</strong></span>
 									</div>
 									<input type="text" name="abbv" id="edit-lead-modal-abbv" value="" class="form-control" required>
-									<span id="edit-lead-modal-abbv-help" class="helper text-center"></span>
+									<div id="edit-lead-modal-abbv-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -252,9 +282,10 @@
 										<span class="input-group-text"><strong>Full Name</strong></span>
 									</div>
 									<input type="text" name="name" id="edit-lead-modal-name" value="" class="form-control" required>
-									<span id="edit-lead-modal-name-help" class="helper text-center"></span>
+									<div id="edit-lead-modal-name-help" class="helper text-center"></div>
 									<input type="hidden" name="_id" value="" id="edit-lead-modal-id">
 									<input type="hidden" name="inactive" value="" id="edit-lead-modal-inactive">
+									<input type="date" name="date" value="" id="edit-lead-modal-date" style="display: none;">
 								</div>
 							</div>
 						</form>
@@ -285,7 +316,7 @@
 							<input type="hidden" name="name" value="" id="remove-agent-modal-name">
 							<input type="hidden" name="agentid" value="" id="remove-agent-modal-agentid">
 							<input type="hidden" name="monitors" value="" id="remove-agent-modal-monitors">
-							<span id="remove-agent-modal-id-help" class="helper text-center"></span>
+							<div id="remove-agent-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -312,7 +343,7 @@
 							<input type="hidden" name="inactive" value="" id="remove-lead-modal-inactive">
 							<input type="hidden" name="name" value="" id="remove-lead-modal-name">
 							<input type="hidden" name="abbv" value="" id="remove-lead-modal-abbv">
-							<span id="remove-lead-modal-id-help" class="helper text-center"></span>
+							<div id="remove-lead-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -343,7 +374,7 @@
 									<select class="form-control" name="agent" id="edit-monitor-modal-select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
 										<option selected disabled value="0">Select The Agent You Monitored</option>
 									</select>
-									<span id="edit-monitor-modal-select-agents-help" class="helper text-center"></span>
+									<div id="edit-monitor-modal-select-agents-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -353,7 +384,7 @@
 										<span class="input-group-text"><strong>Monitor Date</strong></span>
 									</div>
 									<input type="date" class="form-control" name="date" id="edit-monitor-modal-input-date" value="">
-									<span id="edit-monitor-modal-date-help" class="helper text-center"></span>
+									<div id="edit-monitor-modal-date-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -366,7 +397,7 @@
 									<div class="input-group-append">
 											<span class="input-group-text"><strong>%</strong></span>
 									</div>
-									<span id="edit-monitor-modal-score-help" class="helper text-center"></span>
+									<div id="edit-monitor-modal-score-help" class="helper text-center"></div>
 								</div>
 							</div>
 							<div class="form-group">
@@ -395,7 +426,7 @@
 									<select class="form-control" name="lead" id="edit-monitor-modal-select-lead" required data-toggle="tooltip" title="Select your name from the list.">
 										<option selected disabled value="0">Select Your Name</option>
 									</select>
-									<span id="edit-monitor-modal-select-lead-help" class="helper text-center"></span>
+									<div id="edit-monitor-modal-select-lead-help" class="helper text-center"></div>
 								</div>
 							</div>
 						
@@ -421,7 +452,7 @@
 					</div>
 					<div class="modal-body">
 						<p><strong><span id="remove-monitor-modal-type">Remove</span> the monitor for  <span id="remove-monitor-modal-name-span" class="remove-name"></span> on <span id="remove-monitor-modal-date-span" class="remove-date"></span>?</strong></p>
-						<span id="check-fail-help" class="helper text-center"></span>
+						<div id="check-fail-help" class="helper text-center"></div>
 						<form class="" action="#" method="get" id="remove-monitor-modal-form" name="removemonitor">
 							<input type="hidden" name="_id" value="" id="remove-monitor-modal-id">
 							<input type="hidden" name="inactive" value="" id="remove-monitor-modal-inactive">
@@ -430,7 +461,7 @@
 							<input type="hidden" name="score" value="" id="remove-monitor-modal-score">
 							<input type="hidden" name="fail" value="" id="remove-monitor-modal-fail">
 							<input type="hidden" name="lead" value="" id="remove-monitor-modal-lead">
-							<span id="remove-monitor-modal-id-help" class="helper text-center"></span>
+							<div id="remove-monitor-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
 					<div class="modal-footer">
