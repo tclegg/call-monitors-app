@@ -1093,7 +1093,7 @@ var LoadMonitors = {
 					subTheadRow = document.createElement('tr'),
 					headArr = ['Date', 'Score', 'Auto-Fail', 'Lead', 'Edit', 'Remove'],
 					subTbody = document.createElement('tbody'),
-					agentDate = new Date(agentsObj[i].date.getFullYear(), agentsObj[i].date.getMonth(), 1)
+					agentDate = new Date(agentsObj[i].inactivedate.getFullYear(), agentsObj[i].inactivedate.getMonth(), 1)
 				
 				if ((agentsObj[i].inactive === "1") && (new Date(agentDate.getFullYear(), agentDate.getMonth(), 1) < resultDate)){
 					// If they were inactive before the current month, skip building the row.
@@ -1190,7 +1190,9 @@ var LoadMonitors = {
 							agentsObj[monitors[i].agent].name, 
 							leadsObj[monitors[i].lead].name
 						)
-					
+					if (agentsObj[monitors[i].agent].inactive == 1){
+						row.setAttribute('style', 'text-decoration: line-through;')
+					}
 					rows.push(row)
 					
 					count ++
@@ -1244,9 +1246,16 @@ var LoadMonitors = {
 		return new Promise ((resolve, reject) => {
 			if (result) {
 				let monitors = result.monitors.filter(x => x.lead == result.lead),
-					count = 0 
+					count = 0,
+					leadNameSplit = leadsObj[result.lead].name.toString().split(', '),
+					leadname = (result.lead === loggedOnUser) ? 'you' : leadNameSplit[1],
+					hashave = (leadname === 'you') ? 'have' : 'has'
 				let rows = []
+				$('#lead-completed-lead-name').html(leadname)
+				$('#lead-completed-hashave').html(hashave)
+				$('#lead-completed-badge').html(count)
 				for (i in monitors) {
+					count ++
 					let resultDate = new Date(monitors[i].date),
 						resultYear = resultDate.getFullYear(),	
 						resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
@@ -1263,8 +1272,8 @@ var LoadMonitors = {
 						)
 					
 					rows.push(row)
-					count ++
 					
+					$('#lead-completed-badge').html(count)
 				}
 				
 				$(container).append(rows)
@@ -1585,10 +1594,12 @@ domTools.domMethods = {
 		Xicon:  '<i class="fas fa-times" aria-hidden="true"></i>',
 		cog: '<i class="fas fa-cog" aria-hidden="true"></i>',
 		checkmark: '<i class="fas fa-check" aria-hidden="true"></i>',
-		removeAgent: '<i class="fas fa-user-times" aria-hidden="true"></i>',
+		removeUser: '<i class="fas fa-minus" aria-hidden="true"></i>',
+		activateUser: '<i class="fas fa-plus" aria-hidden="true"></i>',
 		addUser: '<i class="fas fa-user-plus" aria-hidden="true"></i>',
 		checkSquare: '<i class="far fa-check-square" aria-hidden="true"></i>',
-		uncheckedSquare: '<i class="far fa-square" aria-hidden="true"></i>'
+		uncheckedSquare: '<i class="far fa-square" aria-hidden="true"></i>',
+		ninja: '<i class="fas fa-user-ninja" aria-hidden="true"></i>'
 
 	},
 	buildTable: function (container, result, type) {
@@ -1615,15 +1626,16 @@ domTools.domMethods = {
 				if (result[i].inactive == 1){
 					tr.setAttribute('style', 'text-decoration: line-through;')
 				}
+
 				headers.forEach(y => {
-					if (y !== '_id' && y !== 'date' && y !== 'inactive') {
+					if (y !== '_id' && y !== 'date' && y !== 'inactive' && y !== 'inactivedate') {
 						tr.setAttribute('data-'+y, result[i][y])
 						rows.push(this.buildTD(y, result[i][y], result[i]._id))
 					}
 				})
-
-				rows.push(this.buildIcon(result[i]._id, result[i].abbv, 'edit', type, 'pencil', result[i]))
-				rows.push(this.buildIcon(result[i]._id, result[i].abbv, 'remove', type, 'Xicon', result[i]))
+				let addRemoveIcon = (result[i].inactive == "0") ? 'removeUser' : 'activateUser'
+				rows.push(this.buildIcon(result[i]._id, result[i].abbv, result[i], 'edit', type, 'pencil', result[i]))
+				rows.push(this.buildIcon(result[i]._id, result[i].abbv, result[i], 'remove', type, addRemoveIcon, result[i]))
 				$(tr).append(rows)
 				container.appendChild(tr)
 			}
@@ -1650,24 +1662,29 @@ domTools.domMethods = {
 		$(td).attr('id', id+'-'+resultTitle).html(resultContent)
 		return td
 	},
-	buildIcon: function (id, abbv, buttonType, type, icon, result = null) {
+	buildIcon: function (id, abbv, agentData, buttonType, type, icon, result = null) {
 		/**
 		 * Build the edit/remove icon
 		 * @param {String} id - id of the agent/lead
 		 * @param {String} abbv - agent/lead abbreviation
+		 * @param {Object} agentData - full agent row from the database
 		 * @param {String} buttonType - edit/remove
 		 * @param {String} type - type of table being created (Agent/Lead Maintenance or Completed Monitors)
-		 * @param {String} icon - which icon to use, pencil or Xicon (this.constants.)
+		 * @param {String} icon - which icon to use, pencil, activate, remove (this.constants.)
 		 * 
 		 */
 		
 		let elem = document.createElement('td'),
 			a = document.createElement('a')
-		a.setAttribute('id', 'edit-'+abbv)
+			title = (buttonType === 'edit') ? 'Edit '+agentData.name : ((agentData.inactive === "0") ? 'Disable' : 'Activate') + ' ' + agentData.name
+		a.setAttribute('id', type+'-'+abbv)
 		elem.setAttribute('id', id+'-'+type)
 		elem.classList.add(buttonType+'-'+type)
 		a.innerHTML = this.constants[icon]
 		elem.appendChild(a)
+		elem.setAttribute('title', title)
+		elem.setAttribute('data-original-title', title)
+		elem.setAttribute('data-tooltip', 'tooltip')
 
 		if (result) {
 			for (var x in result) {
@@ -2259,9 +2276,7 @@ domTools.buildModal = {
 			if (agent) {
 				$('.modal-title > span').text(agent)
 			} else {
-				
 				$('.modal-title > span').text($(inputData).data('name'))
-				
 			}
 			
 			if ($(modal).hasClass('remove')){
@@ -2278,6 +2293,20 @@ domTools.buildModal = {
 					// Make sure a valid date object is being sent to the modal
 					let tmpDate = new Date($(inputData).data(inputElems[i].name))
 					inputElems[i].valueAsDate = tmpDate
+				} else if (inputElems[i].name == 'inactivedate'){
+					if ($(inputData).data('inactive') == 0) {
+						inputElems[i].setAttribute('disabled', 'disabled')
+						$(inputElems[i]).parent().parent().css('display','none')
+					}
+
+					let invalidDate = new Date($(inputData).data(inputElems[i].name)).toString(),
+							testDate = new Date(0).toString()
+
+					if ((invalidDate !== testDate) && ($(inputData).data(inputElems[i].name) !== null)) {
+						let tmpDate = new Date($(inputData).data(inputElems[i].name))
+						inputElems[i].valueAsDate = tmpDate
+					}
+
 				} else if (inputElems[i].name == 'name'){
 					let tmpName = (agent) ? agent : $(inputData).data('name')
 					inputElems[i].value = tmpName
@@ -2295,11 +2324,15 @@ domTools.buildModal = {
 	fillRemoveSpan: function (modal, inputData, agent = null) {
 		return new Promise ((resolve, reject) => {
 			if (modal.id == 'remove-monitor-modal') {
-				let tmpDate = new Date($(inputData).data('date'))
+				let tmpDate = new Date($(inputData).data('date')),
+						nameArr = agent.split(', '),
+						formattedName = `${nameArr[1]} ${nameArr[0]}`
 				$('.remove-date').text(`${tmpDate.getDate()}/${tmpDate.getMonth()}/${tmpDate.getFullYear()}`)
-				$('.remove-name').text(agent)
+				$('.remove-name').text(formattedName)
 			} else {
-				$('.remove-name').text($(inputData).data('name'))
+				let nameArr = $(inputData).data('name').toString().split(', '),
+						formattedName = `${nameArr[1]} ${nameArr[0]}`
+				$('.remove-name').text(formattedName)
 				let activeText = (($(inputData).data('inactive') == 1) ? 'Activate' : 'Deactivate')
 				$('span.add-remove').text(activeText)
 				
@@ -2429,6 +2462,22 @@ validation.formValidation = {
 				return field.value
 			}
 		},
+		inactivedate: (field) => {
+			let validationDate = new Date()
+			let tmpDate = new Date(field.valueAsDate)
+			console.log(field.value)
+			if (field.value === "null") {
+				return null
+			} else {
+				if ((tmpDate > validationDate)) {
+					throw {message: 'You cannot enter a date in the future!', field: field}
+					return false
+				} else {
+					return tmpDate
+				}
+			}
+			
+		}
 		
 	},
 	editmonitor: function (type, form) {
@@ -2505,7 +2554,7 @@ validation.formValidation = {
 				//console.log(fields)
 			try{
 				$(fields).each((k,v) => {
-					//console.log(v.name, v)
+					console.log(v.name, v)
 					let value = this.fieldValidation[v.name](v)
 					formVals[v.name] = value
 				})

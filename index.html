@@ -195,6 +195,16 @@
 									<div id="edit-agent-modal-agent-id-help" class="helper text-center"></div>
 								</div>
 							</div>
+							<div class="form-group">
+									<label for="edit-agent-modal-inactivedate" class="sr-only">Inactive Date</label>
+									<div class="input-group mb-3" title="Leave blank for active agents" data-tooltip="tooltip">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><strong>Inactive Date</strong></span>
+										</div>
+										<input type="date" name="inactivedate" value="" id="edit-agent-modal-inactivedate" class="form-control">
+										<div id="edit-agent-modal-inactivedate-help" class="helper text-center"></div>
+									</div>
+								</div>
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -285,7 +295,26 @@
 									<div id="edit-lead-modal-name-help" class="helper text-center"></div>
 									<input type="hidden" name="_id" value="" id="edit-lead-modal-id">
 									<input type="hidden" name="inactive" value="" id="edit-lead-modal-inactive">
-									<input type="date" name="date" value="" id="edit-lead-modal-date" style="display: none;">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-lead-modal-date" class="sr-only">Hire Date</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><strong>Hire Date</strong></span>
+									</div>
+									<input type="date" name="date" value="" id="edit-lead-modal-date" class="form-control" required>
+									<div id="edit-lead-modal-date-help" class="helper text-center"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit-lead-modal-inactivedate" class="sr-only">Inactive Date</label>
+								<div class="input-group mb-3" title="Leave blank for active leads" data-tooltip="tooltip">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><strong>Inactive Date</strong></span>
+									</div>
+									<input type="date" name="inactivedate" value="" id="edit-lead-modal-inactivedate" class="form-control">
+									<div id="edit-lead-modal-inactivedate-help" class="helper text-center"></div>
 								</div>
 							</div>
 						</form>
@@ -316,6 +345,7 @@
 							<input type="hidden" name="name" value="" id="remove-agent-modal-name">
 							<input type="hidden" name="agentid" value="" id="remove-agent-modal-agentid">
 							<input type="hidden" name="monitors" value="" id="remove-agent-modal-monitors">
+							<input type="date" name="date" value="" id="remove-agent-modal-date" style="display: none;">
 							<div id="remove-agent-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
@@ -343,6 +373,7 @@
 							<input type="hidden" name="inactive" value="" id="remove-lead-modal-inactive">
 							<input type="hidden" name="name" value="" id="remove-lead-modal-name">
 							<input type="hidden" name="abbv" value="" id="remove-lead-modal-abbv">
+							<input type="date" name="date" value="" id="remove-lead-modal-date" style="display: none;">
 							<div id="remove-lead-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
