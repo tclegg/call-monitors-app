@@ -1,7 +1,12 @@
 <template class="section-template" data-target="">
 <section id="main" class="wrapper well">
 	<div class="container bg-light pt-3">
-		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+		<div class="float-right" id="icon-group-main">
+				<span id="print-pdf" class="print-pdf" data-toggle="tooltip" title="Print PDF"><i class="fas fa-file-pdf"></i></span>
+				<span id="spacer">&nbsp;</span>
+				<span class="help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+		</div>
+		
 		<h1 id="title">HD Call Monitors  </h1>
 		<p class="">Select the agent you have monitored and fill out the following form to record the call monitor.</p>
 		<div class="form well">
@@ -12,7 +17,7 @@
 					<div class="col-sm-10">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text"><strong>Agent</strong></span>
+								<span class="input-group-text font-weight-bold">Agent</span>
 							</div>
 							<select class="form-control" name="agent" id="select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
 								<option selected disabled value="0">Select The Agent You Monitored</option>
@@ -42,11 +47,11 @@
 					<div class="col-sm-10">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text"><strong>Score</strong></span>
+								<span class="input-group-text font-weight-bold">Score</span>
 							</div>
 							<input type="number" class="form-control" name="score" id="score-agents" value="" min="0" max="110" step=".01" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
 							<div class="input-group-append">
-								<span class="input-group-text"><strong>%</strong></span>
+								<span class="input-group-text font-weight-bold">%</span>
 							</div>
 							<div id="score-agents-help" class="helper text-center"></div>
 						</div>
@@ -59,7 +64,7 @@
 						
 						<input class="form-check-input" type="checkbox" name="fail" id="check-fail" value="false">
 						<label class="form-check-label" for="check-fail">
-							<strong>Auto Fail</strong>
+							Auto Fail
 						</label>
 						<div id="check-fail-help" class="helper text-center"></div>
 					</div>
@@ -70,7 +75,7 @@
 					<div class="col-sm-10">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-								<span class="input-group-text"><strong>Lead</strong></span>
+								<span class="input-group-text font-weight-bold">Lead</span>
 							</div>
 							<select class="form-control" name="lead" id="select-lead" required data-toggle="tooltip" title="Select your name from the list.">
 								<option selected disabled value="0">Select Your Name</option>
@@ -81,7 +86,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default" id="btn-submit"><strong>Submit</strong></button>
+						<button type="submit" class="btn btn-info font-weight-bold" id="btn-submit">Submit</button>
 					</div>
 				</div>
 			</form>

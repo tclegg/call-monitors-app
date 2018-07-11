@@ -15,6 +15,9 @@
 			input[type="number"]::-webkit-inner-spin-button{
 				display: none;
 			}
+			.navbar {
+				-webkit-user-select:none;
+			}
 		</style>
 		<script>
 			require('@fortawesome/fontawesome-free')
@@ -75,7 +78,7 @@
 								<label for="add-agent-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Abbreviation</strong></span>
+										<span class="input-group-text font-weight-bold">Abbreviation</span>
 									</div>
 									<input type="text" name="abbv" id="add-agent-modal-abbv" value="" class="form-control" required>
 									<div id="add-agent-modal-abbv-help" class="helper text-center"></div>
@@ -85,7 +88,7 @@
 								<label for="add-agent-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Full Name</strong></span>
+										<span class="input-group-text font-weight-bold">Full Name</span>
 									</div>
 									<input type="text" name="name" id="add-agent-modal-name" value="" class="form-control" required>
 									<div id="add-agent-modal-name-help" class="helper text-center"></div>
@@ -96,7 +99,7 @@
 								<label for="add-agent-modal-monitors" class="sr-only"># of Monitors</label>
 								<div class="input-group mb3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong># of Monitors</strong></span>
+										<span class="input-group-text font-weight-bold"># of Monitors</span>
 									</div>
 									<input type="number" name="monitors" id="add-agent-modal-monitors" value="" class="form-control" required>
 									<div id="add-agent-modal-monitors-help" class="helper text-center"></div>
@@ -107,7 +110,7 @@
 								<label for="add-agent-modal-date" class="sr-only">Hire Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Hire Date</strong></span>
+										<span class="input-group-text font-weight-bold">Hire Date</span>
 									</div>
 									<input type="date" name="date" id="add-agent-modal-date" class="form-control" required>
 									<div id="add-agent-modal-date-help" class="helper text-center"></div>
@@ -117,7 +120,7 @@
 								<label for="add-agent-modal-agent-id" class="sr-only">Agent ID</label>
 								<div class="input-group mb3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Agent ID</strong></span>
+										<span class="input-group-text font-weight-bold">Agent ID</span>
 									</div>
 									<input type="number" name="agentid" id="add-agent-modal-agent-id" value="" class="form-control" required>
 									<div id="add-agent-modal-agent-id-help" class="helper text-center"></div>
@@ -126,8 +129,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="add-agent-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="add-agent-modal-submit">Save changes</button>
 						<div id="add-agent-modal-success" class="helper text-center"></div>
 					</div>
 				</div><!-- /.modal-content -->
@@ -147,7 +150,7 @@
 								<label for="edit-agent-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Abbreviation</strong></span>
+										<span class="input-group-text font-weight-bold">Abbreviation</span>
 									</div>
 									<input type="text" name="abbv" id="edit-agent-modal-abbv" value="" class="form-control" required>
 									<div id="edit-agent-modal-help" class="helper text-center"></div>
@@ -157,7 +160,7 @@
 								<label for="edit-agent-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Full Name</strong></span>
+										<span class="input-group-text font-weight-bold">Full Name</span>
 									</div>
 									<input type="text" name="name" id="edit-agent-modal-name" value="" class="form-control" required>
 									<div id="edit-agent-modal-name-help" class="helper text-center"></div>
@@ -167,7 +170,7 @@
 								<label for="edit-agent-modal-monitors" class="sr-only"># of Monitors</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong># of Monitors</strong></span>
+										<span class="input-group-text font-weight-bold"># of Monitors</span>
 									</div>
 									<input type="number" name="monitors" id="edit-agent-modal-monitors" value="" class="form-control" required>
 									<div id="edit-agent-modal-monitors-help" class="helper text-center"></div>
@@ -179,7 +182,7 @@
 								<label for="edit-agent-modal-date" class="sr-only">Hire Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Hire Date</strong></span>
+										<span class="input-group-text font-weight-bold">Hire Date</span>
 									</div>
 									<input type="date" name="date" value="" id="edit-agent-modal-date" class="form-control" required>
 									<div id="edit-agent-modal-date-help" class="helper text-center"></div>
@@ -189,7 +192,7 @@
 								<label for="edit-agent-modal-agent-id" class="sr-only">Agent ID</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Agent ID</strong></span>
+										<span class="input-group-text font-weight-bold">Agent ID</span>
 									</div>
 									<input type="number" name="agentid" id="edit-agent-modal-agent-id" value="" class="form-control" required>
 									<div id="edit-agent-modal-agent-id-help" class="helper text-center"></div>
@@ -199,7 +202,7 @@
 									<label for="edit-agent-modal-inactivedate" class="sr-only">Inactive Date</label>
 									<div class="input-group mb-3" title="Leave blank for active agents" data-tooltip="tooltip">
 										<div class="input-group-prepend">
-											<span class="input-group-text"><strong>Inactive Date</strong></span>
+											<span class="input-group-text font-weight-bold">Inactive Date</span>
 										</div>
 										<input type="date" name="inactivedate" value="" id="edit-agent-modal-inactivedate" class="form-control">
 										<div id="edit-agent-modal-inactivedate-help" class="helper text-center"></div>
@@ -208,8 +211,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="edit-agent-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="edit-agent-modal-submit">Save changes</button>
 						<span id="edit-agent-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->
@@ -229,7 +232,7 @@
 								<label for="add-lead-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<div class="input-group-text"><strong>Abbreviation</strong></div>
+										<div class="input-group-text font-weight-bold">Abbreviation</div>
 									</div>
 									<input type="text" name="abbv" id="add-lead-modal-abbv" value="" class="form-control" required>
 									<div id="add-lead-modal-abbv-help" class="helper text-center"></div>
@@ -239,7 +242,7 @@
 								<label for="add-lead-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Full Name</strong></span>
+										<span class="input-group-text font-weight-bold">Full Name</span>
 									</div>
 									<input type="text" name="name" id="add-lead-modal-name" value="" class="form-control" required>
 									<div id="add-lead-modal-name-help" class="helper text-center"></div>
@@ -249,7 +252,7 @@
 								<label for="add-lead-modal-date" class="sr-only">Hire Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Hire Date</strong></span>
+										<span class="input-group-text font-weight-bold">Hire Date</span>
 									</div>
 									<input type="date" name="date" id="add-lead-modal-date" value="" class="form-control" required>
 									<div is="add-lead-modal-date-help" class="helper text-center"></div>
@@ -259,8 +262,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="add-lead-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="add-lead-modal-submit">Save changes</button>
 						<span id="add-lead-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->
@@ -279,7 +282,7 @@
 								<label for="edit-lead-modal-abbv" class="sr-only">Abbreviation</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Abbreviation</strong></span>
+										<span class="input-group-text font-weight-bold">Abbreviation</span>
 									</div>
 									<input type="text" name="abbv" id="edit-lead-modal-abbv" value="" class="form-control" required>
 									<div id="edit-lead-modal-abbv-help" class="helper text-center"></div>
@@ -289,7 +292,7 @@
 								<label for="edit-lead-modal-name" class="sr-only">Full Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Full Name</strong></span>
+										<span class="input-group-text font-weight-bold">Full Name</span>
 									</div>
 									<input type="text" name="name" id="edit-lead-modal-name" value="" class="form-control" required>
 									<div id="edit-lead-modal-name-help" class="helper text-center"></div>
@@ -301,7 +304,7 @@
 								<label for="edit-lead-modal-date" class="sr-only">Hire Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Hire Date</strong></span>
+										<span class="input-group-text font-weight-bold">Hire Date</span>
 									</div>
 									<input type="date" name="date" value="" id="edit-lead-modal-date" class="form-control" required>
 									<div id="edit-lead-modal-date-help" class="helper text-center"></div>
@@ -311,7 +314,7 @@
 								<label for="edit-lead-modal-inactivedate" class="sr-only">Inactive Date</label>
 								<div class="input-group mb-3" title="Leave blank for active leads" data-tooltip="tooltip">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Inactive Date</strong></span>
+										<span class="input-group-text font-weight-bold">Inactive Date</span>
 									</div>
 									<input type="date" name="inactivedate" value="" id="edit-lead-modal-inactivedate" class="form-control">
 									<div id="edit-lead-modal-inactivedate-help" class="helper text-center"></div>
@@ -320,8 +323,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="edit-lead-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="edit-lead-modal-submit">Save changes</button>
 						<span id="edit-lead-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->
@@ -336,7 +339,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<div class="modal-body">
-						<p><strong><span id="remove-agent-modal-type" class="add-remove">Remove</span> <span id="remove-agent-modal-name" class="remove-name">?</span></strong></p>
+						<p class="font-weight-bold"><span id="remove-agent-modal-type" class="add-remove">Remove</span> <span id="remove-agent-modal-name" class="remove-name">?</span></p>
 						<span id="check-fail-help" class="helper text-center"></span>
 						<form class="" action="#" method="get" id="remove-agent-modal-form" name="removeagent">
 							<input type="hidden" name="_id" value="" id="remove-agent-modal-id">
@@ -350,8 +353,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="remove-agent-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="remove-agent-modal-submit">Save changes</button>
 						<span id="remove-agent-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->
@@ -366,7 +369,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<div class="modal-body">
-						<p><strong><span id="remove-lead-modal-type" class=add-remove>Remove</span> <span id="remove-lead-modal-name" class="remove-name"></span>?</strong></p>
+						<p class="font-weight-bold"><span id="remove-lead-modal-type" class=add-remove>Remove</span> <span id="remove-lead-modal-name" class="remove-name"></span>?</p>
 						<span id="check-fail-help" class="helper text-center"></span>
 						<form class="" action="#" method="get" id="remove-lead-modal-form" name="removelead">
 							<input type="hidden" name="_id" value="" id="remove-lead-modal-id">
@@ -378,8 +381,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="remove-lead-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="remove-lead-modal-submit">Save changes</button>
 						<span id="remove-lead-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->
@@ -400,7 +403,7 @@
 								<label for="edit-monitor-modal-select-agent" class="sr-only">Monitored Agent</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Monitored Agent</strong></span>
+										<span class="input-group-text font-weight-bold">Monitored Agent</span>
 									</div>
 									<select class="form-control" name="agent" id="edit-monitor-modal-select-agent" data-toggle="tooltip" title="Select the name of the agent you monitored." required>
 										<option selected disabled value="0">Select The Agent You Monitored</option>
@@ -412,7 +415,7 @@
 								<label for="edit-monitor-modal-input-date" class="sr-only">Monitor Date</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Monitor Date</strong></span>
+										<span class="input-group-text font-weight-bold">Monitor Date</span>
 									</div>
 									<input type="date" class="form-control" name="date" id="edit-monitor-modal-input-date" value="">
 									<div id="edit-monitor-modal-date-help" class="helper text-center"></div>
@@ -422,11 +425,11 @@
 								<label for="edit-monitor-modal-score" class="sr-only">Score</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Score</strong></span>
+										<span class="input-group-text font-weight-bold">Score</span>
 									</div>
 									<input type="number" class="form-control" name="score" id="edit-monitor-modal-score" value="" min="0" max="110" step=".01" data-toggle="tooltip" title="Enter the score of the call monitor." step="any" min="0">
 									<div class="input-group-append">
-											<span class="input-group-text"><strong>%</strong></span>
+											<span class="input-group-text font-weight-bold">%</span>
 									</div>
 									<div id="edit-monitor-modal-score-help" class="helper text-center"></div>
 								</div>
@@ -434,15 +437,15 @@
 							<div class="form-group">
 									<div class="form-check" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
 										<input class="form-check-input" type="checkbox" name="fail" id="edit-monitor-modal-check-fail" value="false">
-										<label class="form-check-label" for="edit-monitor-modal-check-fail">
-											<strong>Auto Fail</strong>
+										<label class="form-check-label font-weight-bold" for="edit-monitor-modal-check-fail">
+											Auto Fail
 										</label>
 										<div id="edit-monitor-modal-check-fail-help" class="helper text-center"></div>
 									</div>
 								<!--<div class="">
 										<div class="checkbox" data-toggle="tooltip" title="Select if the call monitor was auto-failed.">
 											<label class="control-label" >
-													<input type="checkbox" class="custom-control-input" name="fail" id="edit-monitor-modal-check-fail"><strong> Auto Fail</strong>
+													<input type="checkbox" class="custom-control-input" name="fail" id="edit-monitor-modal-check-fail"> Auto Fail
 											</label>
 											<span id="edit-monitor-modal-check-fail-help" class="helper text-center"></span>
 										</div>
@@ -452,7 +455,7 @@
 								<label for="edit-monitor-modal-select-lead" class="sr-only">Lead</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text"><strong>Lead</strong></span>
+										<span class="input-group-text font-weight-bold">Lead</span>
 									</div>
 									<select class="form-control" name="lead" id="edit-monitor-modal-select-lead" required data-toggle="tooltip" title="Select your name from the list.">
 										<option selected disabled value="0">Select Your Name</option>
@@ -465,8 +468,8 @@
 						</form>
 					</div><!-- /.modal-body-->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-danger modal-submit" id="edit-monitor-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-danger modal-submit font-weight-bold" id="edit-monitor-modal-submit">Save changes</button>
 						<span id="edit-monitor-modal-success" class="helper text-center"></span>
 					</div>
 				
@@ -482,7 +485,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<div class="modal-body">
-						<p><strong><span id="remove-monitor-modal-type">Remove</span> the monitor for  <span id="remove-monitor-modal-name-span" class="remove-name"></span> on <span id="remove-monitor-modal-date-span" class="remove-date"></span>?</strong></p>
+						<p class="font-weight-bold"><span id="remove-monitor-modal-type">Remove</span> the monitor for  <span id="remove-monitor-modal-name-span" class="remove-name"></span> on <span id="remove-monitor-modal-date-span" class="remove-date"></span>?</p>
 						<div id="check-fail-help" class="helper text-center"></div>
 						<form class="" action="#" method="get" id="remove-monitor-modal-form" name="removemonitor">
 							<input type="hidden" name="_id" value="" id="remove-monitor-modal-id">
@@ -496,8 +499,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-danger modal-submit" id="remove-monitor-modal-submit">Save changes</button>
+						<button type="button" class="btn btn-info font-weight-bold" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger modal-submit font-weight-bold" id="remove-monitor-modal-submit">Save changes</button>
 						<span id="remove-monitor-modal-success" class="helper text-center"></span>
 					</div>
 				</div><!-- /.modal-content -->

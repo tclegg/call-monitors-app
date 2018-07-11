@@ -1,3 +1,5 @@
+'use strict';
+
 //handle setupevents as quickly as possible
 /*const setupEvents = require('./installers/setupEvents')
 if (setupEvents.handleSquirrelEvent()) {
@@ -5,12 +7,18 @@ if (setupEvents.handleSquirrelEvent()) {
 	return;
 }*/
 
-const electron = require('electron'), // Main ElectronJS Object
-			{dialog} = require('electron')
-			app = electron.app, // Module to control application life.
-			{ipcMain} = require('electron'), // Communicate between windows
+
+const {electron, app, ipcMain, dialog, shell, BrowserWindow} = require('electron')
+			// Main ElectronJS Object
+			// app = Module to control application life.
+			// ipcMain = Communicate between windows
+			// dialog = Send notifications using Windows Dialog Boxes
+			// shell = Used to print to PDF
+			// BrowserWindow = Module to create native browser window
+
+const fs = require('fs'), 
+			os = require('os'),
 			path = require('path'), // Parse the file path
-			BrowserWindow = electron.BrowserWindow, // Module to create native browser window.
 			dotenv = require('dotenv'),// Grab environment variables from .env file right away
 			dotenvExpand = require('dotenv-expand'),
 			myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
@@ -19,9 +27,9 @@ const electron = require('electron'), // Main ElectronJS Object
 			isDev = require('electron-is-dev');
 
 			if (isDev) {
-				log.info('Running in development');
+				console.info('Running in development');
 			} else {
-				log.info('Running in production');
+				console.info('Running in production');
 			}
 
 dotenvExpand(myEnv)
@@ -36,12 +44,12 @@ dotenvExpand(myEnv)
 //-------------------------------------------------------------------
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
+log.transports.file.format = '[{y}-{m}-{d}]  [{h}:{i}:{s}:{ms}]  | [{level}] |  {text}';
 log.transports.file.maxSize = 5*1024*1024;
 log.transports.file.file = path.join(__dirname, 'log.txt');
 log.transports.file.appName = app.getName()
 log.info('App starting...');
-log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}`);
+log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}, ${isDev}`);
 
 
 // Adds the main Menu to our app
@@ -49,10 +57,12 @@ log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}`);
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let helpWindow
+let logWindow
 let manualUpdate = false
 
 function createWindow () {
 	// MainWindow Options
+	console.log(process.env.height)
 	let opts = {titleBarStyle: 'default',
 		height: 800,
 		width: (process.env.TODO_DEV) ? 1920 : 1281,
@@ -100,8 +110,8 @@ function createWindow () {
 	helpWindow = new BrowserWindow({frame: false,
 		width: 1024,
 		height: 768,
-		minWidth: 800,
-		minHeight: 600,
+		minWidth: 1024,
+		minHeight: 768,
 		backgroundColor: '#f8f9fa',
 		show: false,
 		icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
@@ -110,10 +120,32 @@ function createWindow () {
 	})
 	// Open the DevTools.
 	// helpWindow.webContents.openDevTools()
+	
 	helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
 
-}
+	logWindow = new BrowserWindow({frame: false,
+		width: 1024,
+		height: 768,
+		minWidth: 1024,
+		minHeight: 768,
+		backgroundColor: '#f8f9fa',
+		show: false,
+		icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+		parent: mainWindow,
+		modal: true
+	})
 
+	logWindow.loadURL(`file://${__dirname}/windows/logwindow.html`)
+	
+	/*logWindow.once('ready-to-show', () => {
+		sendLogsToWindow()
+	})*/
+
+	logWindow.webContents.on('did-finish-load', (e) => {
+		sendLogsToWindow()
+	})
+
+}
 
 
 //-------------------------------------------------------------------
@@ -138,10 +170,10 @@ function createWindow () {
 // autoUpdater.on('download-progress', (ev, progressObj) => {
 // })
 
-function sendStatusToWindow(text) {
+function sendUpdateStatusToWindow(text) {
 	log.info(text);
 	log.info('sending to window')
-	mainWindow.webContents.send('message', text);
+	mainWindow.webContents.send('updateMessage', text);
 }
 
 app.on('ready', function () {
@@ -179,20 +211,20 @@ autoUpdater.on('update-downloaded', (ev, info) => {
 	});
 })
 autoUpdater.on('update-available', (ev, info) => {
-	sendStatusToWindow('Update available.');
+	sendUpdateStatusToWindow('Update available.');
 })
 autoUpdater.on('update-not-available', (ev, info) => {
 	if (!manualUpdate) {
-		sendStatusToWindow('Up to date');
+		sendUpdateStatusToWindow('Up to date');
 	} else {
 		dialog.showMessageBox({
 			type: 'info',
 			buttons: [],
 			defaultId: 0,
 			message: `No update is available at this time.`,
-			detail: `Versions\n\nCurrent: v${app.getVersion()}\nUpdated: v${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
+			detail: `Versions\n\nCurrently Installed: v${app.getVersion()}\nLatest Available: v${ev.version}\n\nRelease Notes:\n${ev.releaseNotes.replace(/<[^>]*>/g, '')}`
 		}, () => {
-			sendStatusToWindow('Up to date')
+			sendUpdateStatusToWindow('Up to date')
 			manualUpdate = false
 		})
 		
@@ -200,16 +232,16 @@ autoUpdater.on('update-not-available', (ev, info) => {
 	
 })
 autoUpdater.on('error', (ev, err) => {
-		sendStatusToWindow('Error in auto-updater.');
+		sendUpdateStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (ev, progressObj) => {
-		sendStatusToWindow('Download in progress...');
+		sendUpdateStatusToWindow('Download in progress...');
 })
 autoUpdater.on('update-downloaded', (ev, info) => {
-		sendStatusToWindow('Update downloaded');
+		sendUpdateStatusToWindow('Update downloaded');
 })
 autoUpdater.on('checking-for-update', (ev, info) => {
-		sendStatusToWindow('Checking for updates...');
+		sendUpdateStatusToWindow('Checking for updates...');
 })
 
 
@@ -223,10 +255,61 @@ ipcMain.on('close-second-window', (event, arg)=> {
 })
 
 ipcMain.on('checkUpdatesNow', (event, arg) => {
-	console.log('Checking for updates manually')
+	log.info('Checking for updates manually')
 	manualUpdate = true
 	autoUpdater.checkForUpdates()
 })
+
+function sendLogsToWindow() {
+	log.info('sending to window')
+	let logData = fs.readFileSync(path.join(__dirname, 'log.txt'))
+	logWindow.webContents.send('logs', logData.toString());
+}
+
+// Listen for message from BrowserWindow
+ipcMain.on('checkLogs', (event, arg) => {
+	sendLogsToWindow()
+	logWindow.show()
+	
+})
+
+// Log window Event Listeners
+//ipcMain.on('open-log-window', (event, arg)=> {
+//	helpWindow.show()
+//})
+
+ipcMain.on('close-log-window', (event, arg)=> {
+	logWindow.hide()
+})
+
+ipcMain.on('clear-logs', (event, arg) => {
+	fs.writeFile(path.join(__dirname, 'log.txt'), '', (err) => {
+		let message = 'The logs have been cleared'
+		if (err) {
+			message = err;
+			return console.error(err.message)
+		};
+		
+		logWindow.webContents.send('logs-cleared', message)
+	})
+})
+
+ipcMain.on('print-to-pdf', (event) => {
+	const pdfPath = path.join(os.tmpdir(), 'print.pdf')
+	const win = BrowserWindow.fromWebContents(event.sender);
+
+	win.webContents.printToPDF({}, (error, data) => {
+		if (error) return console.error(error.message);
+
+		fs.writeFile(pdfPath, data, (err) => {
+			if (err) return console.error(err.message)
+			shell.openExternal('file://' + pdfPath)
+			log.info('Wrote PDF to ' + pdfPath)
+			event.sender.send('wrote-pdf', pdfPath)
+		})
+	})
+})
+
 
 
 // This method will be called when Electron has finished
@@ -254,4 +337,4 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-process.on('uncaughtException', (error) => {log.error(error)})
+process.on('uncaughtException', (error) => {console.error(error)})

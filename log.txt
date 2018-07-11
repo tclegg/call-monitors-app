@@ -1,4 +1,121 @@
-13:10:08:457 App starting...
-13:10:08:461 DEV ENVIRONMENT = true
-17:33:07:867 App starting...
-17:33:07:868 DEV ENVIRONMENT = true
+[2018-07-10] | [16:43:46:506] | [info] | sending to window
+[2018-07-10] | [16:43:47:501] | [info] | sending to window
+[2018-07-10] | [16:44:03:889] | [info] | sending to window
+[2018-07-10] | [16:44:04:312] | [info] | sending to window
+[2018-07-10] | [16:56:59:110] | [info] | Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10] | [16:57:55:408] | [info] | Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10] | [16:58:01:608] | [info] | Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10] | [16:58:08:577] | [info] | Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10] | [17:00:01:195] | [info] | Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10] | [17:00:22:281] | [info] | sending to window
+[2018-07-10]  [17:01:35:652]  | [info] |  App starting...
+[2018-07-10]  [17:01:35:657]  | [info] |  DEV ENVIRONMENT = true
+[2018-07-10]  [17:01:39:345]  | [info] |  sending to window
+[2018-07-10]  [17:16:23:581]  | [info] |  App starting...
+[2018-07-10]  [17:16:23:590]  | [info] |  DEV ENVIRONMENT = true
+[2018-07-10]  [17:16:27:850]  | [info] |  sending to window
+[2018-07-10]  [17:21:37:834]  | [info] |  App starting...
+[2018-07-10]  [17:21:37:838]  | [info] |  DEV ENVIRONMENT = true
+[2018-07-10]  [17:21:42:543]  | [info] |  sending to window
+[2018-07-10]  [17:25:35:038]  | [info] |  App starting...
+[2018-07-10]  [17:25:35:042]  | [info] |  DEV ENVIRONMENT = true
+[2018-07-10]  [17:25:37:806]  | [info] |  sending to window
+[2018-07-10]  [17:38:17:221]  | [info] |  App starting...
+[2018-07-10]  [17:38:17:224]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [17:38:19:507]  | [info] |  sending to window
+[2018-07-10]  [17:47:51:276]  | [info] |  App starting...
+[2018-07-10]  [17:47:51:279]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [17:47:54:714]  | [info] |  sending to window
+[2018-07-10]  [17:48:47:522]  | [info] |  App starting...
+[2018-07-10]  [17:48:47:526]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [17:48:49:795]  | [info] |  sending to window
+[2018-07-10]  [17:49:58:645]  | [info] |  App starting...
+[2018-07-10]  [17:49:58:667]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [17:50:03:947]  | [info] |  sending to window
+[2018-07-10]  [17:51:53:362]  | [info] |  App starting...
+[2018-07-10]  [17:51:53:370]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [17:51:55:573]  | [info] |  sending to window
+[2018-07-10]  [18:00:57:902]  | [info] |  App starting...
+[2018-07-10]  [18:00:57:906]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-10]  [18:01:01:260]  | [info] |  sending to window
+[2018-07-10]  [18:04:24:272]  | [info] |  sending to window
+[2018-07-10]  [18:04:48:022]  | [info] |  Wrote PDF to C:\Users\cleggt\AppData\Local\Temp\print.pdf
+[2018-07-10]  [18:04:53:525]  | [info] |  sending to window
+[2018-07-11]  [09:01:43:044]  | [info] |  App starting...
+[2018-07-11]  [09:01:43:050]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [09:01:50:706]  | [info] |  sending to window
+[2018-07-11]  [09:22:34:382]  | [info] |  App starting...
+[2018-07-11]  [09:22:34:388]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [09:22:37:114]  | [info] |  sending to window
+[2018-07-11]  [09:23:08:076]  | [info] |  Checking for updates manually
+[2018-07-11]  [09:23:08:185]  | [info] |  Checking for update
+[2018-07-11]  [09:23:08:186]  | [info] |  Checking for updates...
+[2018-07-11]  [09:23:08:187]  | [info] |  sending to window
+[2018-07-11]  [09:23:12:187]  | [info] |  Update for version 2.4.3 is not available (latest version: 2.3.1, downgrade is disallowed).
+[2018-07-11]  [09:23:20:433]  | [info] |  Up to date
+[2018-07-11]  [09:23:20:459]  | [info] |  sending to window
+[2018-07-11]  [09:23:24:091]  | [info] |  sending to window
+[2018-07-11]  [11:43:48:072]  | [info] |  App starting...
+[2018-07-11]  [11:43:48:077]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [11:43:50:394]  | [info] |  sending to window
+[2018-07-11]  [11:46:12:771]  | [info] |  App starting...
+[2018-07-11]  [11:46:12:776]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [11:46:15:511]  | [info] |  sending to window
+[2018-07-11]  [11:55:48:433]  | [info] |  App starting...
+[2018-07-11]  [11:55:48:438]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [11:55:50:716]  | [info] |  sending to window
+[2018-07-11]  [11:57:15:918]  | [info] |  sending to window
+[2018-07-11]  [11:58:06:883]  | [info] |  Checking for updates manually
+[2018-07-11]  [11:58:07:043]  | [info] |  Checking for update
+[2018-07-11]  [11:58:07:045]  | [info] |  Checking for updates...
+[2018-07-11]  [11:58:07:045]  | [info] |  sending to window
+[2018-07-11]  [11:58:11:066]  | [info] |  Update for version 2.4.5 is not available (latest version: 2.3.1, downgrade is disallowed).
+[2018-07-11]  [11:58:12:618]  | [info] |  Up to date
+[2018-07-11]  [11:58:12:632]  | [info] |  sending to window
+[2018-07-11]  [11:58:15:274]  | [info] |  Checking for updates manually
+[2018-07-11]  [11:58:15:279]  | [info] |  Checking for update
+[2018-07-11]  [11:58:15:280]  | [info] |  Checking for updates...
+[2018-07-11]  [11:58:15:280]  | [info] |  sending to window
+[2018-07-11]  [11:58:16:358]  | [info] |  Update for version 2.4.5 is not available (latest version: 2.3.1, downgrade is disallowed).
+[2018-07-11]  [11:58:18:005]  | [info] |  Up to date
+[2018-07-11]  [11:58:18:048]  | [info] |  sending to window
+[2018-07-11]  [11:58:20:721]  | [info] |  sending to window
+[2018-07-11]  [11:58:33:538]  | [info] |  sending to window
+[2018-07-11]  [12:00:38:146]  | [info] |  App starting...
+[2018-07-11]  [12:00:38:149]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [12:00:40:136]  | [info] |  sending to window
+[2018-07-11]  [12:01:45:755]  | [info] |  App starting...
+[2018-07-11]  [12:01:45:761]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [12:01:48:008]  | [info] |  sending to window
+[2018-07-11]  [12:02:14:717]  | [info] |  sending to window
+[2018-07-11]  [12:33:56:888]  | [info] |  App starting...
+[2018-07-11]  [12:33:56:892]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [12:33:58:824]  | [info] |  sending to window
+[2018-07-11]  [12:37:05:109]  | [info] |  App starting...
+[2018-07-11]  [12:37:05:113]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [12:37:07:195]  | [info] |  sending to window
+[2018-07-11]  [12:38:52:558]  | [info] |  App starting...
+[2018-07-11]  [12:38:52:563]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [12:38:55:064]  | [info] |  sending to window
+[2018-07-11]  [13:06:47:940]  | [info] |  App starting...
+[2018-07-11]  [13:06:47:944]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:06:50:287]  | [info] |  sending to window
+[2018-07-11]  [13:08:55:593]  | [info] |  App starting...
+[2018-07-11]  [13:08:55:597]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:08:57:949]  | [info] |  sending to window
+[2018-07-11]  [13:11:20:072]  | [info] |  App starting...
+[2018-07-11]  [13:11:20:081]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:11:22:687]  | [info] |  sending to window
+[2018-07-11]  [13:14:51:907]  | [info] |  App starting...
+[2018-07-11]  [13:14:51:912]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:14:55:582]  | [info] |  sending to window
+[2018-07-11]  [13:17:35:067]  | [info] |  App starting...
+[2018-07-11]  [13:17:35:070]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:17:38:080]  | [info] |  sending to window
+[2018-07-11]  [13:21:00:352]  | [info] |  App starting...
+[2018-07-11]  [13:21:00:355]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:21:02:501]  | [info] |  sending to window
+[2018-07-11]  [13:21:10:538]  | [info] |  sending to window
+[2018-07-11]  [13:30:18:207]  | [info] |  App starting...
+[2018-07-11]  [13:30:18:210]  | [info] |  DEV ENVIRONMENT = true, true
+[2018-07-11]  [13:30:22:482]  | [info] |  sending to window

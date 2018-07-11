@@ -35,6 +35,17 @@ const template = [
 			},
 			{
 				role: 'selectall', label: i18n.__('Select all')
+			},
+			{
+				type: 'separator'
+			},
+			{
+				label: i18n.__('Print to PDF'),
+				click (item, focusedWindow) { 
+					//Send the update command to the Renderer Process
+					focusedWindow.webContents.send('print-clicked', focusedWindow)
+				},
+				accelerator: 'CmdOrCtrl+P'
 			}
 		]
 	},
@@ -92,6 +103,27 @@ const template = [
 				click (item, focusedWindow) { 
 					//Send the update command to the Renderer Process
 					focusedWindow.webContents.send('updateClicked', focusedWindow)
+				}
+			},
+			{
+				label: i18n.__('Show Logs'),
+				click (item, focusedWindow) {
+					focusedWindow.webContents.send('showLogsClicked', focusedWindow)
+				}
+			},
+			{
+				label: i18n.__('Report a bug'),
+				click (item, focusedWindow) {
+					electron.shell.openExternal('https://github.com/tclegg/call-monitors-app/issues')
+				}
+			},
+			{
+				type: 'separator'
+			},
+			{
+				label: i18n.__('About'),
+				click(item, focusedWindow) {
+					focusedWindow.webContents.send('help-clicked', focusedWindow)
 				}
 			}
 		]

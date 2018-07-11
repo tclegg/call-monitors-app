@@ -39,5 +39,9 @@
 	"Check for updates": "Check for updates",
 	"About ElectronJS": "About ElectronJS",
 	"Paste and Match Style": "Paste and Match Style",
-	"Hard Refresh": "Hard Refresh"
+	"Hard Refresh": "Hard Refresh",
+	"Show Logs": "Show Logs",
+	"Print to PDF": "Print to PDF",
+	"File": "File",
+	"Report a bug": "Report a bug"
 }
