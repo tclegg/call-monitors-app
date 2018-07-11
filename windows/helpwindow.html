@@ -13,6 +13,17 @@
 	<link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/@fontawesome/fontawesome-free/css/all.css">
 
+	<style media="screen">
+			input[type="date"]::-webkit-inner-spin-button{
+				display: none;
+			}
+			input[type="number"]::-webkit-inner-spin-button{
+				display: none;
+			}
+			.navbar {
+				-webkit-user-select:none;
+			}
+		</style>
 	<!--<link rel="import" href="../sections/footer.html" class="footer-link">-->
 </head>
 <body style="padding-top:80px;" class="bg-dark">
@@ -48,24 +59,32 @@
 			<div class="container">
 				<!--<h1>Call Monitor App Help</h1>-->
 				<div class="card-group mb-2">
-					<div class="card border-light col-sm-12">
+					<div class="card border-light col-sm-6 mr-1">
 						<div class="card-header">
-							<h4>New Mointors</h4>
+							<h4>New Monitors</h4>
 						</div>
 						<div class="card-body">
-							<p class="text-justify">Make sure you select the name, enter the score of the monitor, set the auto-fail option (if needed), and choose your name from the list. The Date will automatically fill in.</p>
+							<p class="text-justify">Make sure you select the name, enter the score of the monitor, set the auto-fail option (if needed), and choose your name from the list. The date will automatically fill in.</p>
+						</div>
+					</div>
+					<div class="card border-light col-sm-6 ml-1" >
+						<div class="card-header">
+							<h4>Printing</h4>
+						</div>
+						<div class="card-body">
+							<p class="text-justify">Print the current screen to a PDF using the <i class="fas fa-file-pdf"></i> icon.</p>
 						</div>
 					</div>
 				</div>
 				<div class="card-group mb-2">
-						<div class="card border-light col-sm-6 mr-1" >
-								<div class="card-header">
-									<h4>All Monitors</h4>
-								</div>
-								<div class="card-body">
-									<p class="text-justify">This page displays all the monitors completed this month</p>
-								</div>
-							</div>
+					<div class="card border-light col-sm-6 mr-1" >
+						<div class="card-header">
+							<h4>All Monitors</h4>
+						</div>
+						<div class="card-body">
+							<p class="text-justify">This page displays all the monitors completed this month.</p>
+						</div>
+					</div>
 					<div class="card border-light col-sm-6 ml-1" >
 						<div class="card-header">
 							<h4>Monitors by Lead</h4>
@@ -94,7 +113,7 @@
 					</div>
 				</div>
 				<div>
-						<button href="#one" id="close-me-button" class="close-me-button btn btn-danger pull-right">Close me</button>
+						<button href="#one" id="close-me-button" class="close-me-button btn btn-danger float-right">Close me</button>
 				</div>
 			</div>
 		</section>

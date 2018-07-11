@@ -21,7 +21,7 @@
 	"Close": "Stäng",
   "Help": "Hjälp",
   "Learn more": "Läs mer",
-  "About": "Om",
+  "About": "Handla om",
   "Services": "Tjänster",
   "Hide" : "Göm",
   "Hide others": "Göm övriga",
@@ -39,6 +39,9 @@
 	"Check for updates": "Sök efter uppdateringar",
 	"About ElectronJS": "Om ElectronJS",
 	"Paste and Match Style": "Klistra in och matcha stil"
-	"Hard Refresh": "Hård uppdatering"
-
+	"Hard Refresh": "Hård uppdatering",
+	"Show Logs": "Visa loggar",
+	"Print to PDF": "Skriv ut till PDF",
+	"File": "Fil",
+	"Report a bug": "Rapportera en bugg"
 }

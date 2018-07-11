@@ -1,7 +1,12 @@
 <template class="section-template" data-target="">
 <section id="leadmonitors" class="wrapper well">
 	<div class="container bg-light pt-3">
-		<span class="float-right help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+			<div class="float-right" id="icon-group-leadmonitors">
+					<span id="print-pdf" class="print-pdf" data-toggle="tooltip" title="Print PDF"><i class="fas fa-file-pdf"></i></span>
+					<span id="spacer">&nbsp;</span>
+					<span class="help-icon" data-toggle="tooltip" title="Help!"><i class="fas fa-question-circle" aria-hidden="true"></i></span>
+			</div>
+			
 		<h2>Monitors By Lead</h2>
 		<p class="">Choose the lead and the month to display the completed monitors.</p>
 		<div class="container">
@@ -12,7 +17,7 @@
 							<label for="input-date-search" class="sr-only">Monitor Date</label>
 							<div class="input-group mb-3">
 								<div class="input-group-prepend">
-									<span class="input-group-text"><strong>Date</strong></span>
+									<span class="input-group-text font-weight-bold">Date</span>
 								</div>
 								<input type="month"class="form-control" name="date-search" id="input-date-search" value="" required data-toggle="tooltip" title="Choose the date to search (this will pull the whole month).">
 							</div>
@@ -24,7 +29,7 @@
 							<label for="select-lead-search" class="sr-only">Lead</label>
 							<div class="input-group mb-3">
 								<div class="input-group-prepend">
-									<span class="input-group-text"><strong>Lead</strong></span>
+									<span class="input-group-text font-weight-bold">Lead</span>
 								</div>
 								<select class="form-control" name="lead-search" id="select-lead-search" required data-toggle="tooltip" title="Choose the lead from the list.">
 									<option selected disabled value="0">Select Your Name</option>

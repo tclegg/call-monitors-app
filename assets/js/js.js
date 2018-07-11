@@ -46,7 +46,7 @@ try {
 			})
 } catch (err) {
 	//location.reload()
-	console.log(err)
+	console.error(err)
 	alert(`An Error Has Occurred\nPlease reload the page\n\n${err}`)
 }
 
@@ -131,7 +131,7 @@ var ReloadInit = {
 			}).then((result) => {
 				return LoadMonitors.init()
 			})
-		}).catch(err => console.log(err))
+		}).catch(err => console.error(err))
 	}
 }
 
@@ -156,7 +156,7 @@ var DBSubmitTools = {
 			})/*.then((result) => {
 				return ReloadInit.init()
 			})*/
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	/**
 	 * Routing
@@ -176,7 +176,7 @@ var DBSubmitTools = {
 				return reject(values)
 			}
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	editmonitor: function (values){
 		/**
@@ -195,7 +195,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removemonitor: function (values) {
 		return new Promise ((resolve, reject) => {
@@ -209,7 +209,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	addagent: function (values){
@@ -230,7 +230,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	editagent: function (values){
@@ -253,7 +253,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removeagent: function(values){
 		/**
@@ -283,7 +283,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	addlead: function (values){
 		/**
@@ -303,7 +303,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	editlead: function (values){
@@ -325,7 +325,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removelead: function(values){
 		/**
@@ -357,7 +357,7 @@ var DBSubmitTools = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	/**
 	 * DB Transactions
@@ -380,7 +380,7 @@ var DBSubmitTools = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 
 		
 	},
@@ -400,7 +400,7 @@ var DBSubmitTools = {
 					return resolve(newDoc)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	update: function (dbname, row, query){
 		/**
@@ -417,7 +417,7 @@ var DBSubmitTools = {
 					return resolve(numReplaced)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	remove: function (dbname, query, multi=false) {
 		/**
@@ -433,7 +433,7 @@ var DBSubmitTools = {
 					return resolve(numRemoved)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	clearfields: function (formValues) {
 		/**
@@ -464,7 +464,7 @@ var DBSubmitTools = {
 				}
 
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	}
 }
 
@@ -496,7 +496,7 @@ var BuildStaffDom = {
 			}).then((result) => {
 				return resolve(true)
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	importAllAgents: function (DBquery = null) {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
@@ -509,7 +509,7 @@ var BuildStaffDom = {
 					return resolve(result)
 				}	
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	allAgentsToObj: function (result) {
 		agentObj = {}
@@ -524,7 +524,7 @@ var BuildStaffDom = {
 				}
 			}
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	importActiveAgents: function (DBquery = null) {
 		let query = {inactive: "0"},
@@ -537,7 +537,7 @@ var BuildStaffDom = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	activeAgentsToObj: function (result) {
 		activeAgentsObj = {}
@@ -551,7 +551,7 @@ var BuildStaffDom = {
 					count ++
 				}
 			}
-		}).catch ((err) => console.log(err))
+		}).catch ((err) => console.error(err))
 	},
 	importAllLeads: function () {
 		let query = {abbv: {'$regex': /^[a-zA-Z]/}},
@@ -565,7 +565,7 @@ var BuildStaffDom = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	allLeadsToObj: function (result) {
 		leadsObj = {}
@@ -580,7 +580,7 @@ var BuildStaffDom = {
 					count ++
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	importActiveLeads: function () {
 		let query = {inactive: "0"},
@@ -594,7 +594,7 @@ var BuildStaffDom = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	activeLeadsToObj: function (result) {
 		activeLeadsObj = {}
@@ -613,7 +613,7 @@ var BuildStaffDom = {
 					count ++
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	agentSelect: function() {
 		let select = document.getElementById('select-agent'),
@@ -647,7 +647,7 @@ var BuildStaffDom = {
 				}
 			}
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 			
 	},
 	leadSelect: function() {
@@ -694,7 +694,7 @@ var BuildStaffDom = {
 					count++
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	}
 }
 var LoadMonitors = {
@@ -735,8 +735,8 @@ var LoadMonitors = {
 				return this.averageBadges()
 			}).then ((result) => {
 				return resolve(result)
-			}).catch(err => {console.log(err)})
-		}).catch(err => {console.log(err)})
+			}).catch(err => {console.error(err)})
+		}).catch(err => {console.error(err)})
 	},
 	pullNeeded: function () {
 		/**
@@ -758,7 +758,7 @@ var LoadMonitors = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	pullLastMonitor: function () {
 		/**
@@ -777,7 +777,7 @@ var LoadMonitors = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	fillLastMonitor: function (result) {
 		/**
@@ -809,7 +809,7 @@ var LoadMonitors = {
 					count ++
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	buildNeeded: function(result) {
 		/**
@@ -828,7 +828,7 @@ var LoadMonitors = {
 				return resolve()
 			}
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 			
 	},
@@ -848,7 +848,7 @@ var LoadMonitors = {
 					return resolve (result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	loadClaimed: function (claimedMonitors) {
 		/**
@@ -862,7 +862,7 @@ var LoadMonitors = {
 				})
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	pullCompleted: function (month = null, sort = null) {
 		/**
@@ -891,7 +891,7 @@ var LoadMonitors = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	pullQuarter: function (argMonth = null) {
 		/**
@@ -934,7 +934,7 @@ var LoadMonitors = {
 					return resolve(result) 
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	fillQuarter: function (monitors) {
 		/**
@@ -961,7 +961,7 @@ var LoadMonitors = {
 			} else {
 				return resolve(true)
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	
 	},
 	pullYear: function (argYear = null) {
@@ -982,7 +982,7 @@ var LoadMonitors = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	fillYear: function (monitors) {
 		/**
@@ -1020,7 +1020,7 @@ var LoadMonitors = {
 			} else {
 				return resolve(true)
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	averageBadges: function () {
 		return new Promise ((resolve, reject) => {
@@ -1063,7 +1063,7 @@ var LoadMonitors = {
 				}
 				
 			});
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	buildCompleted: function(result, queryMonth = null) {
@@ -1162,7 +1162,7 @@ var LoadMonitors = {
 					count ++ // Increase count
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	buildCompletedThisMonth: function(monitors) {
 		/**
@@ -1205,7 +1205,7 @@ var LoadMonitors = {
 			} else {
 				return resolve()
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 
 	},
 	pullLeadMonitors: function (lead = null, month = null) {
@@ -1234,7 +1234,7 @@ var LoadMonitors = {
 					return resolve(resultObj)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	leadMonitors: function(result) {
 		/**
@@ -1285,7 +1285,7 @@ var LoadMonitors = {
 				container.innerHTML = 'No monitors found'
 				return resolve()
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	completedPerAgentSearch: function (month){
@@ -1320,7 +1320,7 @@ var LoadMonitors = {
 				let result2 = this.buildCompletedThisMonth(result)
 				return result2
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	completedByLead: function (lead = null, month) {
 		/**
@@ -1339,7 +1339,7 @@ var LoadMonitors = {
 			}).then((result) => {
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	}
 }
 
@@ -1355,7 +1355,7 @@ var LoadStaffEdit = {
 				//finally
 				return resolve()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	agentMaintenance: function() {
 		/**
@@ -1370,7 +1370,7 @@ var LoadStaffEdit = {
 			} else {
 				return reject()
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 
 	},
@@ -1385,7 +1385,7 @@ var LoadStaffEdit = {
 			if (domTools.domMethods.buildTable(container, leadsObj, 'lead')) {
 				return resolve()
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	}
 }
 
@@ -1403,7 +1403,7 @@ var FormSubmitTools = {
 					return resolve()
 				})
 			})
-		}).catch ((err) => console.log(err))
+		}).catch ((err) => console.error(err))
 	},
 	/**
 	 * select the modal to pop up
@@ -1411,48 +1411,48 @@ var FormSubmitTools = {
 	addAgent: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('add-agent-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	editAgent: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('edit-agent-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removeAgent: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('remove-agent-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	addLead: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('add-lead-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	editLead: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('edit-lead-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removeLead: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('remove-lead-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	editMonitor: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('edit-monitor-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removeMonitor: function (args){
 		return new Promise ((resolve, reject) => {
 			return resolve(document.getElementById('remove-monitor-modal'))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	changeClaimed: function (agent, lead, type) {
 		return new Promise((resolve, reject) => {
 			let setRemove = (type === 'unclaimed') ? 'setClaimed' : 'removeClaimed'
 			return resolve(this[setRemove](agent, lead))
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	setClaimed: function (agent, lead) {
 		let query = {agentabbv: agent, leadabbv: lead}
@@ -1463,7 +1463,7 @@ var FormSubmitTools = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	removeClaimed: function (agent) {
 		let query = {agentabbv: agent}
@@ -1473,7 +1473,7 @@ var FormSubmitTools = {
 					return resolve(result)
 				}
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	/**
 	 * Submitting
@@ -1487,7 +1487,7 @@ var FormSubmitTools = {
 			}).then ((result) => {
 				return ReloadInit.init()
 			})
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	submit: function (form) {
 		return new Promise ((resolve, reject) => {
@@ -1504,7 +1504,7 @@ var FormSubmitTools = {
 			}).then ((result) => {
 				return ReloadInit.init()
 			})
-		}).catch((err) => console.log(err))	
+		}).catch((err) => console.error(err))	
 	}
 }
 
@@ -1865,7 +1865,7 @@ domTools.domMethods = {
 			} else {
 				return resolve()
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	changeClaimed: function (agentabbv, leadfullname, leadabbv, type = null) {
@@ -1886,7 +1886,7 @@ domTools.domMethods = {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
 			return resolve()
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	countMonitorsNeeded: function (monitors, required) {
@@ -2240,7 +2240,7 @@ domTools.buildModal = {
 				return resolve($(modal).modal('show'))
 			})
 			return resolve()
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	clearFields: function (modal, lead){
@@ -2260,7 +2260,7 @@ domTools.buildModal = {
 				}			
 			})
 			return resolve()
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 
@@ -2318,7 +2318,7 @@ domTools.buildModal = {
 					return resolve()
 				}
 			}
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 		
 	},
 	fillRemoveSpan: function (modal, inputData, agent = null) {
@@ -2330,7 +2330,7 @@ domTools.buildModal = {
 				$('.remove-date').text(`${tmpDate.getDate()}/${tmpDate.getMonth()}/${tmpDate.getFullYear()}`)
 				$('.remove-name').text(formattedName)
 			} else {
-				let nameArr = $(inputData).data('name').toString().split(', '),
+				let nameArr = (agent) ? agent.toString().split(', ') : $(inputData).data('name').toString().split(', '),
 						formattedName = `${nameArr[1]} ${nameArr[0]}`
 				$('.remove-name').text(formattedName)
 				let activeText = (($(inputData).data('inactive') == 1) ? 'Activate' : 'Deactivate')
@@ -2338,7 +2338,7 @@ domTools.buildModal = {
 				
 			}
 			return resolve()
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	}
 }
 
@@ -2363,7 +2363,7 @@ validation.formValidation = {
 				
 			})
 			
-		}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
 	},
 	fieldValidation: {
 		/**
@@ -2465,7 +2465,6 @@ validation.formValidation = {
 		inactivedate: (field) => {
 			let validationDate = new Date()
 			let tmpDate = new Date(field.valueAsDate)
-			console.log(field.value)
 			if (field.value === "null") {
 				return null
 			} else {
@@ -2499,7 +2498,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 	removemonitor: function (type, form) {
 		/**
@@ -2518,7 +2517,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 
 
@@ -2541,7 +2540,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})
 	},
 	editagent: function (type, form) {
 		/**
@@ -2551,10 +2550,9 @@ validation.formValidation = {
 		return new Promise ((resolve, reject) => {
 			let formVals = {},
 				fields = $(form).find('[name]')
-				//console.log(fields)
+				
 			try{
 				$(fields).each((k,v) => {
-					console.log(v.name, v)
 					let value = this.fieldValidation[v.name](v)
 					formVals[v.name] = value
 				})
@@ -2562,7 +2560,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})
 	},
 	removeagent: function (type, form) {
 		/**
@@ -2581,7 +2579,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 
 
@@ -2604,7 +2602,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 	editlead: function (type, form) {
 		/**
@@ -2623,7 +2621,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 	removelead: function (type, form) {
 		/**
@@ -2642,7 +2640,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	},
 	newmonitor: function (type, form) {
 		/**
@@ -2662,7 +2660,7 @@ validation.formValidation = {
 			} catch (err){
 				return reject (err)
 			}
-		})//.catch((err) => console.log(err))
+		})//.catch((err) => console.error(err))
 	}
 }
 
@@ -2716,8 +2714,8 @@ $(window).on('load', function () {
 		}).then((result) => {
 			// Pull monitors from the database and load to the pages
 			return LoadMonitors.init()
-		}).catch((err) => console.log(err))
-	}).catch((err) => console.log(err))
+		}).catch((err) => console.error(err))
+	}).catch((err) => console.error(err))
 	
 	// Turn on Bootstrap Tooltips because they look much better than default
 	$(function () {
@@ -2727,8 +2725,8 @@ $(window).on('load', function () {
 	// Catch errors that got missed
 	window.addEventListener('unhandledrejection', function(event) {
 		// the event object has two special properties:
-		console.log(event.promise); // [object Promise] - the promise that generated the error
-		console.log(event.reason); // Error: Whoops! - the unhandled error object
+		console.error(event.promise); // [object Promise] - the promise that generated the error
+		console.error(event.reason); // Error: Whoops! - the unhandled error object
 	});
 })
 
@@ -2831,10 +2829,11 @@ $(document).on('change', '#monitors-search-date', function (e) {
 	let month = $(this).val().replace(/-/g, '\/'),
 		tmpDate = new Date(month),
 		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
-		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
+		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)],
+		lead = $('#select-lead-search').val()
 		
 	clearTbody.innerHTML = '';
-	LoadMonitors.completedByLead(null, month)
+	LoadMonitors.completedByLead(lead, month)
 	LoadMonitors.completedPerAgentSearch(tmpDate)
 	document.getElementById('monitors-search-date-2').valueAsDate = tmpDate
 	document.getElementById('input-date-search').valueAsDate = tmpDate
@@ -2867,6 +2866,7 @@ $(document).on('submit', '#form-monitors', function (e){
 	FormSubmitTools.submit(form)
 	return true
 })
+// Prevent all forms from submitting
 $('form').on('submit', (e) => {
 	e.preventDefault()
 })
@@ -2875,6 +2875,11 @@ $(document).on('click', '.modal-submit', function (e){
 	let form = $(this).parent().parent().find('form')
 	
 	FormSubmitTools.modalSubmit(form)
+})
+
+$(document).on('click', '#repo-link', (e) => {
+	e.preventDefault()
+	electron.shell.openExternal('https://github.com/tclegg/call-monitors-app/')
 })
 
 // Move focus

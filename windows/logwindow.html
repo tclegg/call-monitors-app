@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+	<title>Call Monitors Help</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../assets/@fontawesome/fontawesome-free/css/all.css">
+	
+	<style media="screen">
+			input[type="date"]::-webkit-inner-spin-button{
+				display: none;
+			}
+			input[type="number"]::-webkit-inner-spin-button{
+				display: none;
+			}
+			.navbar {
+				-webkit-user-select:none;
+			}
+		</style>
+	<!--<link rel="import" href="../sections/footer.html" class="footer-link">-->
+</head>
+<body style="padding-top:80px;" class="bg-dark">
+	
+	<nav class="navbar navbar-dark navbar-expand-sm fixed-top bg-dark clearfix">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#help-navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+		<!--Navbar Content-->
+			<div class="collapse navbar-collapse" id="help-navbar-collapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<span class="navbar-text h3">Call Monitor App Logs</span>
+					</li>
+				</ul>
+				<span class="navbar-text">
+					<button type="button" class="btn btn-danger navbar-right close-log-button" aria-label="Close" style="margin-right:0">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</nav>
+	<!-- ./nav -->
+	<!-- Wrapper -->
+	<div class="container-fuid bg-dark ">
+		<section id="help-section" class="">
+			<div class="container bg-secondary rounded-top rounded-bottom">
+				<row class="clearfix">
+					<div class="float-left">
+						<h4 class="bg-secondary text-white rounded-top rounded-bottom" id="log-helper-text"></h4>
+					</div>
+					
+					<div class="float-right">
+							<button class="btn btn-secondary" id="refresh-logs-button" title="Refresh Logs" data-tooltip="tooltip"><i class="fas fa-sync-alt"></i></button>
+							<button class="btn btn-secondary" id="clear-logs-button" title="Clear Logs" data-tooltip="tooltip"><i class="fas fa-eraser"></i></button>
+					</div>
+				</row>
+				<row>
+					<textarea name="log-container" id="log-container" cols="130" rows="25" wrap="off" disabled></textarea>
+				</row>
+				
+			</div>
+		</section>
+	</div>
+	
+		<!-- Footer -->
+		<footer id="footer" class=""></footer>
+	
+		<!-- Scripts -->
+			<script src="../renderer.js">//Loads bootstrap dependencies</script>
+			<script>
+				//require('../assets/js/js')
+				require('../assets/js/ipc')
+				//let dateDiv = document.getElementById('log-helper-div')
+				//let todaysDate = new Date()
+
+				//dateDiv.innerText = `${todaysDate.getFullYear()}-${todaysDate.getMonth()+1}-${todaysDate.getDate()}`
+
+				$(function(){
+					$('[data-tooltip="tooltip"]').tooltip()
+				})
+			</script>
+	</body>
+		
+	</html>
