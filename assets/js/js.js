@@ -1,14 +1,16 @@
 // declare constants for node tools
 const {app} = require('electron').remote, // electron.app,
 	electron = require('electron'),
-	{ipcRenderer} = require('electron'), // send data back and forth between windows (used for help (?))
+	{ipcRenderer} = require('electron'),
+	appConfig = require('electron-settings'), // send data back and forth between windows (used for help (?))
 	fs = require('fs'), // Access the PC's File System
 	path = require('path'), // Resolve paths in the FS
 	nedb = require('nedb'), // Flat File Database
 	date = new Date(),
 	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2];
 
-	
+appConfig.setPath(path.join(__dirname, '../../appsettings.json'))
+
 
 	// check for dev and set the database location if dev === true
 const isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false,
@@ -1511,7 +1513,9 @@ var FormSubmitTools = {
 /**
  * Load DOM sections
  */
-
+/*require ('electron').remote.getCurrentWindow().on('focus', () => {
+	console.log(this)
+})*/
 let navigation =  {
 	constants: {
 		sectionTemplate: '.section-template',
@@ -1551,6 +1555,7 @@ let navigation =  {
 
 	showSection: function(event) {
 		const sectionId = event.target.dataset.section
+		
 		$('#' + sectionId).show()
 		$('#' + sectionId + ' section').show()
 	},
@@ -1567,6 +1572,7 @@ let navigation =  {
 
 	init: function() {
 		return new Promise ((resolve, reject) => {
+			$(this.constants.startSectionMenuItem).parent().addClass('active')
 			this.importSectionsToDOM()
 			this.hideAllSections()
 			this.setMenuOnClickEvent()

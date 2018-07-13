@@ -1,6 +1,5 @@
 const {ipcRenderer} = require('electron')
 
-
 window.ipc = window.ipc || {},
 function(n) {
 		ipc.messaging = {
