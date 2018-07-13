@@ -2,7 +2,7 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "2.4.5",
+  "version": "2.5.2",
   "main": "main.js",
   "license": "MIT",
   "author": "Thomas Clegg",
@@ -24,7 +24,8 @@
     ],
     "asarUnpack": [
       "**/log.txt",
-      "**/.env"
+      "**/.env",
+      "**/appsettings.json"
     ]
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "dotenv-expand": "^4.2.0",
     "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.15",
+    "electron-settings": "^3.2.0",
     "electron-updater": "^2.22.1",
     "jquery": "^3.3.1",
     "nedb": "^1.8.0",

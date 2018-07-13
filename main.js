@@ -24,7 +24,8 @@ const fs = require('fs'),
 			myEnv = dotenv.config({path: path.join(__dirname, '.env')}),
 			log = require('electron-log'),
 			{autoUpdater} = require('electron-updater'),
-			isDev = require('electron-is-dev');
+			isDev = require('electron-is-dev'),
+			appConfig = require('electron-settings');
 
 			if (isDev) {
 				console.info('Running in development');
@@ -33,6 +34,55 @@ const fs = require('fs'),
 			}
 
 dotenvExpand(myEnv)
+appConfig.setPath(path.join(__dirname, 'appsettings.json'))
+
+
+//-------------------------------------------------------------------
+// Save the state of the window to resume on reload
+//-------------------------------------------------------------------
+function windowStateKeeper(windowName) {
+  let window, windowState;
+  function setBounds() {
+    // Restore from appConfig
+    if (appConfig.has(`windowState.${windowName}`)) {
+      windowState = appConfig.get(`windowState.${windowName}`);
+      return;
+    }
+    // Default
+    windowState = {
+      x: undefined,
+      y: undefined,
+      width: (windowName === 'mainWindow') ? 1281 : 1024,
+      height: (windowName === 'mainWindow') ? 800 : 768,
+    };
+  }
+  function saveState() {
+    if (!windowState.isMaximized) {
+      windowState = window.getBounds();
+    }
+    windowState.isMaximized = window.isMaximized();
+    appConfig.set(`windowState.${windowName}`, windowState);
+  }
+  function track(win) {
+    window = win;
+    ['resize', 'move', 'close'].forEach(event => {
+      win.on(event, saveState);
+    });
+  }
+  setBounds();
+  return({
+    x: windowState.x,
+    y: windowState.y,
+    width: windowState.width,
+    height: windowState.height,
+    isMaximized: windowState.isMaximized,
+    track,
+  });
+}
+
+
+
+
 
 //-------------------------------------------------------------------
 // Logging
@@ -62,10 +112,17 @@ let manualUpdate = false
 
 function createWindow () {
 	// MainWindow Options
-	console.log(process.env.height)
+	const mainWindowStateKeeper = windowStateKeeper('mainWindow'),
+				helpWindowStateKeeper = windowStateKeeper('helpWindow'),
+				logWindowStateKeeper = windowStateKeeper('logWindow');
+
+
 	let opts = {titleBarStyle: 'default',
-		height: 800,
-		width: (process.env.TODO_DEV) ? 1920 : 1281,
+		title: 'Main Window',
+		x: mainWindowStateKeeper.x,
+		y: mainWindowStateKeeper.y,
+		height: mainWindowStateKeeper.height,
+		width: (process.env.TODO_DEV) ? 1920 : mainWindowStateKeeper.width,//1281,
 		minWidth: 1281,
 		minHeight: 800,
 		backgroundColor: '#f8f9fa',
@@ -108,10 +165,11 @@ function createWindow () {
 	})
 
 	helpWindow = new BrowserWindow({frame: false,
-		width: 1024,
-		height: 768,
-		minWidth: 1024,
-		minHeight: 768,
+		title: 'Help Window',
+		width: helpWindowStateKeeper.width,
+		height: helpWindowStateKeeper.height,
+		minWidth: helpWindowStateKeeper.width,
+		minHeight: helpWindowStateKeeper.height,
 		backgroundColor: '#f8f9fa',
 		show: false,
 		icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
@@ -120,21 +178,21 @@ function createWindow () {
 	})
 	// Open the DevTools.
 	// helpWindow.webContents.openDevTools()
-	
 	helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
 
 	logWindow = new BrowserWindow({frame: false,
-		width: 1024,
-		height: 768,
-		minWidth: 1024,
-		minHeight: 768,
+		title: 'Log Window',
+		width: logWindowStateKeeper.width,
+		height: logWindowStateKeeper.height,
+		minWidth: logWindowStateKeeper.width,
+		minHeight: logWindowStateKeeper.height,
 		backgroundColor: '#f8f9fa',
 		show: false,
 		icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
 		parent: mainWindow,
 		modal: true
 	})
-
+	
 	logWindow.loadURL(`file://${__dirname}/windows/logwindow.html`)
 	
 	/*logWindow.once('ready-to-show', () => {
@@ -145,6 +203,13 @@ function createWindow () {
 		sendLogsToWindow()
 	})
 
+	//Track window size/position in production
+	if (!process.env.TODO_DEV){
+		mainWindowStateKeeper.track(mainWindow)
+		helpWindowStateKeeper.track(helpWindow)
+		logWindowStateKeeper.track(logWindow)
+	}
+	
 }
 
 
@@ -315,7 +380,10 @@ ipcMain.on('print-to-pdf', (event) => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+	console.log('in app.ready')
+	new createWindow
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
