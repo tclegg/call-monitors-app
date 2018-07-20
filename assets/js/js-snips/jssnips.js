@@ -228,3 +228,16 @@ function buildEditScoreModal(args) {
 	$('#edit-monitor-modal-select-lead').val(args.lead)
 	$('#edit-monitor-modal-id').val(args.id)
 }
+
+
+
+// Find agents on "needed"
+
+let listedAgents = document.querySelectorAll('.claimed')
+		let count = 0, numAgents = Array.from(listedAgents).length
+		let agents = new Array
+		Array.from(listedAgents).forEach((x) => {
+			agents[count] = x.getAttribute('data-agent')
+			count++
+		})
+		console.log(agents)

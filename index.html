@@ -4,24 +4,8 @@
 		<title>Nex-Tech Call Monitors</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--<link rel="stylesheet" href="assets/css/main.css" />-->
-		<link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" href="assets/@fontawesome/fontawesome-free/css/all.css">
+		<link rel="stylesheet" href="assets/css/main.css" />
 		
-		<style media="screen">
-			input[type="date"]::-webkit-inner-spin-button{
-				display: none;
-			}
-			input[type="number"]::-webkit-inner-spin-button{
-				display: none;
-			}
-			.navbar {
-				-webkit-user-select:none;
-			}
-		</style>
-		<script>
-			//require('@fortawesome/fontawesome-free')
-		</script>
 		<link rel="import" href="sections/index-main.html">
 		<link rel="import" href="sections/allmonitors.html">
 		<link rel="import" href="sections/leadmonitors.html">
@@ -30,7 +14,7 @@
 		<link rel="import" href="sections/footer.html" class="footer-link">
 
 	</head>
-	<body style="padding-top:70px" class="bg-secondary">
+	<body class="bg-secondary">
 
 		<!-- Navbar Controls -->
 		<nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
@@ -348,7 +332,7 @@
 							<input type="hidden" name="name" value="" id="remove-agent-modal-name">
 							<input type="hidden" name="agentid" value="" id="remove-agent-modal-agentid">
 							<input type="hidden" name="monitors" value="" id="remove-agent-modal-monitors">
-							<input type="date" name="date" value="" id="remove-agent-modal-date" style="display: none;">
+							<input type="date" name="date" value="" id="remove-agent-modal-date" class="display-none">
 							<div id="remove-agent-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
@@ -376,7 +360,7 @@
 							<input type="hidden" name="inactive" value="" id="remove-lead-modal-inactive">
 							<input type="hidden" name="name" value="" id="remove-lead-modal-name">
 							<input type="hidden" name="abbv" value="" id="remove-lead-modal-abbv">
-							<input type="date" name="date" value="" id="remove-lead-modal-date" style="display: none;">
+							<input type="date" name="date" value="" id="remove-lead-modal-date" class="display-none">
 							<div id="remove-lead-modal-id-help" class="helper text-center"></div>
 						</form>
 					</div>
@@ -490,7 +474,7 @@
 						<form class="" action="#" method="get" id="remove-monitor-modal-form" name="removemonitor">
 							<input type="hidden" name="_id" value="" id="remove-monitor-modal-id">
 							<input type="hidden" name="inactive" value="" id="remove-monitor-modal-inactive">
-							<input type="date" name="date" value="" id="remove-monitor-modal-date" style="display: none">
+							<input type="date" name="date" value="" id="remove-monitor-modal-date" class="display-none">
 							<input type="hidden" name="agent" value="" id="remove-monitor-modal-agent">
 							<input type="hidden" name="score" value="" id="remove-monitor-modal-score">
 							<input type="hidden" name="fail" value="" id="remove-monitor-modal-fail">

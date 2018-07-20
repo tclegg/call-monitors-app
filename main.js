@@ -16,6 +16,8 @@ const {electron, app, ipcMain, dialog, shell, BrowserWindow} = require('electron
 			// shell = Used to print to PDF
 			// BrowserWindow = Module to create native browser window
 
+	
+
 const fs = require('fs'), 
 			os = require('os'),
 			path = require('path'), // Parse the file path
@@ -122,7 +124,7 @@ function createWindow () {
 		x: mainWindowStateKeeper.x,
 		y: mainWindowStateKeeper.y,
 		height: mainWindowStateKeeper.height,
-		width: (process.env.TODO_DEV) ? 1920 : mainWindowStateKeeper.width,//1281,
+		width: (process.env.TODO_DEV) ? 1800 : mainWindowStateKeeper.width,//1281,
 		minWidth: 1281,
 		minHeight: 800,
 		backgroundColor: '#f8f9fa',
@@ -154,6 +156,7 @@ function createWindow () {
 		mainWindow.on('unresponsive', (e) => { console.error(e) })
 		// Load main window
 		mainWindow.show()
+		mainWindow.focus()
 	})
 
 	// Emitted when the window is closed.
@@ -381,7 +384,6 @@ ipcMain.on('print-to-pdf', (event) => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-	console.log('in app.ready')
 	new createWindow
 })
 
