@@ -7,8 +7,7 @@ if (setupEvents.handleSquirrelEvent()) {
 	return;
 }*/
 
-
-const {electron, app, ipcMain, dialog, shell, BrowserWindow} = require('electron')
+const {electron, app, ipcMain, dialog, shell, BrowserWindow, Menu, MenuItem} = require('electron')
 			// Main ElectronJS Object
 			// app = Module to control application life.
 			// ipcMain = Communicate between windows
@@ -16,9 +15,7 @@ const {electron, app, ipcMain, dialog, shell, BrowserWindow} = require('electron
 			// shell = Used to print to PDF
 			// BrowserWindow = Module to create native browser window
 
-	
-
-const fs = require('fs'), 
+const fs = require('fs'),
 			os = require('os'),
 			path = require('path'), // Parse the file path
 			dotenv = require('dotenv'),// Grab environment variables from .env file right away
@@ -27,64 +24,68 @@ const fs = require('fs'),
 			log = require('electron-log'),
 			{autoUpdater} = require('electron-updater'),
 			isDev = require('electron-is-dev'),
-			appConfig = require('electron-settings');
+			appConfig = require('electron-settings');;
 
-			if (isDev) {
-				console.info('Running in development');
-			} else {
-				console.info('Running in production');
-			}
+	if (isDev) {
+		console.info('Running in development');
+	} else {
+		console.info('Running in production');
+	}
 
 dotenvExpand(myEnv)
 appConfig.setPath(path.join(__dirname, 'appsettings.json'))
-
 
 //-------------------------------------------------------------------
 // Save the state of the window to resume on reload
 //-------------------------------------------------------------------
 function windowStateKeeper(windowName) {
-  let window, windowState;
-  function setBounds() {
-    // Restore from appConfig
-    if (appConfig.has(`windowState.${windowName}`)) {
-      windowState = appConfig.get(`windowState.${windowName}`);
-      return;
-    }
-    // Default
-    windowState = {
-      x: undefined,
-      y: undefined,
-      width: (windowName === 'mainWindow') ? 1281 : 1024,
-      height: (windowName === 'mainWindow') ? 800 : 768,
-    };
-  }
-  function saveState() {
-    if (!windowState.isMaximized) {
-      windowState = window.getBounds();
-    }
-    windowState.isMaximized = window.isMaximized();
-    appConfig.set(`windowState.${windowName}`, windowState);
-  }
-  function track(win) {
-    window = win;
-    ['resize', 'move', 'close'].forEach(event => {
-      win.on(event, saveState);
-    });
-  }
-  setBounds();
-  return({
-    x: windowState.x,
-    y: windowState.y,
-    width: windowState.width,
-    height: windowState.height,
-    isMaximized: windowState.isMaximized,
-    track,
-  });
+	let window, windowState;
+	function setBounds() {
+		// Restore from appConfig
+		if (appConfig.has(`windowState.${windowName}`)) {
+			windowState = appConfig.get(`windowState.${windowName}`);
+			return;
+		}
+		// Default
+		windowState = {
+			x: undefined,
+			y: undefined,
+			width: (windowName === 'mainWindow') ? 1281 : 1024,
+			height: (windowName === 'mainWindow') ? 800 : 768,
+		};
+	}
+	function saveState() {
+		if (!windowState.isMaximized) {
+			windowState = window.getBounds();
+		}
+		windowState.isMaximized = window.isMaximized();
+		appConfig.set(`windowState.${windowName}`, windowState);
+	}
+	function track(win) {
+		window = win;
+		['resize', 'move', 'close'].forEach(event => {
+			win.on(event, saveState);
+		});
+	}
+	setBounds();
+	return({
+		x: windowState.x,
+		y: windowState.y,
+		width: windowState.width,
+		height: windowState.height,
+		isMaximized: windowState.isMaximized,
+		track,
+	});
 }
 
-
-
-
+// Right-click context menu
+let i18n = new (require(path.join(__dirname, 'translations/i18n')))
+const ctxMenu = new Menu()
+ctxMenu.append(new MenuItem({ role: 'copy', label: i18n.__('Copy') }))
+ctxMenu.append(new MenuItem({ role: 'cut', label: i18n.__('Cut') }))
+ctxMenu.append(new MenuItem({ role: 'paste', label: i18n.__('Paste') }))
+ctxMenu.append(new MenuItem({ type: 'separator' }))
+ctxMenu.append(new MenuItem({ role:'reload', label: i18n.__('Reload') }))
 
 //-------------------------------------------------------------------
 // Logging
@@ -118,7 +119,6 @@ function createWindow () {
 				helpWindowStateKeeper = windowStateKeeper('helpWindow'),
 				logWindowStateKeeper = windowStateKeeper('logWindow');
 
-
 	let opts = {titleBarStyle: 'default',
 		title: 'Main Window',
 		x: mainWindowStateKeeper.x,
@@ -138,13 +138,13 @@ function createWindow () {
 	// and load the index.html of the app.
 	mainWindow.loadURL(`file://${__dirname}/index.html`)
 
-	
-	
 	if (process.env.TODO_DEV){
 		// Open the DevTools.
 		process.env.NODE_ENV === 'development'
 		process.env.DEVTRON_DEBUG_PATH = `file://${__dirname}../../../devtron/static/index.html`
-		mainWindow.webContents.openDevTools()
+		mainWindow.on('show', () => {
+			mainWindow.webContents.openDevTools()
+		})
 		
 	}
 
@@ -157,6 +157,9 @@ function createWindow () {
 		// Load main window
 		mainWindow.show()
 		mainWindow.focus()
+		BrowserWindow.getFocusedWindow().webContents.on('context-menu', function (e, params) {
+			ctxMenu.popup(mainWindow, params.x, params.y)
+		})
 	})
 
 	// Emitted when the window is closed.
@@ -182,7 +185,11 @@ function createWindow () {
 	// Open the DevTools.
 	// helpWindow.webContents.openDevTools()
 	helpWindow.loadURL(`file://${__dirname}/windows/helpwindow.html`)
-
+	helpWindow.once('ready-to-show', () => {
+		helpWindow.webContents.on('context-menu', function (e, params) {
+			ctxMenu.popup(this, params.x, params.y)
+		})
+	})
 	logWindow = new BrowserWindow({frame: false,
 		title: 'Log Window',
 		width: logWindowStateKeeper.width,
@@ -195,28 +202,30 @@ function createWindow () {
 		parent: mainWindow,
 		modal: true
 	})
-	
+
 	logWindow.loadURL(`file://${__dirname}/windows/logwindow.html`)
-	
-	/*logWindow.once('ready-to-show', () => {
-		sendLogsToWindow()
-	})*/
+
+	logWindow.once('ready-to-show', () => {
+		// sendLogsToWindow()
+		logWindow.webContents.on('context-menu', function (e, params) {
+			ctxMenu.popup(this, params.x, params.y)
+		})
+	})
 
 	logWindow.webContents.on('did-finish-load', (e) => {
 		sendLogsToWindow()
 	})
 
-	//Track window size/position in production
+	// Track window size/position in production
 	if (!process.env.TODO_DEV){
 		mainWindowStateKeeper.track(mainWindow)
 		helpWindowStateKeeper.track(helpWindow)
 		logWindowStateKeeper.track(logWindow)
 	}
-	
 }
 
 
-//-------------------------------------------------------------------
+// -------------------------------------------------------------------
 // Auto updates
 //
 // For details about these events, see the Wiki:
@@ -226,7 +235,7 @@ function createWindow () {
 //
 // Uncomment any of the below events to listen for them.  Also,
 // look in the previous section to see them being used.
-//-------------------------------------------------------------------
+// -------------------------------------------------------------------
 // autoUpdater.on('checking-for-update', () => {
 // })
 // autoUpdater.on('update-available', (ev, info) => {
@@ -315,11 +324,11 @@ autoUpdater.on('checking-for-update', (ev, info) => {
 
 // Second window Event Listeners
 ipcMain.on('open-second-window', (event, arg)=> {
-		helpWindow.show()
+	helpWindow.show()
 })
 
 ipcMain.on('close-second-window', (event, arg)=> {
-		helpWindow.hide()
+	helpWindow.hide()
 })
 
 ipcMain.on('checkUpdatesNow', (event, arg) => {
@@ -342,9 +351,9 @@ ipcMain.on('checkLogs', (event, arg) => {
 })
 
 // Log window Event Listeners
-//ipcMain.on('open-log-window', (event, arg)=> {
-//	helpWindow.show()
-//})
+// ipcMain.on('open-log-window', (event, arg)=> {
+// 	helpWindow.show()
+// })
 
 ipcMain.on('close-log-window', (event, arg)=> {
 	logWindow.hide()
@@ -378,7 +387,10 @@ ipcMain.on('print-to-pdf', (event) => {
 	})
 })
 
-
+ipcMain.on('print', (event) => {
+	const win = BrowserWindow.fromWebContents(event.sender)
+	win.webContents.print({silent: false, printBackground: false, deviceName: ''})
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

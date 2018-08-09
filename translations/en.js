@@ -42,6 +42,7 @@
 	"Hard Refresh": "Hard Refresh",
 	"Show Logs": "Show Logs",
 	"Print to PDF": "Print to PDF",
+	"Print": "Print",
 	"File": "File",
 	"Report a bug": "Report a bug"
 }

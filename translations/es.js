@@ -42,6 +42,7 @@
 	"Hard Refresh": "Refresco duro",
 	"Show Logs": "Mostrar registros",
 	"Print to PDF": "Imprimir en PDF",
+	"Print": "Impresión",
 	"File": "Archivo",
 	"Report a bug": "Reportar un error"
 }
