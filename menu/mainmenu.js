@@ -1,7 +1,7 @@
 const {Menu} = require('electron')
 const electron = require('electron')
 const app = electron.app
-var i18n = new(require('../translations/i18n'))
+let i18n = new (require('../translations/i18n'))
 
 
 
@@ -42,7 +42,14 @@ const template = [
 			{
 				label: i18n.__('Print to PDF'),
 				click (item, focusedWindow) { 
-					//Send the update command to the Renderer Process
+					//Send the print-pdf command to the Renderer Process
+					focusedWindow.webContents.send('print-pdf-clicked', focusedWindow)
+				}
+			},
+			{
+				label: i18n.__('Print'),
+				click (item, focusedWindow) {
+					//Send the print command to the Renderer Process
 					focusedWindow.webContents.send('print-clicked', focusedWindow)
 				},
 				accelerator: 'CmdOrCtrl+P'

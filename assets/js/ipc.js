@@ -97,16 +97,20 @@ function(n) {
 					ipcRenderer.send('print-to-pdf')
 				})
 
+				// Receive printpdf from main menu
+				ipcRenderer.on('print-pdf-clicked', () => {
+					ipcRenderer.send('print-to-pdf')
+				})
+
 				// Receive print from main menu
 				ipcRenderer.on('print-clicked', () => {
-					ipcRenderer.send('print-to-pdf')
+					ipcRenderer.send('print')
 				})
 
 				// Not used at this time. Receives a confirmation from the printToPDF()
 				ipcRenderer.on('wrote-pdf', (event, path) => {
 					//const message = `Wrote PDF to: ${path}`
 					//document.getElementById('pdf-path').innerHTML = message
-
 				})
 
 				// Send log refresh to main

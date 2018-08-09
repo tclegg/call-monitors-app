@@ -42,6 +42,7 @@
 	"Hard Refresh": "Hård uppdatering",
 	"Show Logs": "Visa loggar",
 	"Print to PDF": "Skriv ut till PDF",
+	"Print": "Skriva ut",
 	"File": "Fil",
 	"Report a bug": "Rapportera en bugg"
 }

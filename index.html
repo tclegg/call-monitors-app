@@ -5,17 +5,16 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		
+
 		<link rel="import" href="sections/index-main.html">
 		<link rel="import" href="sections/allmonitors.html">
 		<link rel="import" href="sections/leadmonitors.html">
 		<link rel="import" href="sections/agents.html">
 		<link rel="import" href="sections/leads.html">
 		<link rel="import" href="sections/footer.html" class="footer-link">
-
 	</head>
-	<body class="bg-secondary">
 
+	<body class="bg-secondary">
 		<!-- Navbar Controls -->
 		<nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
 			<div class="container-fluid"><!-- .container-fluid didn't work here -->
@@ -41,14 +40,12 @@
 			<div id="wrapper" class="">
 			</div>
 		</div>
-		
-		
+		<!-- /Content Wrapper -->
 
 		<!-- Footer -->
-		<footer id="footer" class="mt-5">
+		<footer id="footer" class="mt-5"></footer>
 
-		</footer>
-		<!--MODAL-->
+		<!-- MODALS -->
 		<div class="modal fade" id="add-agent-modal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -253,6 +250,7 @@
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
+
 		<div class="modal fade" id="edit-lead-modal" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -490,15 +488,13 @@
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
-
+		<!-- /MODALS -->
 
 		<!-- Scripts -->
-			
-			<script src="renderer.js">//Loads bootstrap dependencies</script>
-			<script>
-				require('./assets/js/ipc')
-				require('./assets/js/js')
-			</script>
+		<script src="renderer.js">// Loads bootstrap dependencies</script>
+		<script>
+			require('./assets/js/ipc')
+			require('./assets/js/js')
+		</script>
 	</body>
-	
 </html>
