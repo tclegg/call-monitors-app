@@ -2,7 +2,7 @@
   "name": "callmonitortracking",
   "productName": "Nex-Tech Call Monitor Tracking",
   "description": "Application for tracking call monitors and performance.",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "main": "main.js",
   "license": "MIT",
   "author": "Thomas Clegg",
