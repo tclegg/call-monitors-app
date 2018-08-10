@@ -97,6 +97,10 @@ function(n) {
 					ipcRenderer.send('print-to-pdf')
 				})
 
+				$('.print').on('click', function (e){
+					ipcRenderer.send('print')
+				})
+
 				// Receive printpdf from main menu
 				ipcRenderer.on('print-pdf-clicked', () => {
 					ipcRenderer.send('print-to-pdf')
