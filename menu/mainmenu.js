@@ -61,7 +61,7 @@ const template = [
 		submenu: [
 			{
 				role: 'reload',
-				label: i18n.__('Reload'),
+				label: i18n.__('Refresh'),
 				accelerator: 'CmdOrCtrl+R'
 			},
 			{
