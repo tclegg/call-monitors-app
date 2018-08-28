@@ -44,5 +44,6 @@
 	"Print to PDF": "Skriv ut till PDF",
 	"Print": "Skriva ut",
 	"File": "Fil",
-	"Report a bug": "Rapportera en bugg"
+	"Report a bug": "Rapportera en bugg",
+	"Refresh": "Uppdatera"
 }

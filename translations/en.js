@@ -44,5 +44,6 @@
 	"Print to PDF": "Print to PDF",
 	"Print": "Print",
 	"File": "File",
-	"Report a bug": "Report a bug"
+	"Report a bug": "Report a bug",
+	"Refresh": "Refresh"
 }
