@@ -104,7 +104,6 @@ log.transports.file.appName = app.getName()
 log.info('App starting...');
 log.info(`DEV ENVIRONMENT = ${process.env.TODO_DEV}, ${isDev}`);
 
-
 // Adds the main Menu to our app
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -223,7 +222,6 @@ function createWindow () {
 		logWindowStateKeeper.track(logWindow)
 	}
 }
-
 
 // -------------------------------------------------------------------
 // Auto updates

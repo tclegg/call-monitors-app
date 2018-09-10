@@ -3,8 +3,6 @@ const electron = require('electron')
 const app = electron.app
 let i18n = new (require('../translations/i18n'))
 
-
-
 const template = [
 	{
 		label: i18n.__('Edit'),

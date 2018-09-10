@@ -7,15 +7,13 @@ const {app} = require('electron').remote, // electron.app,
 	path = require('path'), // Resolve paths in the FS
 	nedb = require('nedb'), // Flat File Database
 	date = new Date(),
-	loggedOnUser = process.env['USERPROFILE'].split(path.sep)[2];
-
-appConfig.setPath(path.join(__dirname, '../../appsettings.json'))
-
+	dialog = require('electron').dialog;
 
 	// check for dev and set the database location if dev === true
 const isDev = process.env.TODO_DEV ? (process.env.TODO_DEV.trim() == "true") : false,
-	datastorePath = (!isDev) ? path.resolve(process.env['prodPath']) : path.resolve(__dirname, process.env['devPath'])
-	
+	datastorePath = (!isDev) ? path.resolve(process.env['prodPath']) : path.resolve(__dirname, process.env['devPath']),
+	loggedOnUser = (isDev) ?  'cleggt' : process.env['USERPROFILE'].split(path.sep)[2];
+
 let validation = {},
 	domTools = {}
 	// variables for date and database creation/selection
@@ -112,7 +110,6 @@ var ReloadInit = {
 		}).catch(err => console.error(err))
 	}
 }
-
 
 /**
  * DB Tools
@@ -604,9 +601,8 @@ var BuildStaffDom = {
 					count++
 				}
 			}
-			
+	
 	//	}).catch((err) => console.error(err))
-			
 	},
 	leadSelect: function() {
 		let newMonitorSelect = document.getElementById('select-lead'),
@@ -618,7 +614,6 @@ var BuildStaffDom = {
 		monitorModalSelect.innerHTML = defaultOptionHTML;
 
 	//	return new Promise ((resolve, reject) => {
-
 			var length = Object.keys(activeLeadsObj).length, count = 1
 			for (var x in activeLeadsObj) {
 				let option1 = document.createElement('option'),
@@ -714,15 +709,13 @@ var LoadMonitors = {
 										})
 					.find('span').empty().append(domTools.domMethods.constants.uncheckedSquare)
 			})
-			
-				
-			
+
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
 			return resolve(true)
 		}).catch((err) => console.error(err))
-		
+
 	},
 	pullNeeded: function () {
 		/**
@@ -857,7 +850,7 @@ var LoadMonitors = {
 		if (!sort) {
 			sort = {'agent': 1, 'date': 1}
 		}
-		
+
 		if (month) {
 			tmpDate = new Date(month)
 			start = new Date(tmpDate.getFullYear(), tmpDate.getMonth(), 1)
@@ -1041,7 +1034,6 @@ var LoadMonitors = {
 				} else {
 					count ++
 				}
-				
 			});
 		}).catch((err) => console.error(err))
 		
@@ -1050,7 +1042,7 @@ var LoadMonitors = {
 		/**
 		 * @param {Object} result Result of DB query for the specified month
 		 */
-		
+
 		let accordionContainer = document.getElementById('agent-accordion-tbody'),
 			count = 1,
 			head = [], cells = [], // Declared outside of the IF to maintain scope
@@ -1101,8 +1093,7 @@ var LoadMonitors = {
 												'area-expanded': false,
 												'role': 'button'})
 									.addClass('accordion-toggle pointer')
-					
-				
+
 				if (Object.keys(result).length > 0){
 					let monitors = result.filter(x => x.agent === i)
 					//Create the content of the agent row (head)
@@ -1133,7 +1124,7 @@ var LoadMonitors = {
 				$(wellTR).append(wellTD)
 				$(accordionContainer).append(agentRow)
 				$(accordionContainer).append(wellTR)
-				
+
 				$('#total-badge').html(`${completedCount} / ${requiredCount}`)
 				if (count == Object.keys(agentsObj).length){
 					// Return to verify the loop is completed
@@ -1161,9 +1152,7 @@ var LoadMonitors = {
 						resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
 						resultDD = ("0" + resultDate.getDate()).slice(-2),
 						resultDateString = resultYear + '-' + resultMM + '-' + resultDD
-						
-						
-					
+
 					let row = domTools.domMethods.buildCompletedMonthRow(
 							monitors[i], 
 							resultDateString, 
@@ -1174,9 +1163,9 @@ var LoadMonitors = {
 						$(row).addClass('strike-through')
 					}
 					rows.push(row)
-					
+
 					count ++
-					
+
 				}
 				$(container).append(rows)
 				if (count == Object.keys(monitors).length){
@@ -1206,7 +1195,7 @@ var LoadMonitors = {
 			end = new Date(tmpStart.getFullYear(), tmpStart.getMonth() + 1, 1)
 		}
 		let query = {'$and': [ {date: { '$gte': start }}, {date: { '$lte': end }} ] }
-			
+
 		return new Promise ((resolve, reject) => {
 			return DBSubmitTools.pull('monitors', query, sort).then(function (result) {
 				if (result) {
@@ -1241,32 +1230,29 @@ var LoadMonitors = {
 						resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
 						resultDD = ("0" + resultDate.getDate()).slice(-2),
 						resultDateString = resultYear + '-' + resultMM + '-' + resultDD
-							
-							
-						
+
 					let row = domTools.domMethods.buildCompletedMonthRow(
 							monitors[i], 
 							resultDateString, 
 							agentsObj[monitors[i].agent].name, 
 							leadsObj[monitors[i].lead].name
 						)
-					
+
 					rows.push(row)
-					
+
 					$('#lead-completed-badge').html(count)
 				}
-				
+
 				$(container).append(rows)
 				if (count == Object.keys(monitors).length){
 					return //resolve()
 				}
-				
+
 			} else { // If no result
 				container.innerHTML = 'No monitors found'
 				return //resolve()
 			}
 	//	}).catch((err) => console.error(err))
-		
 	},
 	completedPerAgentSearch: function (month){
 		/**
@@ -1341,7 +1327,6 @@ var LoadStaffEdit = {
 				return reject()
 			}
 		}).catch((err) => console.error(err))
-		
 
 	},
 	leadMaintenance: function() {
@@ -1428,7 +1413,7 @@ var FormSubmitTools = {
 		if (!agent) {
 			throw 'Missing "agent" from the query.'
 		}
-		
+
 		let query = {agentabbv: agent}, sort = {'agent': 1}
 		return new Promise((resolve, reject) => {
 			 return DBSubmitTools.pull('claimedDb', query, sort).then((result) => {
@@ -1437,7 +1422,6 @@ var FormSubmitTools = {
 				 } else {
 					 resolve(result)
 				 }
-				
 			})
 		})
 	},
@@ -1446,7 +1430,6 @@ var FormSubmitTools = {
 		return new Promise ((resolve, reject) => {
 			return DBSubmitTools.post('claimedDb', query).then((result) => {
 				if (result) {
-					
 					return resolve(result)
 				}
 			})
@@ -1468,7 +1451,6 @@ var FormSubmitTools = {
 	modalSubmit: function (form) {
 		return new Promise ((resolve, reject) => {
 			let formname = $(form).attr('name')
-			
 			return validation.formValidation.init(formname, form).then ((result) => {
 				return DBSubmitTools.init(formname, result)
 			}).then ((result) => {
@@ -1479,7 +1461,6 @@ var FormSubmitTools = {
 	submit: function (form) {
 		return new Promise ((resolve, reject) => {
 			let formname = $(form).attr('name')
-		
 			// Validate the form fields, then make them into a useable object for the submit.
 			 return validation.formValidation.init(formname, form).then ((result) => {
 				if (result.fail === true) {
@@ -1524,7 +1505,6 @@ let navigation =  {
 	},
 
 	setMenuOnClickEvent: function () {
-		
 		document.body.addEventListener('click', function (event) {
 			if (event.target.dataset.section) {
 				navigation.hideAllSections()
@@ -1538,7 +1518,6 @@ let navigation =  {
 
 	showSection: function(event) {
 		const sectionId = event.target.dataset.section
-		
 		$('#' + sectionId).show()
 		$('#' + sectionId + ' section').show()
 	},
@@ -1634,7 +1613,6 @@ domTools.domMethods = {
 				})
 				return true
 			}
-			
 		} else {
 			return false
 		}
@@ -1699,15 +1677,15 @@ domTools.domMethods = {
 			count = 0
 		return new Promise ((resolve, reject) => {
 			for (num in activeAgentsObj){ // Total number monitors that need to be completed for the month
-			
 				if (activeAgentsObj[num].inactive !== "1") {
 					totalMonitors += parseInt(activeAgentsObj[num].monitors)
 				}
 			}
+
 			if (result) {
 				newTotalCompleted += this.countTotal(result)
 			}
-			
+
 			for (var i in activeAgentsObj) {
 				count ++
 				if (!result) { // No result would mean no monitors have been completed, or there was a DB error
@@ -1730,14 +1708,11 @@ domTools.domMethods = {
 							totalCompleted += ((parseInt(needed.completed) < parseInt(activeAgentsObj[i].monitors)) ?  parseInt(needed.completed) : parseInt(activeAgentsObj[i].monitors))
 							continue
 						}
-						
-						
 					} else {
 						// the agent did not have any monitors, so create the row
 						let needed = this.neededRows(activeAgentsObj[i])
 						rows.push(needed.monitor)
 					}
-					
 				}
 			}
 			//totalMonitorsLeft = totalMonitors - totalCompleted
@@ -1745,8 +1720,7 @@ domTools.domMethods = {
 			$(container).append(rows)
 			if (count == Object.keys(activeAgentsObj).length) {
 				return resolve(true)
-			} 
-			
+			}
 		})
 	},
 	countTotal: function (monitors){
@@ -1774,7 +1748,7 @@ domTools.domMethods = {
 		// then subtract that from the required
 		// make sure Auto-Fail is flagged and removes a number from the 
 		// completed monitors list
-		
+
 		let headers = ['date', 'name', 'agentid', 'last-monitor', 'num-left', 'claimed'],
 				tr = document.createElement('tr'),
 				total = 0,
@@ -1791,25 +1765,21 @@ domTools.domMethods = {
 				tr.appendChild(td)
 			})
 		if (monitors) {
-			
 			var lastmonitordata = this.countMonitorsNeeded(monitors, agent.monitors)
 			lastfail = lastmonitordata.fail
 			numleft = parseInt(agent.monitors) - parseInt(lastmonitordata.completed)
-			
-
 		} else {
 			numleft = parseInt(agent.monitors)
 		}
-		
+
 		this.fillNeededRow(agent, tr, thisMonth, numleft, lastfail)
-		
+
 		if (!lastfail && numleft < 1) {
 			return {'monitor': false, "completed": lastmonitordata.completed}
 		} else {
 			return {"monitor": tr, "completed": numleft}
 		}
-		
-		
+
 	},
 	fillNeededRow: function (agent, row, thisMonth, numleft) {
 		/**
@@ -1824,11 +1794,12 @@ domTools.domMethods = {
 		let claimedSpan = document.createElement('span'),
 			icon = 'fa fa-check-square-o',
 			claimedTd = row.querySelector('#'+agent.abbv+'-claimed')
-		
+
 		$(row).find('#'+agent.abbv+'-date').html(`${argsDate.getFullYear()}-${("0"+(date.getMonth() + 1)).slice(-2)}`)
 		$(row).find('#'+agent.abbv+'-name').html(agent.name)
 		$(row).find('#'+agent.abbv+'-agentid').html(agent.agentid)
-		$(row).find('#'+agent.abbv+'-num-left').html(`<span id="${agent.abbv}-num-left-span">${numleft}</span> / <span id="${agent.abbv}-total-span">${agent.monitors}</span>`)
+		let NumLeftHTML = `<span id="${agent.abbv}-num-left-span">${numleft}</span> / <span id="${agent.abbv}-total-span">${agent.monitors}</span>`
+		$(row).find('#'+agent.abbv+'-num-left').html(NumLeftHTML)
 		$(claimedSpan).append(this.constants.uncheckedSquare)
 		$(claimedTd).addClass('claimed').data('claimed', 'unclaimed').attr('data-agent', agent.abbv)
 				.append(claimedSpan)
@@ -1870,7 +1841,6 @@ domTools.domMethods = {
 				return resolve()
 			}
 		}).catch((err) => console.error(err))
-		
 	},
 	changeClaimed: function (agentabbv, leadfullname, leadabbv, type = null) {
 		return new Promise ((resolve, reject) => {
@@ -1891,7 +1861,6 @@ domTools.domMethods = {
 			})
 			return resolve()
 		}).catch((err) => console.error(err))
-		
 	},
 	countMonitorsNeeded: function (monitors, required) {
 		/**
@@ -1901,8 +1870,6 @@ domTools.domMethods = {
 		 * @return {Object} {Left: monitors left, completed: count of valid monitors, fail: last monitor was failed, lastmonitor: Last monitor}
 		 */
 		let count = 0, autofail = false, localMonitorCount = 0, lastmonitor = {}, monitorsLeft
-		
-		
 
 		for (i in monitors) {
 			count ++
@@ -1913,7 +1880,7 @@ domTools.domMethods = {
 			lastmonitor = monitors[i]
 		}
 		monitorsLeft = required - count
-		
+
 		return {left: monitorsLeft, completed: count, fail: autofail, lastmonitor: lastmonitor}
 	},
 	checkAutoFail: function (cell, fail) {
@@ -1925,8 +1892,7 @@ domTools.domMethods = {
 		if (fail) {
 			$(cell).toggleClass('bg-danger')
 		}
-		
-		
+
 	},
 	buildAccordionHead: function ( agentData, monitors = null) {
 		/**
@@ -1938,7 +1904,7 @@ domTools.domMethods = {
 		let head = ['agent', 'completed', 'mAvg', 'qAvg', 'yAvg'],
 			count = 0,
 			panelHead = []
-		
+
 		//create the top of the panel
 		head.forEach((heading) => {
 			count ++
@@ -1962,9 +1928,7 @@ domTools.domMethods = {
 				break;
 			}
 			panelHead.push(td)
-			
 		})
-		
 		return panelHead
 	},
 	fillAccordionHead: function (agentData) {
@@ -2082,7 +2046,7 @@ domTools.domMethods = {
 		let cells = ['date', 'name', 'score', 'fail', 'lead', 'edit', 'remove'],
 			row = document.createElement('tr'),
 			count = 0
-		
+
 		cells.forEach(cellName => {
 			let td = document.createElement('td')
 			td.setAttribute('id', 'monitor-by-month-'+monitor._id)
@@ -2140,7 +2104,7 @@ domTools.domMethods = {
 
 			row.appendChild(td)
 			count ++
-			
+
 		})
 		if (count == cells.length){
 			return row
@@ -2153,7 +2117,7 @@ domTools.domMethods = {
 		let cells = ['date', 'name', 'score', 'fail', 'edit', 'remove'],
 			row = document.createElement('tr'),
 			count = 0
-		
+
 		cells.forEach(cellName => {
 			let td = document.createElement('td')
 			td.setAttribute('id', 'monitor-by-month-'+monitor._id)
@@ -2208,12 +2172,10 @@ domTools.domMethods = {
 
 			row.appendChild(td)
 			count ++
-			
 		})
 		if (count == cells.length){
 			return row
 		}
-		
 	}
 }
 
@@ -2244,14 +2206,13 @@ domTools.buildModal = {
 					} else {
 						return this.fillFields(modal, inputElement)
 					}
-					
 				}
 			}).then ((result) => {
 				return resolve($(modal).modal('show'))
 			})
 			return resolve()
 		}).catch((err) => console.error(err))
-		
+
 	},
 	clearFields: function (modal, lead){
 		return new Promise ((resolve, reject) => {
@@ -2267,11 +2228,10 @@ domTools.buildModal = {
 					$(v).prop('value', 0)
 				} else {
 					$(v).val('')
-				}			
+				}
 			})
 			return resolve()
 		}).catch((err) => console.error(err))
-		
 	},
 
 	fillFields: function(modal, inputData, agent = null){
@@ -2279,7 +2239,7 @@ domTools.buildModal = {
 		 * @param {string} modal - HTML Modal <DIV>
 		 * @param {Object} inputData - used to fill the modal fields if using edit
 		 */
-		
+
 		return new Promise ((resolve, reject) => {
 			let inputElems = document.querySelectorAll('#' + modal.id + ' [name]')//$(modal).find('[name]'),
 				count = 0
@@ -2288,11 +2248,11 @@ domTools.buildModal = {
 			} else {
 				$('.modal-title > span').text($(inputData).data('name'))
 			}
-			
+
 			if ($(modal).hasClass('remove')){
 				this.fillRemoveSpan(modal, inputData, agent)
 			}
-			
+
 			for (i in inputElems){
 				count ++
 				let inputName = $(inputData).data(inputElems[i].name)
@@ -2324,13 +2284,12 @@ domTools.buildModal = {
 				} else {
 					inputElems[i].value = inputName
 				}
-				
+
 				if (count == Object.keys(inputElems).length){
 					return resolve()
 				}
 			}
 		}).catch((err) => console.error(err))
-		
 	},
 	fillRemoveSpan: function (modal, inputData, agent = null) {
 		return new Promise ((resolve, reject) => {
@@ -2346,7 +2305,6 @@ domTools.buildModal = {
 				$('.remove-name').text(formattedName)
 				let activeText = (($(inputData).data('inactive') == 1) ? 'Activate' : 'Deactivate')
 				$('span.add-remove').text(activeText)
-				
 			}
 			return resolve()
 		}).catch((err) => console.error(err))
@@ -2371,7 +2329,7 @@ validation.formValidation = {
 				} else {
 					return reject (err)
 				}
-				
+
 			})
 			
 		}).catch((err) => console.error(err))
@@ -2486,9 +2444,7 @@ validation.formValidation = {
 					return tmpDate
 				}
 			}
-			
 		}
-		
 	},
 	editmonitor: function (type, form) {
 		/**
@@ -2531,7 +2487,6 @@ validation.formValidation = {
 		})//.catch((err) => console.error(err))
 	},
 
-
 	addagent: function (type, form) {
 		/**
 		 * @param {Object} form Form values
@@ -2542,7 +2497,6 @@ validation.formValidation = {
 				fields = $(form).find('[name]')
 			try{
 				$(fields).each((k,v) => {
-					
 					let value = this.fieldValidation[v.name](v)
 					formVals[v.name] = value
 				})
@@ -2561,7 +2515,6 @@ validation.formValidation = {
 		return new Promise ((resolve, reject) => {
 			let formVals = {},
 				fields = $(form).find('[name]')
-				
 			try{
 				$(fields).each((k,v) => {
 					let value = this.fieldValidation[v.name](v)
@@ -2592,8 +2545,6 @@ validation.formValidation = {
 			}
 		})//.catch((err) => console.error(err))
 	},
-
-
 
 	addlead: function (type, form) {
 		/**
@@ -2658,7 +2609,7 @@ validation.formValidation = {
 		 * @param {Object} form Form values
 		 * @return {Object} [formVals, formFields] - {FieldName: Values, Field: FieldObject}
 		 */
-		
+
 		return new Promise ((resolve, reject) => {
 			let formVals = {},
 				fields = $(form).find('[name]')
@@ -2730,16 +2681,20 @@ validation.claimedErrorHandling = (error) => {
 	}, 2000)
 }
 
+/**
+ * Block users not in the Leads section
+ */
 
-
-
-
-
-
-
-
-
-
+function NotAllowed() {
+	/**
+	 * Check if the loggedOnUser is in the list of Active Leads
+	 */
+	
+	if (!isDev && !activeLeadsObj.hasOwnProperty(loggedOnUser)){
+		let failHTML = `<div class="wrapper well">You are not allowed - speak with an admin to get access</div>`
+		document.getElementById('wrapper').innerHTML = failHTML
+	}
+}
 
 /**
  *	Global Event Listeners
@@ -2756,10 +2711,10 @@ $(window).on('load', function () {
 			return LoadStaffEdit.init()
 		}).then((result) => {
 			// Pull monitors from the database and load to the pages
+			NotAllowed()
 			return LoadMonitors.init()
 		}).catch((err) => console.error(err))
 	}).catch((err) => console.error(err))
-	
 
 	// Turn on Bootstrap Tooltips because they look much better than default
 	$(function () {
@@ -2873,14 +2828,14 @@ $(document).on('change', '#select-lead-search', function (e) {
 		tmpDate = new Date(month),
 		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
 		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
-	
+
 	clearTbody.innerHTML = '';
 	LoadMonitors.completedByLead(lead, month)
 	LoadMonitors.completedPerAgentSearch(tmpDate)
 	document.getElementById('monitors-search-date-2').valueAsDate = tmpDate
 	document.getElementById('input-date-search').valueAsDate - tmpDate
 	document.getElementById('all-monitors-date-2').innerHTML = monthName
-	
+
 })
 $(document).on('change', '#input-date-search', function (e) {
 	e.preventDefault()
@@ -2904,7 +2859,7 @@ $(document).on('change', '#monitors-search-date', function (e) {
 		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
 		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)],
 		lead = $('#select-lead-search').val()
-		
+
 	clearTbody.innerHTML = '';
 	LoadMonitors.completedByLead(lead, month)
 	LoadMonitors.completedPerAgentSearch(tmpDate)
@@ -2918,7 +2873,7 @@ $(document).on('change', '#monitors-search-date-2', function (e) {
 		tmpDate = new Date(month),
 		clearTbody = document.getElementsByClassName('all-monitors-tbody'),
 		monthName = months[("0" + (tmpDate.getMonth() + 1)).slice(-2)]
-		
+
 	clearTbody.innerHTML = '';
 	LoadMonitors.completedByLead(null, month)
 	LoadMonitors.completedPerAgentSearch(tmpDate)
@@ -2946,7 +2901,7 @@ $('form').on('submit', (e) => {
 $(document).on('click', '.modal-submit', function (e){
 	e.preventDefault()
 	let form = $(this).parent().parent().find('form')
-	
+
 	FormSubmitTools.modalSubmit(form)
 })
 
@@ -2959,4 +2914,3 @@ $(document).on('click', '#author-link', (e) => {
 $(document).on('shown.bs.modal', '.modal', function () {
 	$('.modal').focus()
 })
-
