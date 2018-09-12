@@ -1147,10 +1147,14 @@ var LoadMonitors = {
 			if (monitors) {
 				let rows = []
 				for (i in monitors) {
-					let resultDate = new Date(monitors[i].date),
-						resultYear = resultDate.getFullYear(),	
-						resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
-						resultDD = ("0" + resultDate.getDate()).slice(-2),
+					let tmpDate = new Date(monitors[i].date)
+						let tmpDateHours = tmpDate.getHours()
+						let tmpDateOffset = tmpDate.getTimezoneOffset() / 60
+						tmpDate.setHours(tmpDateHours + tmpDateOffset)
+						
+						let resultYear = tmpDate.getFullYear(),
+						resultMM = ("0" + (tmpDate.getMonth() + 1)).slice(-2),
+						resultDD = ("0" + tmpDate.getDate()).slice(-2),
 						resultDateString = resultYear + '-' + resultMM + '-' + resultDD
 
 					let row = domTools.domMethods.buildCompletedMonthRow(
@@ -1225,10 +1229,14 @@ var LoadMonitors = {
 				$('#lead-completed-badge').html(count)
 				for (i in monitors) {
 					count ++
-					let resultDate = new Date(monitors[i].date),
-						resultYear = resultDate.getFullYear(),	
-						resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
-						resultDD = ("0" + resultDate.getDate()).slice(-2),
+					let tmpDate = new Date(monitors[i].date)
+					let tmpDateHours = tmpDate.getHours()
+					let tmpDateOffset = tmpDate.getTimezoneOffset() / 60
+					tmpDate.setHours(tmpDateHours + tmpDateOffset)
+					
+					let resultYear = tmpDate.getFullYear(),
+						resultMM = ("0" + (tmpDate.getMonth() + 1)).slice(-2),
+						resultDD = ("0" + tmpDate.getDate()).slice(-2),
 						resultDateString = resultYear + '-' + resultMM + '-' + resultDD
 
 					let row = domTools.domMethods.buildCompletedMonthRow(
@@ -2015,10 +2023,14 @@ domTools.domMethods = {
 							$(td).html(lead)
 						break;
 						case 'date':
-							let resultDate = new Date(monitors[i].date),
-								resultYear = resultDate.getFullYear(),
-								resultMM = ("0" + (resultDate.getMonth() + 1)).slice(-2),
-								resultDD = ("0" + resultDate.getDate()).slice(-2),
+							let tmpDate = new Date(monitors[i].date)
+							let tmpDateHours = tmpDate.getHours()
+							let tmpDateOffset = tmpDate.getTimezoneOffset() / 60
+							tmpDate.setHours(tmpDateHours + tmpDateOffset)
+							
+							let resultYear = tmpDate.getFullYear(),
+								resultMM = ("0" + (tmpDate.getMonth() + 1)).slice(-2),
+								resultDD = ("0" + tmpDate.getDate()).slice(-2),
 								resultDateString = resultYear + '-' + resultMM + '-' + resultDD
 							$(td).html(resultDateString)
 						break;
@@ -2263,6 +2275,10 @@ domTools.buildModal = {
 				} else if (inputElems[i].name == 'date'){
 					// Make sure a valid date object is being sent to the modal
 					let tmpDate = new Date(inputName)
+					let tmpDateHours = tmpDate.getHours()
+					let tmpDateOffset = tmpDate.getTimezoneOffset() / 60
+					tmpDate.setHours(tmpDateHours + tmpDateOffset)
+
 					inputElems[i].valueAsDate = tmpDate
 				} else if (inputElems[i].name == 'inactivedate'){
 					if ($(inputData).data('inactive') == 0) {
